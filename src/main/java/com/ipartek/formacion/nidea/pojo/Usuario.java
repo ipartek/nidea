@@ -4,11 +4,31 @@ public class Usuario {
 
 	private int id;
 	private String nombre;
+	private String pass;
+	private Rol rol;
 
 	public Usuario() {
 		super();
 		this.id = -1;
+		this.pass = "";
 		this.nombre = "";
+		this.rol = new Rol();
+	}
+
+	public String getPass() {
+		return pass;
+	}
+
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+
+	public Rol getRol() {
+		return rol;
+	}
+
+	public void setRol(Rol rol) {
+		this.rol = rol;
 	}
 
 	public Usuario(int id2, String nombre2) {
@@ -35,7 +55,7 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
 	}
 
 }
