@@ -31,9 +31,6 @@ public class LoginController extends HttpServlet {
 
 	private UsuarioDAO daoUsuario;
 
-	private static final int ROL_USER_ADMIN = 1;
-	private static final int ROL_USER_NORMAL = 2;
-
 	private static final int SESSION_EXPIRATION = -1; // No expira
 
 	@Override
@@ -88,7 +85,7 @@ public class LoginController extends HttpServlet {
 				 */
 				session.setMaxInactiveInterval(SESSION_EXPIRATION);
 
-				if (usuario.getRol().getId() == ROL_USER_ADMIN) {
+				if (usuario.getRol().getId() == Usuario.ROL_ADMIN) {
 					view = VIEW_BACKOFFICE;
 				} else {
 					view = VIEW_FRONTOFFICE;

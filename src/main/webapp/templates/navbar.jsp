@@ -11,7 +11,7 @@
         <a class="p-2 text-dark" href="calculadora">Calculadora</a>     
       </nav>
       
-      <a class="btn btn-outline-primary" href="loginUsuario.jsp">Login Usuario</a>
+     <!-- <a class="btn btn-outline-primary" href="loginUsuario.jsp">Login Usuario</a> -->
       
       
       <c:if test="${empty usuario}">

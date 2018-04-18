@@ -2,6 +2,9 @@ package com.ipartek.formacion.nidea.pojo;
 
 public class Usuario {
 
+	public static final int ROL_ADMIN = 1;
+	public static final int ROL_USER = 2;
+
 	private int id;
 	private String nombre;
 	private String pass;
