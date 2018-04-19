@@ -1,7 +1,12 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.ipartek.formacion.nidea.model.UsuarioDAO"%>
+<%@page import="com.ipartek.formacion.nidea.pojo.Usuario"%>
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
+
+
 
 <div class="container">
 	<div class="form-group row">
@@ -25,9 +30,19 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
-	    </div>
-	   
+	    </div>  
 	  </div>
+	  <br>  
+	  
+	  <div class="form-group row">
+			<label for="material" class="col-sm-4 col-form-label">Usuario:</label>
+			<select name="materialPrecio" class="col-sm-6  form-control">
+				<option value="0">-- selecciona --</option>
+
+							
+			</select>
+		</div>	
+	  
 	</div>
 	<br>  
 	
@@ -80,6 +95,9 @@
 			    
 			  </div>
 		</c:if>	  
+		
+		
+		
 	</form>
 </div>
 

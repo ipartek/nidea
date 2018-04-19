@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 
@@ -58,8 +60,21 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 
 	@Override
-	public List<Usuario> getAll() {
-		// TODO Auto-generated method stub
+	public ArrayList<Usuario> getAll() {
+	ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id ORDER BY material.id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);
+				ResultSet rs = pst.executeQuery();) {
+			Usuario u = null;
+			while (rs.next()) {
+				u = mapper(rs);
+				lista.add(u);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		return null;
 	}
 
