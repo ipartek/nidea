@@ -1,7 +1,14 @@
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.ipartek.formacion.nidea.pojo.Material"%>
+<%@page import="com.ipartek.formacion.nidea.pojo.Usuario"%>
+
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
+
+
+
 
 <div class="container">
 	<div class="form-group row">
@@ -27,8 +34,16 @@
 	      <span class="input-group-text">&euro;</span>
 	    </div>
 	   
-	  </div>
 	</div>
+	<br>	
+	<div class="form-group row">
+		<label for="material" class="col-sm-4 col-form-label">Material:</label>	
+		<select name="usuario" class="col-sm-6  form-control">
+				<option value="0">-- selecciona --</option>
+				
+			</select>
+	  </div>
+	  </div>	
 	<br>  
 	
 		<c:if test="${material.id == -1}">
@@ -79,7 +94,8 @@
 			    <!-- "col-sm-6"  -->
 			    
 			  </div>
-		</c:if>	  
+		</c:if>
+			  
 	</form>
 </div>
 
