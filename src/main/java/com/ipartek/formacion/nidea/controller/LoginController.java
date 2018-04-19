@@ -1,6 +1,7 @@
 package com.ipartek.formacion.nidea.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -69,12 +70,14 @@ public class LoginController extends HttpServlet {
 			String password = request.getParameter("password");
 
 			Usuario usuario = daoUsuario.check(nombre, password);
+			ArrayList<Usuario> users = daoUsuario.getAll();
 
 			if (usuario != null) {
 
 				// guardar usuario en session
 				HttpSession session = request.getSession();
 				session.setAttribute("usuario", usuario);
+				session.setAttribute("users", users);
 
 				/*
 				 * Tiempo expiracion session, tambien se puede configurar web.xml un valor

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ipartek.formacion.nidea.pojo.Rol;
@@ -57,11 +58,30 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resul;
 	}
 
-	@Override
-	public List<Usuario> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		@Override
+		public ArrayList<Usuario> getAll() {
+
+			ArrayList<Usuario> lista = new ArrayList<Usuario>();
+			String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'"
+						+"FROM usuario as u, rol as r " 
+						+ "WHERE u.id_rol = r.id;";
+
+			try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+				try (ResultSet rs = pst.executeQuery();) {
+					Usuario m = null;
+					while (rs.next()) {
+						m = mapper(rs);
+						lista.add(m);
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return lista;
+
+		}
 
 	@Override
 	public Usuario getById(int id) {

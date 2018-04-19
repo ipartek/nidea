@@ -26,8 +26,15 @@
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
 	  </div>
+	  	    <div class="form-group">
+	  <label for="sel1">Select Creador:</label>
+	  <select class="form-control" id="sel1">
+	  <c:forEach items="${users}" var="user">
+	  	<option valuer="${user.id}">${user.nombre}</option>	
+	  </c:forEach>
+		  </select>
+		</div>
 	</div>
 	<br>  
 	
