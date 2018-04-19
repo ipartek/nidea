@@ -68,7 +68,7 @@ public class LoginController extends HttpServlet {
 			String nombre = request.getParameter("usuario");
 			String password = request.getParameter("password");
 
-			Usuario usuario = daoUsuario.check(nombre, password);
+			Usuario usuario = daoUsuario.getUser(nombre, password);
 
 			if (usuario != null) {
 

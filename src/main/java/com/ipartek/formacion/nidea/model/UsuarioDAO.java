@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 
@@ -57,16 +59,50 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resul;
 	}
 
+	/**
+	 * Recupera todos los usuarios de la BBDD ordenados por id descendente
+	 * 
+	 * @return ArrayList<Usuario> si no existen registros new ArrayList<Usuario>()
+	 */
 	@Override
-	public List<Usuario> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Usuario> getAll() {
+		ArrayList<Usuario> listaUsuarios = null;
+		String sql = "SELECT id, nombre, password, id_rol FROM usuario ORDER BY id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);
+				ResultSet rs = pst.executeQuery();) {
+			Usuario u = null;
+			while (rs.next()) {
+				listaUsuarios = new ArrayList<Usuario>();
+				u = mapper(rs);
+				listaUsuarios.add(u);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listaUsuarios;
 	}
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario usuario = null;
+		String sql = "SELECT `id`, `nombre`, `password` FROM `usuario` WHERE `id` = ?;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					usuario = mapper(rs);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
 	}
 
 	@Override
@@ -84,17 +120,48 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public Usuario mapper(ResultSet rs) throws SQLException {
 		Usuario u = new Usuario();
-		u.setId(rs.getInt("usuario_id"));
-		u.setNombre(rs.getString("usuario_nombre"));
+		u.setId(rs.getInt("id"));
+		u.setNombre(rs.getString("nombre"));
 		u.setPass(rs.getString("password"));
 
 		// Rol del usuario
 		Rol rol = new Rol();
-		rol.setId(rs.getInt("rol_id"));
-		rol.setNombre(rs.getString("rol_nombre"));
+		rol.setId(rs.getInt("id_rol"));
+		// rol.setNombre(rs.getString("rol_nombre"));
 		u.setRol(rol);
 
 		return u;
+	}
+	
+	/**
+	 * Buscamos un usuario en la BD a partir del nombre y la constraseña
+	 * 
+	 * @param username
+	 *            : nombre del usuario
+	 * @param password
+	 *            : contraseña del usuario
+	 * @return : Usuario obtenido de la BD; Si no existe, devuelve null.
+	 */
+	public Usuario getUser(String username, String password) {
+		Usuario usuario = null;
+
+		String sql = "SELECT id, nombre, password, id_rol FROM usuario WHERE nombre = ? AND password = ?;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setString(1, username);
+			pst.setString(2, password);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					usuario = mapper(rs);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return usuario;
 	}
 
 }

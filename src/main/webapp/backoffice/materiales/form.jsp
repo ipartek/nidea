@@ -3,6 +3,10 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
+${material}
+<br>
+${usuarios}
+
 <div class="container">
 	<div class="form-group row">
 		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
@@ -20,13 +24,22 @@
 	      <input type="text" value="${material.nombre}" class="form-control" name="nombre" placeholder="Introduce el nombre del material" >
 	    </div>
 	  </div>
-	  <div class="input-group ">
+	  <div class="form-group input-group row">
 	    <label for="precio" class="col-sm-2 col-form-label">Precio</label>
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
+	  </div>
+	  <div class="form-group row">
+	  	<label for="usuario" class="col-sm-2 col-form-label">Dueño:</label>
+	  	<div class="col-sm-5">
+	      <select class="custom-select custom-select-md">
+	      	<c:forEach items="${usuarios}" var="usuario">
+	            <option value="usuario.id">usuario.nombre</option>
+	        </c:forEach>
+		  </select>
+	    </div>
 	  </div>
 	</div>
 	<br>  
@@ -50,7 +63,7 @@
 			   
 					    <!-- Button trigger modal -->
 						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Cuidado
+						  Eliminar
 						</button>
 						
 						<!-- Modal -->

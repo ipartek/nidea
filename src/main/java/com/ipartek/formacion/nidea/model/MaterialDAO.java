@@ -160,10 +160,14 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
 
-			Usuario u = new Usuario();
-			u.setId(rs.getInt("id_usuario"));
-			u.setNombre(rs.getString("nombre_usuario"));
-			m.setUsuario(u);
+			try {
+				Usuario u = new Usuario();
+				u.setId(rs.getInt("id_usuario"));
+				u.setNombre(rs.getString("nombre_usuario"));
+				m.setUsuario(u);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		}
 		return m;
