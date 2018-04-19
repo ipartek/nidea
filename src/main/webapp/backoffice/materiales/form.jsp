@@ -3,6 +3,7 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
+
 <div class="container">
 	<div class="form-group row">
 		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
@@ -26,9 +27,15 @@
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
 	  </div>
-	</div>
+	  
+	
+		
+		<h1>"${usuarios}"</h1>
+
+	
+	  
+
 	<br>  
 	
 		<c:if test="${material.id == -1}">
