@@ -18,11 +18,15 @@ public class Material {
 	@DecimalMax("999999999.99")
 	private float precio;
 
+	@NotNull
+	private Usuario usuario;
+
 	public Material() {
 		super();
 		this.id = -1;
 		this.nombre = "";
 		this.precio = 0f;
+		this.usuario = new Usuario();
 	}
 
 	public int getId() {
@@ -49,9 +53,17 @@ public class Material {
 		this.precio = precio;
 	}
 
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	@Override
 	public String toString() {
-		return "Material [id=" + id + ", nombre=" + nombre + ", precio=" + precio + "]";
+		return "Material [id=" + id + ", nombre=" + nombre + ", precio=" + precio + ", usuario=" + usuario + "]";
 	}
 
 }

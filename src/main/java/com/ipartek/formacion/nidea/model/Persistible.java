@@ -30,8 +30,9 @@ public interface Persistible<P> {
 	 * 
 	 * @param pojo
 	 * @return
+	 * @throws SQLException
 	 */
-	public boolean save(P pojo);
+	public boolean save(P pojo) throws SQLException;
 
 	/**
 	 * Eliminamos un resgistro por su identificador

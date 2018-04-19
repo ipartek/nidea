@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
 
 public class MaterialDAO implements Persistible<Material> {
@@ -39,7 +40,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public ArrayList<Material> getAll() {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` ORDER BY `id` DESC LIMIT 500";
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id ORDER BY material.id DESC LIMIT 500";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
@@ -158,6 +159,12 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
+
+			Usuario u = new Usuario();
+			u.setId(rs.getInt("id_usuario"));
+			u.setNombre(rs.getString("nombre_usuario"));
+			m.setUsuario(u);
+
 		}
 		return m;
 	}
