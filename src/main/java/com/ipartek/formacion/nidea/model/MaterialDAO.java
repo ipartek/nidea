@@ -40,7 +40,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public ArrayList<Material> getAll() {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id ORDER BY material.id DESC LIMIT 500";
+		String sql = "SELECT m.id, m.nombre, m.precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.id_usuario = u.id ORDER BY m.id DESC LIMIT 500";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
@@ -59,7 +59,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`id` as 'id_usuario', u.`nombre` as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.`id_usuario` = u.`id` AND m.`id` = ? ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -171,7 +171,7 @@ public class MaterialDAO implements Persistible<Material> {
 
 	public ArrayList<Material> search(String nombreBuscar) {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `nombre` LIKE ? ORDER BY `id` DESC LIMIT 500;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`id` as 'id_usuario', u.`nombre` as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.id_usuario = u.`id` AND m.`nombre` LIKE ? ORDER BY m.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, "%" + nombreBuscar + "%");

@@ -26,7 +26,16 @@
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
+	  </div>
+	  <div class="input-group ">
+	    <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
+	    <div class="input-group-append">
+	      <select>
+	      	<option value = 1>1</option>
+	      	<option value = 2>2</option>
+	       	<!--   <option value = ${usuario.id_usuario}>${usuario.nombre_usuario}</option>	-->
+	      </select>
+	    </div>
 	  </div>
 	</div>
 	<br>  
@@ -50,7 +59,7 @@
 			   
 					    <!-- Button trigger modal -->
 						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Cuidado
+						  Eliminar
 						</button>
 						
 						<!-- Modal -->
