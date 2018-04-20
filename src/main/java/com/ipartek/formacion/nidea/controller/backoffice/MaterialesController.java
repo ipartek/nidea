@@ -20,6 +20,7 @@ import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class MaterialesController
@@ -53,6 +54,7 @@ public class MaterialesController extends HttpServlet {
 	private int id;
 	private String nombre;
 	private float precio;
+	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -153,11 +155,14 @@ public class MaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
+		Usuario usuario=new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
+			usuario=daoUsuario.getById(id_usuario);
+			material.setUsuario(usuario);
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -187,6 +192,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		request.setAttribute("material", material);
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -260,6 +266,12 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
+		}
+		
+		if (request.getParameter("user") != null) {
+			id_usuario = Integer.parseInt(request.getParameter("user"));
+		} else {
+			id_usuario = -1;
 		}
 
 	}

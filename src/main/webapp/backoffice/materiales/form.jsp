@@ -25,12 +25,25 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
+	      <br>
 	    </div>
-	   
 	  </div>
+	  <br>
+	  <div class="form-group row">
+	    <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
+	    <div class="input-group-append">
+	    <select name="user">
+		   <c:forEach items="${usuarios}" var="usuario">
+		  	<option ${(usuario.id==material.usuario.id)?"selected":""} value=${usuario.id} >${usuario.nombre}</option>
+		  	</c:forEach>
+		</select>
+	     
+	      <br>
+	    </div>
+	  </div>
+	  
 	</div>
-	<br>  
-	
+	<br>
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
