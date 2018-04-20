@@ -24,8 +24,8 @@
 <table class="tabla table table-striped table-bordered" style="width:100%">
    <thead>
        <tr>
-           <th>Nombre</th>
-           <th>Precio</th>
+			<th>Izena</th>
+			<th>Precio</th>
            <th>Usuario</th>                
        </tr>
    </thead>
