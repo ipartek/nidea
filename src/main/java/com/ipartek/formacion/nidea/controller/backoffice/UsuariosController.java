@@ -53,8 +53,8 @@ public class UsuariosController extends HttpServlet {
 	private int op; // operacion a realizar
 
 	// parametros del Material
-	private int id;
-	private String nombre;
+	private int id_usuario;
+	private String nombre_usuario;
 	private String password;
 	private int rol_id;
 	
@@ -144,16 +144,16 @@ public class UsuariosController extends HttpServlet {
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
 		if (request.getParameter("id") != null) {
-			id = Integer.parseInt(request.getParameter("id"));
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
 		} else {
-			id = -1;
+			id_usuario = -1;
 		}
 
 		if (request.getParameter("nombre") != null) {
-			nombre = request.getParameter("nombre");
-			nombre = nombre.trim();
+			nombre_usuario = request.getParameter("nombre");
+			nombre_usuario = nombre_usuario.trim();
 		} else {
-			nombre = "";
+			nombre_usuario = "";
 		}
 		if(request.getParameter("password")!=null) {
 			password = request.getParameter("password");
@@ -173,8 +173,8 @@ public class UsuariosController extends HttpServlet {
 
 	private void mostrarFormulario(HttpServletRequest request) {
 		Usuario usuario = new Usuario();
-		if (id > -1) {
-			usuario = daoUsuario.getById(id);
+		if (id_usuario > -1) {
+			usuario = daoUsuario.getById(id_usuario);
 
 		} else {
 			alert = new Alert("Nuevo Usuario creado", Alert.TIPO_WARNING);
@@ -188,8 +188,8 @@ public class UsuariosController extends HttpServlet {
 	}
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) {
-		if (daoUsuario.delete(id)) {
-			alert = new Alert("Usuario Eliminado id " + id, Alert.TIPO_PRIMARY);
+		if (daoUsuario.delete(id_usuario)) {
+			alert = new Alert("Usuario Eliminado id " + id_usuario, Alert.TIPO_PRIMARY);
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
 		}
@@ -209,8 +209,8 @@ public class UsuariosController extends HttpServlet {
 
 		try {
 
-			usuario.setId(id);
-			usuario.setNombre(nombre);
+			usuario.setId(id_usuario);
+			usuario.setNombre(nombre_usuario);
 			usuario.getRol().setId(rol_id);
 			
 

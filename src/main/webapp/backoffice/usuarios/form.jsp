@@ -16,13 +16,13 @@
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
-	      <input type="text" class="form-control" name="id_usuario" readonly value="${usu.id}">
+	      <input type="text" class="form-control" name="id" readonly value="${usu.id}">
 	    </div>
 	  </div>
 	  <div class="form-group row">
 	    <label for="nombre" class="col-sm-2 col-form-label">Nombre Usuario</label>
 	    <div class="col-sm-5">
-	      <input type="text" value="${usu.nombre}" class="form-control" name="nombre_usuario" placeholder="Introduce el nombre del usuario" >
+	      <input type="text" value="${usu.nombre}" class="form-control" name="nombre" placeholder="Introduce el nombre del usuario" >
 	    </div>
 	  </div>
 	  <div class="input-group ">

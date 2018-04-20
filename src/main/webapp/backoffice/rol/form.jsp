@@ -9,7 +9,7 @@
 <a href="backoffice/roles" class="btn btn-primary">Volver</a>
 <hr>
 
-<h1>Roles Form</h1>
+<h1>ROLES</h1>
 
 <%@include file="/templates/alert.jsp"%>
 

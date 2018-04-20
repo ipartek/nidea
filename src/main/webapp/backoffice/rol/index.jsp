@@ -11,7 +11,7 @@
 
 
 
-<h1>Backoffice Roles</h1>
+<h1>Roles</h1>
 <hr>
 
 <%@include file="/templates/alert.jsp"%>
