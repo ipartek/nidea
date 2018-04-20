@@ -62,13 +62,13 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public ArrayList<Usuario> getAll() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		String sql = "SELECT u.id, u.nombre, u.password FROM `usuario` as`u` ORDER BY u.id DESC LIMIT 500";
+		String sql = "SELECT `id`, `nombre` FROM usuario ORDER BY usuario.id DESC LIMIT 500";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
 			Usuario u = null;
 			while (rs.next()) {
-				u = mapper(rs);
+				u = mapper2(rs);
 				lista.add(u);
 			}
 
@@ -112,5 +112,12 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		return u;
 	}
+		public Usuario mapper2(ResultSet rs) throws SQLException {
+			Usuario u = new Usuario();
+			u.setId(rs.getInt("id"));
+			u.setNombre(rs.getString("nombre"));
+			//u.setPass(rs.getString("password"));
+			return u;
 
+}
 }

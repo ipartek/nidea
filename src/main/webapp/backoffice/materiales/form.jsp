@@ -28,11 +28,17 @@
 	      <span class="input-group-text">&euro;</span>
 	    </div>
 	  </div>
-	  
-	
-		
-		<h1>"${usuarios}"</h1>
+	  <div class="input-group ">
+	    <label for="precio" class="col-sm-2 col-form-label">Usuario</label>
+	  <select>
+	<c:forEach items="${usuarios}" var="usuario">
 
+  <option value="${usuario.id}">${usuario.nombre}</option>
+
+	</c:forEach>
+	</select>
+	</div>
+	
 	
 	  
 

@@ -169,6 +169,7 @@ public class BackofficeRolesController extends HttpServlet {
 		if (id != -1) {
 			rol = dao.getById(id);
 		}
+	
 		request.setAttribute("rol", rol);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -196,11 +197,7 @@ public class BackofficeRolesController extends HttpServlet {
 
 		request.setAttribute("roles", roles);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = dao1.getAll();
-
-		request.setAttribute("usuarios", usuarios);
-		dispatcher = request.getRequestDispatcher(VIEW_FORM1);
+	
 	}
 	
 

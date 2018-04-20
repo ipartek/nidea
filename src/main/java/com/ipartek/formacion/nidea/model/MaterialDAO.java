@@ -59,7 +59,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`nombre` as `nombre_usuario`, u.`id`as `id_usuario` FROM `material`as m,`usuario` as u WHERE m.`id`=? AND  m.`id_usuario`= u.`id` ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -159,7 +159,7 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
-
+			
 			Usuario u = new Usuario();
 			u.setId(rs.getInt("id_usuario"));
 			u.setNombre(rs.getString("nombre_usuario"));

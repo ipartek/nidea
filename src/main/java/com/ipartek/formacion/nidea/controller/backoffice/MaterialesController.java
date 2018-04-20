@@ -20,6 +20,7 @@ import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class MaterialesController
@@ -44,6 +45,7 @@ public class MaterialesController extends HttpServlet {
 	private Alert alert;
 	private MaterialDAO daoMaterial;
 	private UsuarioDAO daoUsuario;
+	
 
 	// parametros comunes
 	private String search; // para el buscador por nombre matertial
@@ -222,6 +224,10 @@ public class MaterialesController extends HttpServlet {
 
 		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
+		
+
+		
+	
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
 
