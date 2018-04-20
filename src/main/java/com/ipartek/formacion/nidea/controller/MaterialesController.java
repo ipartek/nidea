@@ -2,6 +2,7 @@ package com.ipartek.formacion.nidea.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -11,7 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
@@ -49,6 +53,9 @@ public class MaterialesController extends HttpServlet {
 	private float precio;
 	private Usuario propietario;
 	
+	ValidatorFactory factory;
+	Validator validator;
+	
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
 	 */
@@ -56,8 +63,8 @@ public class MaterialesController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		daoMaterial = MaterialDAO.getInstance();
-//		factory = Validation.buildDefaultValidatorFactory();
-//		validator = factory.getValidator();
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
 
 	/**
@@ -67,8 +74,8 @@ public class MaterialesController extends HttpServlet {
 	public void destroy() {
 		super.destroy();
 		daoMaterial = null;
-//		validator = null;
-//		factory = null;
+		validator = null;
+		factory = null;
 	}
 
 	/**
@@ -108,16 +115,16 @@ public class MaterialesController extends HttpServlet {
 
 			switch (op) {
 			case OP_MOSTRAR_FORMULARIO:
-				//mostrarFormulario(request);
+				mostrarFormulario(request);
 				break;
 			case OP_ELIMINAR:
-				//eliminar(request, response);
+				materiales = eliminar(request, response, usuario);
 				break;
 			case OP_BUSQUEDA:
 				//buscar(request);
 				break;
 			case OP_GUARDAR:
-				//guardar(request);
+				guardar(request, usuario);
 				break;
 			case OP_MOSTRAR_CATALOGO:
 				materiales = mostrarCatalogo(request);
@@ -144,6 +151,75 @@ public class MaterialesController extends HttpServlet {
 		
 	}
 	
+	private ArrayList<Material> eliminar(HttpServletRequest request, HttpServletResponse response, Usuario usuario) {
+		
+		ArrayList<Material> materiales = new ArrayList<Material>();
+
+		if (daoMaterial.safeDelete(id, usuario.getId())) {
+			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
+		} else {
+			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
+		}
+
+		return mostrarCatalogo(request);
+		
+	}
+
+	private void guardar(HttpServletRequest request, Usuario usuario) {
+
+		Material material = new Material();
+
+		try {
+
+			material.setId(id);
+			material.setNombre(nombre);
+			material.setUsuario(usuario);
+
+			if (request.getParameter("precio") != null) {
+				precio = Float.parseFloat(request.getParameter("precio"));
+				material.setPrecio(precio);
+			}
+			
+			Set<ConstraintViolation<Material>> violations = validator.validate(material);
+			if (violations.size() > 0) {
+				// Validaciones Incorrectas
+				String mensajes = "";
+				for (ConstraintViolation<Material> violation : violations) {
+					mensajes += violation.getMessage() + "<br>";
+					alert = new Alert(mensajes, Alert.TIPO_WARNING);
+				}
+				// Validaciones OK
+			} else {
+				if (daoMaterial.save(material)) {
+					alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
+				} else {
+					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
+				}
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
+					Alert.TIPO_WARNING);
+		}
+
+		request.setAttribute("material", material);
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
+		
+	}
+
+	private void mostrarFormulario(HttpServletRequest request) {
+
+		Material material = new Material();
+		if (id > -1) {
+			material = daoMaterial.getById(id);
+		} else {
+			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
+		}
+
+		request.setAttribute("material", material);
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
+	}
+
 	/**
 	 * Mostrar todo el catálogo de materiales sin opción de editar
 	 * @param request

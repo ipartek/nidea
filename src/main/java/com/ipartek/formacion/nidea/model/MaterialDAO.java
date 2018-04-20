@@ -221,4 +221,20 @@ public class MaterialDAO implements Persistible<Material> {
 		return lista;
 	}
 
+	public boolean safeDelete(int idMaterial, int idUsuario) {
+
+		boolean resul = false;
+		String sql = "DELETE FROM material WHERE id= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, idMaterial);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+
 }

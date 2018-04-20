@@ -6,7 +6,7 @@
 <h1>Materiales</h1>
 
 <div class="col-md-6">
-	<a class="btn btn-outline-primari" href="backoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+	<a class="btn btn-outline-primari" href="materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 </div> 
 
 <ol>
@@ -20,7 +20,12 @@
 				<c:set var="clase" value="text-primary" />
 			</c:when>
 		</c:choose>	
-		<li>${material.nombre} - <span class="${clase}">${material.precio} &euro;</span></li>	
+		<li>
+			<a href="materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a> - 
+			<span class="${clase}">${material.precio} &euro;</span>
+		</li>
+			
+			
 	</c:forEach>
 </ol>
 
