@@ -45,6 +45,7 @@ public class MaterialesController extends HttpServlet {
 	private Alert alert;
 	private MaterialDAO daoMaterial;
 	private UsuarioDAO daoUsuario;
+	private int idusuario;
 	
 
 	// parametros comunes
@@ -160,6 +161,9 @@ public class MaterialesController extends HttpServlet {
 
 			material.setId(id);
 			material.setNombre(nombre);
+			material.getUsuario().setId(idusuario);
+			
+			//crearusuaio con id y setear en material
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -266,6 +270,10 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
+		}
+		if (request.getParameter("idusuario") != null) {
+			idusuario = Integer.parseInt(request.getParameter("idusuario"));
+			
 		}
 
 	}

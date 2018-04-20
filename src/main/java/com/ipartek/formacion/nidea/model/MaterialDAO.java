@@ -93,12 +93,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?, `id_usuario` = ?,  WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getId());
+			pst.setInt(4, pojo.getUsuario().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {

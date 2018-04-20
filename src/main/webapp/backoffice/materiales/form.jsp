@@ -30,10 +30,10 @@
 	  </div>
 	  <div class="input-group ">
 	    <label for="precio" class="col-sm-2 col-form-label">Usuario</label>
-	  <select>
+	  <select name="idusuario">
 	<c:forEach items="${usuarios}" var="usuario">
 
-  <option value="${usuario.id}">${usuario.nombre}</option>
+  <option ${(usuario.id==material.usuario.id)?"selected":""} value="${usuario.id}">${usuario.nombre}</option>
 
 	</c:forEach>
 	</select>
