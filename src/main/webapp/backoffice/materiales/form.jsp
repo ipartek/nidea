@@ -36,10 +36,10 @@
 	  
 	  <div class="form-group row">
 			<label for="material" class="col-sm-4 col-form-label">Usuario:</label>
-			<select name="materialPrecio" class="col-sm-6  form-control">
-				<option value="0">-- selecciona --</option>
-
-							
+			<select name="user" class="col-sm-6  form-control">
+				<c:forEach items="${usuarios}" var="usuario">
+	  				<option ${(usuario.id==material.usuario.id)?"selected":"" } value="${usuario.id}">${usuario.nombre}</option>	
+	  			</c:forEach>				
 			</select>
 		</div>	
 	  
@@ -65,7 +65,7 @@
 			   
 					    <!-- Button trigger modal -->
 						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Cuidado
+						  Eliminar
 						</button>
 						
 						<!-- Modal -->

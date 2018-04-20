@@ -2,11 +2,15 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
+
+<a href="frontoffice/materiales">Materiales</a>
+
+
 <script>
 setTimeout(function () { location.reload(1); }, 5000);	
 </script>
 
-YA ESTAS LOGEADO EN EL FRONTOFFICE <br>
+YA ESTAS LOGUEADO EN EL FRONTOFFICE <br>
 
 
 applicationScope (JSP ) == ServletContext ( servlet ) <br>

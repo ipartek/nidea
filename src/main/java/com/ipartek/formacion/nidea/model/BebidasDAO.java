@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Bebida;
+import com.ipartek.formacion.nidea.pojo.Material;
 
 public class BebidasDAO implements Persistible<Bebida> {
 
@@ -34,6 +35,12 @@ public class BebidasDAO implements Persistible<Bebida> {
 
 	@Override
 	public Bebida mapper(ResultSet rs) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Material getMaterialByIdUser(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
