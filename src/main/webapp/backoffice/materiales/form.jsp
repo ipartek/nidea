@@ -3,9 +3,11 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
-${material}
-<br>
-${usuarios}
+<!-- <h3>Material</h3> -->
+<%-- ${material} --%>
+<!-- <br> -->
+<!-- <h3>Usuarios</h3> -->
+<%-- ${usuarios} --%>
 
 <div class="container">
 	<div class="form-group row">
@@ -32,11 +34,11 @@ ${usuarios}
 	    </div>
 	  </div>
 	  <div class="form-group row">
-	  	<label for="usuario" class="col-sm-2 col-form-label">Dueño:</label>
+	  	<label for="usuario" class="col-sm-2 col-form-label">Propietario:</label>
 	  	<div class="col-sm-5">
-	      <select class="custom-select custom-select-md">
+	      <select class="custom-select custom-select-md" name="idPropietario">
 	      	<c:forEach items="${usuarios}" var="usuario">
-	            <option value="usuario.id">usuario.nombre</option>
+	            <option value="${usuario.id}" ${ usuario.id == material.usuario.id ? "selected" : "" }>${usuario.nombre}</option>
 	        </c:forEach>
 		  </select>
 	    </div>

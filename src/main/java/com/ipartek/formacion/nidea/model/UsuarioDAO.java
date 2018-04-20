@@ -67,13 +67,13 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public ArrayList<Usuario> getAll() {
 		ArrayList<Usuario> listaUsuarios = null;
-		String sql = "SELECT id, nombre, password, id_rol FROM usuario ORDER BY id DESC LIMIT 500";
+		String sql = "SELECT id, nombre, password, id_rol FROM usuario ORDER BY id ASC LIMIT 500";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
 			Usuario u = null;
+			listaUsuarios = new ArrayList<Usuario>();
 			while (rs.next()) {
-				listaUsuarios = new ArrayList<Usuario>();
 				u = mapper(rs);
 				listaUsuarios.add(u);
 			}

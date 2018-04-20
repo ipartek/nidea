@@ -8,10 +8,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class MaterialesController
@@ -29,11 +31,14 @@ public class MaterialesController extends HttpServlet {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
 		Alert alert = null;
+		
+		// recuperar usuario en session
+		HttpSession session = request.getSession();
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 		try {
-
 			MaterialDAO dao = MaterialDAO.getInstance();
-			materiales = dao.getAll();
+			materiales = dao.getByUserId(usuario.getId());
 
 		} catch (Exception e) {
 			alert = new Alert();
