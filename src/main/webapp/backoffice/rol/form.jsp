@@ -33,41 +33,47 @@
 	</c:if>
 
 	<c:if test="${rol.id != -1}">
-		<input type="hidden" name="op"
-			value="<%=BackofficeRolesController.OP_GUARDAR%>">
-		<button type="submit" class="btn btn-primary btn-block">Modificar</button>
-		
-
-		<!-- Button trigger modal -->
-		<button type="button" class="btn btn-danger btn-block"
-			data-toggle="modal" data-target="#exampleModalCenter">Eliminar</button>
-
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalCenter" tabindex="-1"
-			role="dialog" aria-labelledby="exampleModalCenterTitle"
-			aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLongTitle">Confirmar
-							eliminacion de ${rol.nombre}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div class="form-group">
-							<label for="id">Id:</label>
-							<p>${rol.id }</p>
+		<div class="form-group row">
+			<div class="col-sm-6">
+				<input type="hidden" name="op"
+				value="<%=BackofficeRolesController.OP_GUARDAR%>">
+				<button type="submit" class="btn btn-primary btn-block">Modificar</button>
+			</div>
+			
+			<div class="col-sm-6">
+				<!-- Button trigger modal -->
+				<button type="button" class="btn btn-danger btn-block"
+					data-toggle="modal" data-target="#exampleModalCenter">Eliminar</button>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModalCenter" tabindex="-1"
+				role="dialog" aria-labelledby="exampleModalCenterTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Confirmar
+								eliminacion de ${rol.nombre}</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
 						</div>
-						<div class="form-group">
-							<label for="nombre">Nombre Rol:</label>
-							<p>${rol.nombre }</p>
+						<div class="modal-body">
+							<div class="form-group">
+								<label for="id">Id:</label>
+								<p>${rol.id }</p>
+							</div>
+							<div class="form-group">
+								<label for="nombre">Nombre Rol:</label>
+								<p>${rol.nombre }</p>
+							</div>
+							
+								<a class="btn btn-danger btn-block"
+								href="backoffice/roles?id=${rol.id}&op=<%=BackofficeRolesController.OP_ELIMINAR %>">Eliminar</a>
+							
+							
 						</div>
-						
-						<a class="btn btn-danger btn-block"
-							href="backoffice/roles?id=${rol.id}&op=<%=BackofficeRolesController.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

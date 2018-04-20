@@ -3,10 +3,14 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
+
+
+
 <div class="container">
 	<div class="form-group row">
 		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
 	</div>
+	
 	<form action="backoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
@@ -26,32 +30,38 @@
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
+	  </div>
+	  <br>
+	  <div class="input-group ">
+	    <label for="usuario" class="col-sm-2 col-form-label">Usuarios</label>
+	    <div class="input-group-append">
+	    	<select name="id_usuario">
+		      <c:forEach items="${usuarios}" var="u">
+		      	<option value="${u.id}">${u.nombre}</option>
+		      </c:forEach>
+	      </select>
+	    </div>
 	  </div>
 	</div>
 	<br>  
-	
-		<c:if test="${material.id == -1}">
-		   <div class="form-group row">
-			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
-			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
-			  </div>
-		  </div>
-		</c:if>
-		  
-		<c:if test="${material.id > -1}">  
-			  <div class="form-group row">
-			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
-			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
-			    </div>
-			    <div class="col-sm-6">		      
-			   
-					    <!-- Button trigger modal -->
-						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Cuidado
-						</button>
+	<c:if test="${material.id == -1}">
+		<div class="form-group row">
+			<div class="col-sm-12">
+			 	<input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			    <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
+			</div>
+		 </div>
+	</c:if>
+	<c:if test="${material.id > -1}">  
+		<div class="form-group row">
+			<div class="col-sm-6">
+			    <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			     <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
+			 </div>
+		<div class="col-sm-6">		      
+			<!-- Button trigger modal -->
+			<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">Eliminar
+			</button>
 						
 						<!-- Modal -->
 						<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

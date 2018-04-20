@@ -17,13 +17,10 @@
 <%@include file="/templates/alert.jsp"%>
 <form action="backoffice/roles" method="get" class="form-inline">
 
-	<input type="hidden" name="op"
-		value="<%=BackofficeRolesController.OP_BUSQUEDA%>"> <input
-		type="search" name="search" class="form-control mr-sm-2" required
-		placeholder="Nombre del Rol" aria-label="Search"> <input
-		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
-	<a class="btn btn-warning my-2 my-sm-0"
-		href="backoffice/roles?op=-1">LIMPIAR</a>
+	<input type="hidden" name="op" value="<%=BackofficeRolesController.OP_BUSQUEDA%>">
+	<input type="search" name="search" class="form-control mr-sm-2" required placeholder="Nombre del Rol" aria-label="Search"> 
+	<input class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
+	<a class="btn btn-warning my-2 my-sm-0" href="backoffice/roles?op=-1">LIMPIAR</a>
 
 </form>
 <hr>

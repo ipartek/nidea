@@ -59,7 +59,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
+		String sql = "SELECT material.id, material.nombre, material.precio, material.id_usuario, usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario' FROM material, usuario WHERE material.id_usuario = usuario.id AND material.id = ? ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -93,12 +93,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?  , `id_usuario`= ? WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -112,12 +113,15 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES ( ? , ? );";
+		
+		String sql = "INSERT INTO `material` (`nombre`, `precio`, `id_usuario`) VALUES ( ? , ?,?);";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
+			
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {

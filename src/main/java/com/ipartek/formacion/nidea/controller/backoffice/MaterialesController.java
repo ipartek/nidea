@@ -20,6 +20,7 @@ import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class MaterialesController
@@ -53,6 +54,7 @@ public class MaterialesController extends HttpServlet {
 	private int id;
 	private String nombre;
 	private float precio;
+	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -153,11 +155,14 @@ public class MaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
+		Usuario usuario = new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
+			material.getUsuario().setId(id_usuario);
+			
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -219,8 +224,8 @@ public class MaterialesController extends HttpServlet {
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
-
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
+		request.setAttribute("usuarios", usuarios);
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -260,6 +265,14 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
+		}
+		
+		if (request.getParameter("id_usuario")!= null) {
+			id_usuario =Integer.parseInt(request.getParameter("id_usuario"));
+			
+		}
+		else {
+			id_usuario= -1;
 		}
 
 	}

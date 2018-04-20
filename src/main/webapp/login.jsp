@@ -8,7 +8,7 @@
 
       <div class="form-label-group">
         <input type="text" class="form-control"
-               name="usuario" 
+               name="id_usuario" 
                value="administrador"
                placeholder="Nombre Usuario" 
                required autofocus>

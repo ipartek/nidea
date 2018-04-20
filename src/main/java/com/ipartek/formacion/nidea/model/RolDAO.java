@@ -34,7 +34,7 @@ public class RolDAO implements Persistible<Rol> {
 	@Override
 	public ArrayList<Rol> getAll() {
 		ArrayList<Rol> lista = new ArrayList<Rol>();
-		String sql = "SELECT `id`, `nombre` FROM `rol` ORDER BY `nombre` ASC LIMIT 500";
+		String sql = "SELECT `id`, `nombre` FROM `rol` ORDER BY `id` ASC LIMIT 500";
 
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);

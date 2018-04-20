@@ -6,5 +6,6 @@
 
 <a href="backoffice/materiales">Materiales</a>
 <a href="backoffice/roles">Roles</a>
+<a href="backoffice/usuarios">Usuarios</a>
 
 <jsp:include page="/templates/footer.jsp"></jsp:include>
