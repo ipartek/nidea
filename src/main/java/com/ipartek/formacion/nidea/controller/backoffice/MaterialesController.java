@@ -156,12 +156,14 @@ public class MaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
+		Usuario usuario=new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			material.getUsuario().setId(idusuario);
+			usuario=daoUsuario.getById(idusuario);
+			material.setUsuario(usuario);
 			
 			//crearusuaio con id y setear en material
 
@@ -273,9 +275,12 @@ public class MaterialesController extends HttpServlet {
 		}
 		if (request.getParameter("idusuario") != null) {
 			idusuario = Integer.parseInt(request.getParameter("idusuario"));
+		} else {
+			idusuario = -1;
+		}
 			
 		}
 
 	}
 
-}
+

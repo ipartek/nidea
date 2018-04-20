@@ -81,8 +81,19 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario usuario = null;
+		String sql = "SELECT u.id as usuario_id, u.nombre as usuario_nombre, u.password as password, u.id_rol as rol_id, r.nombre as rol_nombre FROM usuario as u, rol as r WHERE u.id_rol=r.id AND u.id = ? ;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					usuario = mapper(rs);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return usuario;
 	}
 
 	@Override
