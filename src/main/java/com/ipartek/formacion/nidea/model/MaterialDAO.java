@@ -112,6 +112,11 @@ public class MaterialDAO implements Persistible<Material> {
 
 	}
 
+	public ArrayList<Material> getByUser(int id_usuario) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		//TODO
+		return lista;
+	}
 	@Override
 	public boolean save(Material pojo) {
 		boolean resultado = false;
