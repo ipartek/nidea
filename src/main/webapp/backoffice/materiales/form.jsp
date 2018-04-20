@@ -37,9 +37,12 @@
 	</div>
 	<br>	
 	<div class="form-group row">
-		<label for="material" class="col-sm-4 col-form-label">Material:</label>	
+		<label for="material" class="col-sm-4 col-form-label">Usuario:</label>	
 		<select name="usuario" class="col-sm-6  form-control">
 				<option value="0">-- selecciona --</option>
+				<c:forEach items="${usuarios}" var="usuario">
+	  				<option value="${usuario.id}">${usuario.nombre}</option>	
+	 			 </c:forEach>
 				
 			</select>
 	  </div>
