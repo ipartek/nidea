@@ -14,8 +14,10 @@ applicationScope (JSP ) == ServletContext ( servlet ) <br>
 <h2>Usuarios Conectados</h2>
 
 
+<a
+	href="frontoffice/materiales/index.jsp">Materiales
 
-
+</a>
 <hr>
 
 <ul>
