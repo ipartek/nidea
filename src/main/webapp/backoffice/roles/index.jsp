@@ -1,5 +1,6 @@
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeRolesController"%>
-
+<%@page
+	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -33,7 +34,7 @@
 	class="btn btn-success my-2 my-sm-0">Nuevo Rol</a>
 <hr>
 
-<table id="table-roles" class="display">
+<table class="tabla table table-striped table-bordered display" style="width:100%" id="table-roles">
 	<thead>
 		<tr>
 			<th>Id</th>

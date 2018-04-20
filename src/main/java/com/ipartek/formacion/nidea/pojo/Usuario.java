@@ -1,13 +1,26 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Usuario {
 
 	public static final int ROL_ADMIN = 1;
 	public static final int ROL_USER = 2;
 
+	@NotNull(message = "El id de usuario no puede ser nulo")
 	private int id;
+	
+	@NotNull(message = "El nombre de usuario no puede ser nulo")
+	@Size(min = 1, max= 45, message = "El tamaño del nombre del usuario no esta entre 1 y 45")
 	private String nombre;
+	
+	@NotNull(message = "La pass no puede ser nula")
 	private String pass;
+	
+	@NotNull(message = "Seleccione un rol valido")
+	@Valid
 	private Rol rol;
 
 	public Usuario() {

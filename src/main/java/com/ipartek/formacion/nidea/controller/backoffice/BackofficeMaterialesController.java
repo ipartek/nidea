@@ -20,71 +20,53 @@ import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
- * Servlet implementation class MaterialesController
+ * Servlet implementation class BackofficeMateriales
  */
 @WebServlet("/backoffice/materiales")
-public class MaterialesController extends HttpServlet {
-
+public class BackofficeMaterialesController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final String VIEW_INDEX = "materiales/index.jsp";
-	private static final String VIEW_FORM = "materiales/form.jsp";
-
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
-
-	ValidatorFactory factory;
-	Validator validator;
+	private static final String VIEW_INDEX = "/backoffice/materiales/index.jsp";
+	private static final String VIEW_FORM = "/backoffice/materiales/form.jsp";
 
 	private RequestDispatcher dispatcher;
 	private Alert alert;
-	private MaterialDAO daoMaterial;
-	private UsuarioDAO daoUsuario;
+	private MaterialDAO dao;
+	private UsuarioDAO usuarioDao;
 
-	// parametros comunes
-	private String search; // para el buscador por nombre matertial
-	private int op; // operacion a realizar
+	public static final int OP_MOSTRAR_FORMULARIO = 1;
+	public static final int OP_BUSQUEDA = 2;
+	public static final int OP_ELIMINAR = 3;
+	public static final int OP_GUARDAR = 4;
+	public static final int OP_MOSTRAR_CRUD = 5;
 
-	// parametros del Material
+	// Parametros del material
 	private int id;
 	private String nombre;
 	private float precio;
+	private Usuario usuario;
 
-	/**
-	 * Se ejecuta solo la 1º vez que llaman al Servlet
-	 */
+	// Parametros comunes
+	private String search; // buscador por nombre material
+	private int op; // operacion a realizar
+
+	// Validaciones
+	private ValidatorFactory factory;
+	private Validator validator;
+
+	// se ejecuta al iniciar la servlet y solo una vez
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		daoMaterial = MaterialDAO.getInstance();
-		daoUsuario = UsuarioDAO.getInstance();
+		dao = MaterialDAO.getInstance();
+		usuarioDao = UsuarioDAO.getInstance();
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
-	}
-
-	/**
-	 * Se ejecuta cuando Paramos Servidor de Aplicaciones
-	 */
-	@Override
-	public void destroy() {
-		super.destroy();
-		daoMaterial = null;
-		daoUsuario = null;
-		validator = null;
-		factory = null;
-	}
-
-	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		System.out.println("Antes de Ejecutar doGET o doPost");
-
-		super.service(request, response);
-		System.out.println("Despues de Ejecutar doGET o doPost");
 	}
 
 	/**
@@ -106,7 +88,7 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	/**
-	 * Unimos las peticiones doGet y doPost, vamos que hacemos los mismo!!!
+	 * Une los metodos doGet y doPost
 	 * 
 	 * @param request
 	 * @param response
@@ -116,8 +98,9 @@ public class MaterialesController extends HttpServlet {
 	private void doProcess(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		alert = null;
 		try {
+
+			alert = null;
 
 			recogerParametros(request);
 
@@ -125,40 +108,48 @@ public class MaterialesController extends HttpServlet {
 			case OP_MOSTRAR_FORMULARIO:
 				mostrarFormulario(request);
 				break;
-			case OP_ELIMINAR:
-				eliminar(request, response);
-				break;
+
 			case OP_BUSQUEDA:
 				buscar(request);
 				break;
+
+			case OP_ELIMINAR:
+				eliminar(request);
+				break;
+
 			case OP_GUARDAR:
 				guardar(request);
 				break;
+
 			default:
 				listar(request);
 				break;
 			}
 
 		} catch (Exception e) {
-			alert = new Alert();
 			e.printStackTrace();
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+			listar(request);
+			alert = new Alert();
 
 		} finally {
+			// request.setAttribute("materiales", materiales);
 			request.setAttribute("alert", alert);
 			dispatcher.forward(request, response);
 		}
+
 	}
 
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
+		material.setId(id);
+		material.setNombre(nombre);
+		material.setUsuario(usuario);
+
+		request.setAttribute("usuarios", usuarioDao.getAll());
 
 		try {
-
-			material.setId(id);
-			material.setNombre(nombre);
-
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
 				material.setPrecio(precio);
@@ -174,7 +165,7 @@ public class MaterialesController extends HttpServlet {
 				}
 				// Validaciones OK
 			} else {
-				if (daoMaterial.save(material)) {
+				if (dao.save(material)) {
 					alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
 				} else {
 					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
@@ -184,6 +175,10 @@ public class MaterialesController extends HttpServlet {
 			e.printStackTrace();
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
+		} 
+ 
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		request.setAttribute("material", material);
@@ -191,55 +186,53 @@ public class MaterialesController extends HttpServlet {
 
 	}
 
-	private void buscar(HttpServletRequest request) {
-		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
-		ArrayList<Material> materiales = daoMaterial.search(search);
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-
-	}
-
-	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		if (daoMaterial.delete(id)) {
-			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
+	private void eliminar(HttpServletRequest request) {
+		if (dao.delete(id)) {
+			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
 		} else {
-			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
+			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
 		}
+
 		listar(request);
 
 	}
 
-	private void mostrarFormulario(HttpServletRequest request) {
-
-		Material material = new Material();
-		if (id > -1) {
-			material = daoMaterial.getById(id);
-
-		} else {
-			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
-		}
-
-		request.setAttribute("usuarios", daoUsuario.getAll());
-		request.setAttribute("material", material);
-		dispatcher = request.getRequestDispatcher(VIEW_FORM);
+	private void buscar(HttpServletRequest request) {
+		ArrayList<Material> materiales = new ArrayList<Material>();
+		materiales = dao.getByName(search);
+		request.setAttribute("materiales", materiales);
+		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 	}
 
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = daoMaterial.getAll();
+		materiales = dao.getAll();
+
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
 	}
 
+	private void mostrarFormulario(HttpServletRequest request) {
+		Material material = new Material();
+
+		if (id != -1) {
+			material = dao.getById(id);
+		}
+		request.setAttribute("material", material);
+		request.setAttribute("usuarios", usuarioDao.getAll());
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
+	}
+
 	/**
-	 * Recogemos todos los posibles parametros enviados
+	 * recogemos todos los posibles parametros enviados
 	 * 
 	 * @param request
 	 */
 	private void recogerParametros(HttpServletRequest request) {
+
+		usuario = null;
 
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
@@ -251,17 +244,24 @@ public class MaterialesController extends HttpServlet {
 
 		if (request.getParameter("id") != null) {
 			id = Integer.parseInt(request.getParameter("id"));
-		} else {
-			id = -1;
 		}
 
-		if (request.getParameter("nombre") != null) {
-			nombre = request.getParameter("nombre");
-			nombre = nombre.trim();
-		} else {
-			nombre = "";
+		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
+
+		if (request.getParameter("id_usuario") != null) {
+			usuario = usuarioDao.getById(Integer.parseInt(request.getParameter("id_usuario")));
 		}
 
+	}
+
+	// se ejecuta al parar el servidor de aplicaciones
+	@Override
+	public void destroy() {
+		super.destroy();
+		dao = null;
+		usuarioDao = null;
+		factory = null;
+		validator = null;
 	}
 
 }

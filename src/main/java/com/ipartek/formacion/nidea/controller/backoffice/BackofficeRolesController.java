@@ -3,6 +3,7 @@ package com.ipartek.formacion.nidea.controller.backoffice;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -11,11 +12,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.nidea.model.RolDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Rol;
-import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLDataException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+
 
 /**
  * Servlet implementation class BackofficeRolesController
@@ -24,8 +31,8 @@ import com.mysql.jdbc.MysqlDataTruncation;
 public class BackofficeRolesController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private static final String VIEW_FORM = "/backoffice/rol/form.jsp";
-	private static final String VIEW_INDEX = "/backoffice/rol/index.jsp";
+	private static final String VIEW_FORM = "/backoffice/roles/form.jsp";
+	private static final String VIEW_INDEX = "/backoffice/roles/index.jsp";
 
 	public static final int OP_MOSTRAR_FORMULARIO = 1;
 	public static final int OP_BUSQUEDA = 2;
@@ -42,10 +49,16 @@ public class BackofficeRolesController extends HttpServlet {
 	private String search;
 	private int op;
 
+	// Validaciones
+	private ValidatorFactory factory;
+	private Validator validator;
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		dao = RolDAO.getInstance();
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
 
 	/**
@@ -130,11 +143,11 @@ public class BackofficeRolesController extends HttpServlet {
 		listar(request);
 	}
 
-	private void guardar(HttpServletRequest request) {
+	private void guardar(HttpServletRequest request) throws SQLException {
 		Rol rol = new Rol();
 		rol.setId(id);
 		rol.setNombre(nombre);
-
+		
 		if ("".equals(nombre)) {
 			alert = new Alert("El nombre no puede estar vacio. No se ha guardado el registro", Alert.TIPO_WARNING);
 		} else {
@@ -144,17 +157,16 @@ public class BackofficeRolesController extends HttpServlet {
 				} else {
 					alert = new Alert("Ha habido un error al guardar", Alert.TIPO_DANGER);
 				}
-			} catch (MysqlDataTruncation e) {
+			} catch (MySQLIntegrityConstraintViolationException e) {
 				alert = new Alert("Rol duplicado. No se ha podido guardar", Alert.TIPO_WARNING);
 				request.setAttribute("rol", rol);
 
-			} catch (SQLException e) {
+			} catch (MySQLDataException e) {
 				dispatcher = request.getRequestDispatcher(VIEW_FORM);
 				alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
 						Alert.TIPO_WARNING);
 			}
 		}
-
 		request.setAttribute("rol", rol);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}

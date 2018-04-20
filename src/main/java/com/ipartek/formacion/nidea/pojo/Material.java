@@ -1,5 +1,6 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.Valid;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -9,16 +10,17 @@ public class Material {
 
 	private int id;
 
-	@NotNull
-	@Size(min = 1, max = 45)
+	@NotNull(message = "El id de material no puede ser nulo")
+	@Size(min = 1, max = 45, message = "El nombre del material debe tener entre 1 y 45 caracteres")
 	private String nombre;
 
-	@NotNull
-	@DecimalMin("0.1")
-	@DecimalMax("999999999.99")
+	@NotNull(message = "El precio no puede ser nulo")
+	@DecimalMin(value= "0.1", message = "El precio debe ser positivo y mayor de 0")
+	@DecimalMax(value= "999999999.99", message = "El precio es demasiado elevado")
 	private float precio;
 
-	@NotNull
+	@NotNull(message = "Usuario no valido")
+	@Valid
 	private Usuario usuario;
 
 	public Material() {

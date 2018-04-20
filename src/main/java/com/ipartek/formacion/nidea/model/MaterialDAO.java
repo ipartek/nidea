@@ -9,22 +9,27 @@ import java.util.ArrayList;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class MaterialDAO implements Persistible<Material> {
 
 	private static MaterialDAO INSTANCE = null;
 
-	// Private constructor NO se pueda hacer new y crear N instancias
+	// No se puede hacer news de esta clase pq se bloquea con este metodo al ser
+	// private
 	private MaterialDAO() {
 	}
 
-	// creador synchronized para protegerse de posibles problemas multi-hilo
+	// creador synchronyzed para protegerse de posibles problemas multi-hilo
 	private synchronized static void createInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new MaterialDAO();
 		}
 	}
 
+	// A este metodo pueden acceder multiples usuarios a la vez y ejecutarlo pero al
+	// creador solo uno por estar synchronyzed
 	public static MaterialDAO getInstance() {
 		if (INSTANCE == null) {
 			createInstance();
@@ -39,155 +44,206 @@ public class MaterialDAO implements Persistible<Material> {
 	 */
 	@Override
 	public ArrayList<Material> getAll() {
+
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id ORDER BY material.id DESC LIMIT 500";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM `material` as m, usuario as u WHERE u.id = m.id_usuario ORDER BY m.id DESC LIMIT 500;";
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
-				ResultSet rs = pst.executeQuery();) {
-			Material m = null;
-			while (rs.next()) {
-				m = mapper(rs);
-				lista.add(m);
-			}
+				ResultSet rs = pst.executeQuery()) {
 
+			while (rs.next()) {
+				lista.add(mapper(rs));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return lista;
 	}
 
-	@Override
-	public Material getById(int id) {
-		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
-			pst.setInt(1, id);
+	public ArrayList<Material> getByName(String search) {
+
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND m.nombre LIKE ? ORDER BY m.id DESC LIMIT 500;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+
+			pst.setString(1, "%" + search + "%");
+
 			try (ResultSet rs = pst.executeQuery()) {
+
 				while (rs.next()) {
-					material = mapper(rs);
+					lista.add(mapper(rs));
 				}
+
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return material;
+
+		return lista;
+
+	}
+
+	@Override
+	public Material getById(int id) {
+
+		Material m = null;
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND m.id = ? ;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setInt(1, id);
+
+			try (ResultSet rs = pst.executeQuery()) {
+
+				while (rs.next()) {
+					m = mapper(rs);
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return m;
+
 	}
 
 	@Override
 	public boolean save(Material pojo) {
-		boolean resul = false;
-
-		// sanear el nombre
-		pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+		boolean resultado = false;
 
 		if (pojo != null) {
+
+			// Sanitize nombre
+			pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
 			if (pojo.getId() == -1) {
-				resul = crear(pojo);
+				resultado = crear(pojo);
 			} else {
-				resul = modificar(pojo);
+				resultado = modificar(pojo);
 			}
 		}
 
-		return resul;
+		return resultado;
 	}
 
 	private boolean modificar(Material pojo) {
-		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+		boolean resultado = false;
+
+		String sql = "UPDATE `material` SET `nombre`=?, `precio`=?, `id_usuario`=? WHERE  `id`=?;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
+
 			if (affectedRows == 1) {
-				resul = true;
+				resultado = true;
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resul;
+
+		return resultado;
 	}
 
 	private boolean crear(Material pojo) {
-		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES ( ? , ? );";
+		boolean resultado = false;
+		String sql = "INSERT INTO `material` (`nombre`, `precio`, `id_usuario`) VALUES (?, ?, ?);";
+
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
 
-			int affectedRows = pst.executeUpdate();
-			if (affectedRows == 1) {
-				// recuperar ID generado de forma automatica
-				try (ResultSet rs = pst.getGeneratedKeys()) {
-					while (rs.next()) {
-						pojo.setId(rs.getInt(1));
-						resul = true;
+			int affetedRows = pst.executeUpdate();
+
+			if (affetedRows == 1) {
+				try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
+					while (generatedKeys.next()) {
+						pojo.setId(generatedKeys.getInt(1));
 					}
 				}
+				resultado = true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return resul;
+
+		return resultado;
 	}
 
 	@Override
 	public boolean delete(int id) {
-		boolean resul = false;
-		String sql = "DELETE FROM `material` WHERE  `id`= ?;";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+		boolean resultado = false;
+		Connection con = null;
+		PreparedStatement pst = null;
+
+		try {
+			con = ConnectionManager.getConnection();
+			String sql = "DELETE FROM `material` WHERE  `id`= ?;";
+
+			pst = con.prepareStatement(sql);
 			pst.setInt(1, id);
-			int affectedRows = pst.executeUpdate();
-			if (affectedRows == 1) {
-				resul = true;
+
+			int affetedRows = pst.executeUpdate();
+
+			if (affetedRows == 1) {
+				resultado = true;
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
+
+		} finally {
+			try {
+
+				if (pst != null) {
+					pst.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		return resul;
+
+		return resultado;
 	}
 
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
+
 		Material m = null;
+		Usuario u = null;
+
 		if (rs != null) {
 			m = new Material();
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
 
-			Usuario u = new Usuario();
+			u = new Usuario();
 			u.setId(rs.getInt("id_usuario"));
 			u.setNombre(rs.getString("nombre_usuario"));
 			m.setUsuario(u);
-
 		}
+
 		return m;
-	}
-
-	public ArrayList<Material> search(String nombreBuscar) {
-		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `nombre` LIKE ? ORDER BY `id` DESC LIMIT 500;";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
-
-			pst.setString(1, "%" + nombreBuscar + "%");
-			try (ResultSet rs = pst.executeQuery();) {
-
-				Material m = null;
-				while (rs.next()) {
-					m = mapper(rs);
-					lista.add(m);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return lista;
 	}
 
 }
