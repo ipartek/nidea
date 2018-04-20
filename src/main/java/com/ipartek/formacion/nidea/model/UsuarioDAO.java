@@ -37,7 +37,8 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public ArrayList<Usuario> getAll() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		String sql = "SELECT `id`, `nombre`, `password` FROM `usuario` ORDER BY `id` DESC;";
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
+						"FROM usuario as u, rol as r WHERE u.id_rol = r.id ORDER BY u.`id` DESC;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			// Class.forName("com.mysql.jdbc.Driver");
 			// final String URL =
@@ -59,12 +60,13 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 
 	@Override
-	public Usuario getById(int idBuscada) {
+	public Usuario getById(int id) {
 		Usuario u = null;
-		String sql = "SELECT `id`, `nombre`, `password` FROM `usuario`" + " WHERE `id` = ?;";
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
+						"FROM usuario as u, rol as r WHERE u.id_rol = r.id AND u.`id` = ?;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
-			pst.setInt(1, idBuscada);
+			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
 				while (rs.next()) {
 					u = mapper(rs);
@@ -179,22 +181,6 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resul;
 	}
 
-	@Override
-	public Usuario mapper(ResultSet rs) throws SQLException {
-		Usuario u = new Usuario();
-		u.setId(rs.getInt("usuario_id"));
-		u.setNombre(rs.getString("usuario_nombre"));
-		u.setPass(rs.getString("password"));
-
-		// Rol del usuario
-		Rol rol = new Rol();
-		rol.setId(rs.getInt("rol_id"));
-		rol.setNombre(rs.getString("rol_nombre"));
-		u.setRol(rol);
-
-		return u;
-	}
-
 	public Usuario check(String nombre, String pass) {
 		Usuario resul = null;
 		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' "
@@ -213,5 +199,22 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		}
 		return resul;
 	}
+	
+	@Override
+	public Usuario mapper(ResultSet rs) throws SQLException {
+		Usuario u = new Usuario();
+		u.setId(rs.getInt("usuario_id"));
+		u.setNombre(rs.getString("usuario_nombre"));
+		u.setPass(rs.getString("password"));
+
+		// Rol del usuario
+		Rol rol = new Rol();
+		rol.setId(rs.getInt("rol_id"));
+		rol.setNombre(rs.getString("rol_nombre"));
+		u.setRol(rol);
+
+		return u;
+	}
+	
 }
 

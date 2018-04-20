@@ -15,7 +15,7 @@
 				<c:set var="clase" value="text-primary" />
 			</c:when>
 		</c:choose>	
-		<li>${material.nombre} - <span class="${clase}">${material.precio} &euro;</span></li>	
+		<li>${material.nombre} - <span class="${clase}">${material.precio} &euro;</span> - ${material.usuario.nombre}</li>	
 	</c:forEach>
 </ol>
 

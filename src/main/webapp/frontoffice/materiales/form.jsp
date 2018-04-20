@@ -29,12 +29,7 @@
 		</div>
 		<div class="input-group ">
 			<label for="id_usuario" class="col-sm-2 col-form-label">Dueño</label>
-			<select name="id_usuario" class="form-control">
-				<option value="-1">Seleccione Usuario</option>
-				<c:forEach items="${usuarios}" var="usuario">
-					<option value="${usuario.id}" ${usuario.id == material.usuario.id?'selected':''}>${usuario.nombre}</option>
-				</c:forEach>
-			</select>
+			<input type ="text" class="form-control" name="id_usuario" readonly value="${usuario.id}">
 		</div>
 	
 	  </div>

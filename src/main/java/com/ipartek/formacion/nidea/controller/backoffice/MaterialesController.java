@@ -20,6 +20,7 @@ import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class MaterialesController
@@ -53,6 +54,8 @@ public class MaterialesController extends HttpServlet {
 	private int id;
 	private String nombre;
 	private float precio;
+	private Usuario usuario;
+	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -91,8 +94,7 @@ public class MaterialesController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
@@ -100,8 +102,7 @@ public class MaterialesController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
@@ -113,14 +114,10 @@ public class MaterialesController extends HttpServlet {
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	private void doProcess(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		alert = null;
 		try {
-
 			recogerParametros(request);
-
 			switch (op) {
 			case OP_MOSTRAR_FORMULARIO:
 				mostrarFormulario(request);
@@ -138,7 +135,6 @@ public class MaterialesController extends HttpServlet {
 				listar(request);
 				break;
 			}
-
 		} catch (Exception e) {
 			alert = new Alert();
 			e.printStackTrace();
@@ -151,13 +147,14 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	private void guardar(HttpServletRequest request) {
-
 		Material material = new Material();
+		usuario = new Usuario();
 
 		try {
-
 			material.setId(id);
 			material.setNombre(nombre);
+			usuario.setId(id_usuario);
+			material.setUsuario(usuario);
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -187,6 +184,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		request.setAttribute("material", material);
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -260,6 +258,12 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
+		}
+		
+		if (request.getParameter("id_usuario") != null) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+		} else {
+			id_usuario = -1;
 		}
 
 	}

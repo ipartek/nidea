@@ -72,7 +72,46 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return material;
 	}
+	
+	public ArrayList<Material> getByUser(int id) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`id` as 'id_usuario', u.`nombre` as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.`id_usuario` = u.`id` AND u.`id` = ? ;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					Material m = null;
+					m = mapper(rs);
+					lista.add(m);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
 
+	public ArrayList<Material> search(String nombreBuscar) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`id` as 'id_usuario', u.`nombre` as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.id_usuario = u.`id` AND m.`nombre` LIKE ? ORDER BY m.`id` DESC LIMIT 500;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, "%" + nombreBuscar + "%");
+			try (ResultSet rs = pst.executeQuery();) {
+				Material m = null;
+				while (rs.next()) {
+					m = mapper(rs);
+					lista.add(m);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
 	@Override
 	public boolean save(Material pojo) {
 		boolean resul = false;
@@ -93,12 +132,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?,`id_usuario`=? WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -112,12 +152,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES ( ? , ? );";
+		String sql = "INSERT INTO `material` (`nombre`, `precio`,`id_usuario`) VALUES (?, ?, ?);";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -151,6 +192,22 @@ public class MaterialDAO implements Persistible<Material> {
 		return resul;
 	}
 
+	public boolean deletebyUser(int id, int idUser) {
+		boolean resul = false;
+		String sql = "DELETE FROM `material` WHERE  `id`= ? AND `id_usuario`= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			pst.setInt(2, idUser);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
 		Material m = null;
@@ -168,26 +225,4 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return m;
 	}
-
-	public ArrayList<Material> search(String nombreBuscar) {
-		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`id` as 'id_usuario', u.`nombre` as 'nombre_usuario' FROM `material` as m,`usuario` as u WHERE m.id_usuario = u.`id` AND m.`nombre` LIKE ? ORDER BY m.`id` DESC LIMIT 500;";
-		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
-
-			pst.setString(1, "%" + nombreBuscar + "%");
-			try (ResultSet rs = pst.executeQuery();) {
-
-				Material m = null;
-				while (rs.next()) {
-					m = mapper(rs);
-					lista.add(m);
-				}
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return lista;
-	}
-
 }

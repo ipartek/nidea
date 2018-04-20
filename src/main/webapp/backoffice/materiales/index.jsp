@@ -8,7 +8,7 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<a class="btn btn-outline-primari" href="backoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-primary" href="backoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div> 
 
 	<div class="col-md-6">
@@ -31,18 +31,28 @@
        </tr>
    </thead>
    <tbody>
-            
-	<c:forEach items="${materiales}" var="material">
-		<tr>			
-			<td>
-				<a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a>
-			</td>		
-			<td>${material.precio} &euro;</td>			
-			<td>${material.usuario.nombre}</td>
-		</tr>	
-	</c:forEach>
-	
-	</tbody>
+        	<c:forEach items="${materiales}" var="material">
+				<tr>
+					<c:choose>
+						<c:when test = "${material.precio>=6.0 && material.precio<25.0}">
+	           	 			<td class="text-primary"> ${material.id}</td>
+	           	 			<td> <a class="text-primary" href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
+	           	 			<td class="text-primary"> ${material.precio} &euro;</td>	
+	        			</c:when>
+	        			<c:when test = "${material.precio>=25.0}">
+	        				<td class="text-danger"> ${material.id}</td>
+	           	 			<td> <a class="text-danger" href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
+	           	 			<td class="text-danger"> ${material.precio} &euro;</td>
+	        			</c:when>	
+						<c:otherwise>
+	            			<td class='bajo'>${material.id}</td>
+	            			<td class='bajo'><a class='bajo' href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
+	            			<td class='bajo'>${material.precio} &euro;</td>
+	         			</c:otherwise>
+					</c:choose>
+				</tr>
+			</c:forEach>	
+        </tbody>
 </table>
 
-<jsp:include page="/templates/footer.jsp"></jsp:include>
+<%@include file="/templates/footer.jsp" %>
