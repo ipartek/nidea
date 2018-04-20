@@ -29,9 +29,9 @@
 	  </div>
 	  	    <div class="form-group">
 	  <label for="sel1">Select Creador:</label>
-	  <select class="form-control" id="sel1">
+	  <select class="form-control" id="usuario" name="usuario">
 	  <c:forEach items="${users}" var="user">
-	  	<option valuer="${user.id}">${user.nombre}</option>	
+	  	<option value="${user.id}" ${(user.id==material.usuario.id)?"selected":""}>${user.nombre}</option>	
 	  </c:forEach>
 		  </select>
 		</div>
