@@ -6,7 +6,11 @@
 <div class="container">
 	<div class="form-group row">
 		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
+	
 	</div>
+	<!--  <p>Informacion de usuario ${usuario} </p>-->
+	
+	
 	<form action="backoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
@@ -25,6 +29,20 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
+	    </div>
+	    
+	    <div>
+	    <select id="usuario" name="id_usuario">
+	    
+	 <c:forEach var="user" items="${usuarios}">
+	 
+	 	<option value="${user.id}">${user.nombre}</option>
+	 	
+	
+	</c:forEach>
+	   
+	    
+	    </select>
 	    </div>
 	   
 	  </div>

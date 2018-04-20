@@ -4,10 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.ipartek.formacion.nidea.util.Utilidades;
 
 public class UsuarioDAO implements Persistible<Usuario> {
 
@@ -40,7 +43,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	 */
 	public Usuario check(String nombre, String pass) {
 		Usuario resul = null;
-		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' "
+		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password as 'password', r.id as 'rol_id', r.nombre as 'rol_nombre' "
 				+ "FROM usuario as u, rol as r " + "WHERE u.id_rol = r.id AND u.nombre=? and u.password = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, nombre);
@@ -59,33 +62,132 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	@Override
 	public List<Usuario> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario',usuario.password as 'password',usuario.id_rol,rol.id as 'rol_id',rol.nombre as 'rol_nombre' FROM usuario,rol where usuario.id= rol.id;";
+		
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);
+				ResultSet rs = pst.executeQuery();) {
+			Usuario m = null;
+			while (rs.next()) {
+				m = mapper(rs);
+				lista.add(m);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+		
+		
+	
 	}
 
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Usuario usuario = null;
+		String sql = "SELECT  usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario',usuario.password as 'password', usuario.id_rol, rol.nombre as 'rol_nombre',rol.id as 'rol_id'FROM  usuario,rol WHERE usuario.id =1; ;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					usuario = mapper(rs);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return usuario;
 	}
 
 	@Override
 	public boolean save(Usuario pojo) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+
+		// sanear el nombre
+		pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
+		if (pojo != null) {
+			if (pojo.getId() == -1) {
+				resul = crear(pojo);
+			} else {
+				resul = modificar(pojo);
+			}
+		}
+
+		return resul;
+	}
+
+	private boolean modificar(Usuario pojo) {
+		boolean resul = false;
+		String sql = "UPDATE usuario SET nombre=? as 'nombre_usuario', password=? as 'password', id_rol=? WHERE  id=?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setInt(3, pojo.getRol().getId());
+			pst.setInt(4, pojo.getId());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+
+	private boolean crear(Usuario pojo) {
+		boolean resul = false;
+		String sql = "INSERT INTO  usuario (nombre, password,id_rol) VALUES ( ?, ?, ? );";
+	
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setInt(3, pojo.getRol().getId());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				// recuperar ID generado de forma automatica
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+					while (rs.next()) {
+						pojo.setId(rs.getInt(1));
+						resul = true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+		
 	}
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		String sql = "DELETE FROM `usuario` WHERE  `id`= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
 	}
 
 	@Override
 	public Usuario mapper(ResultSet rs) throws SQLException {
 		Usuario u = new Usuario();
-		u.setId(rs.getInt("usuario_id"));
-		u.setNombre(rs.getString("usuario_nombre"));
+		u.setId(rs.getInt("id_usuario"));
+		u.setNombre(rs.getString("nombre_usuario"));
 		u.setPass(rs.getString("password"));
 
 		// Rol del usuario
