@@ -6,15 +6,14 @@
 setTimeout(function () { location.reload(1); }, 5000);	
 </script>
 
-YA ESTAS LOGEADO EN EL FRONTOFFICE <br>
+<h1>Backofice</h1>
 
 
 applicationScope (JSP ) == ServletContext ( servlet ) <br>
 
 <h2>Usuarios Conectados</h2>
 
-
-
+<a href="frontoffice/materiales">Tus Materiales</a>
 
 <hr>
 

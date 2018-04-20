@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
@@ -44,6 +46,27 @@ public class MaterialDAO implements Persistible<Material> {
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
+			Material m = null;
+			while (rs.next()) {
+				m = mapper(rs);
+				lista.add(m);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
+	public ArrayList<Material> getAllByUser(int idUser) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id AND material.id_usuario=? ORDER BY material.id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);) {
+				pst.setInt(1, idUser);
+				ResultSet rs = pst.executeQuery();
+			
+			
 			Material m = null;
 			while (rs.next()) {
 				m = mapper(rs);
@@ -151,6 +174,22 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return resul;
 	}
+	
+	public boolean deleteByUser(int id,int idUser) {
+		boolean resul = false;
+		String sql = "DELETE FROM `material` WHERE  `id`= ? AND id_usuario=?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			pst.setInt(2, idUser);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
 
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
@@ -169,6 +208,7 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return m;
 	}
+	
 
 	public ArrayList<Material> search(String nombreBuscar) {
 		ArrayList<Material> lista = new ArrayList<Material>();

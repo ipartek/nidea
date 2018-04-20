@@ -9,7 +9,7 @@
       <div class="form-label-group">
         <input type="text" class="form-control"
                name="usuario" 
-               value="administrador"
+               value="pepe"
                placeholder="Nombre Usuario" 
                required autofocus>
                
