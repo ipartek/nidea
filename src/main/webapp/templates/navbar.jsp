@@ -17,14 +17,22 @@
       <c:if test="${empty usuario}">
       	<a class="btn btn-outline-primary" href="login">Login</a>
       </c:if>
-            
       <c:if test="${!empty usuario}">
-      	<nav class="my-2 my-md-0 mr-md-10">
-      		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
-      		<a href="#" class="badge badge-secondary">${usuario}</a>
-      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
-      	</nav>   	
-      </c:if>
+     	<nav class="my-2 my-md-0 mr-md-10">
+     		<c:set var = "rol" scope = "session" value = "${usuario.rol.id}"/>
+<!--      		Menú para usuarios -->
+	     	<c:if test="${rol == 1}">
+		     	<a href="backoffice/materiales?op=0">Materiales</a>
+		     	<a href="backoffice/roles?op=0">Roles</a>
+			</c:if>
+<!-- 			Menú para admin -->
+			<c:if test="${rol == 2}">
+		     	<a href="materiales">Mis materiales</a>
+			</c:if>
+			<span class="badge badge-success">${usuario.nombre}</span>
+	     	<a class="btn btn-outline-danger" href="logout">Logout</a>
+	     </nav>
+     </c:if>
 
      
     </div>
