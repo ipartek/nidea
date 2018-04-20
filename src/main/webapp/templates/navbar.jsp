@@ -7,7 +7,7 @@
             
       <nav class="my-2 my-md-0 mr-md-10">
         <a class="p-2 text-dark" href="generar-mesa">Mesa</a>
-        <a class="p-2 text-dark" href="materiales">Materiales</a>          
+        <a class="p-2 text-dark" href="materiales?op=3">Materiales</a>          
         <a class="p-2 text-dark" href="calculadora">Calculadora</a>     
       </nav>
       
@@ -27,7 +27,7 @@
 			</c:if>
 <!-- 			Menú para admin -->
 			<c:if test="${rol == 2}">
-		     	<a href="materiales">Mis materiales</a>
+		     	<a href="materiales?op=0">Mis materiales</a>
 			</c:if>
 			<span class="badge badge-success">${usuario.nombre}</span>
 	     	<a class="btn btn-outline-danger" href="logout">Logout</a>
