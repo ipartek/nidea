@@ -14,7 +14,7 @@ public class Usuario {
 		super();
 		this.id = -1;
 		this.pass = "";
-		this.nombre = "";
+		this.nombre = "Elija un usuario";
 		this.rol = new Rol();
 	}
 

@@ -59,7 +59,9 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.id AS id_usuario, u.nombre AS nombre_usuario  "
+				+ "FROM `material` AS m, usuario AS u  "
+				+ "WHERE  m.id_usuario = u.id AND m.`id` = ? ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -93,12 +95,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? , id_usuario= ? WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -112,12 +115,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES ( ? , ? );";
+		String sql = "INSERT INTO `material` (`nombre`, `precio`, id_usuario) VALUES ( ? , ?, ?);";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -171,10 +175,95 @@ public class MaterialDAO implements Persistible<Material> {
 
 	public ArrayList<Material> search(String nombreBuscar) {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `nombre` LIKE ? ORDER BY `id` DESC LIMIT 500;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre_usuario FROM `material` as m, usuario as u "
+				+ "WHERE m.`nombre` LIKE ? "
+				+ "ORDER BY m.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, "%" + nombreBuscar + "%");
+			try (ResultSet rs = pst.executeQuery();) {
+
+				Material m = null;
+				while (rs.next()) {
+					m = mapper(rs);
+					lista.add(m);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	public Material getById(int id, int idUsuarioSession) {
+		Material material = null;
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.id AS id_usuario, u.nombre AS nombre_usuario  "
+				+ "FROM `material` AS m, usuario AS u  "
+				+ "WHERE  m.id_usuario = u.id AND m.`id` = ? AND m.id_usuario = ? ;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			pst.setInt(2, idUsuarioSession);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					material = mapper(rs);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return material;
+	}
+
+	public ArrayList<Material> getAll(int idUsuarioSession) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' "
+				+ "FROM `material`,`usuario` as u "
+				+ "WHERE material.id_usuario = u.id  AND material.id_usuario = ?"
+				+ "ORDER BY material.id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);				
+				) {
+			pst.setInt(1, idUsuarioSession);
+			try (ResultSet rs = pst.executeQuery();) {
+				Material m = null;
+				while (rs.next()) {
+					m = mapper(rs);
+					lista.add(m);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
+
+	public boolean delete(int id, int idUsuarioSession) {
+		boolean resul = false;
+		String sql = "DELETE FROM `material` WHERE  `id`= ? AND id_usuario = ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			pst.setInt(2, idUsuarioSession);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+
+	public ArrayList<Material> search(String nombreBuscar, int idUsuarioSession) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre_usuario FROM `material` as m, usuario as u "
+				+ "WHERE m.`nombre` LIKE ?  AND m.id_usuario = ?"
+				+ "ORDER BY m.`id` DESC LIMIT 500;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, "%" + nombreBuscar + "%");
+			pst.setInt(2, idUsuarioSession);
 			try (ResultSet rs = pst.executeQuery();) {
 
 				Material m = null;

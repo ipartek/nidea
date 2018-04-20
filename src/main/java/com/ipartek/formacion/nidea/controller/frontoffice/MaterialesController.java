@@ -1,4 +1,4 @@
-package com.ipartek.formacion.nidea.controller.backoffice;
+package com.ipartek.formacion.nidea.controller.frontoffice;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -25,7 +26,7 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
 /**
  * Servlet implementation class MaterialesController
  */
-@WebServlet("/backoffice/materiales")
+@WebServlet("/frontoffice/materiales")
 public class MaterialesController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -55,6 +56,10 @@ public class MaterialesController extends HttpServlet {
 	private String nombre;
 	private float precio;
 	private Usuario usuario;
+	
+	//usuarios
+	
+	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -186,7 +191,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		
-		request.setAttribute("material", daoMaterial.getAll());
+		request.setAttribute("material", daoMaterial.getAll(id_usuario));
 		request.setAttribute("usuarios",daoUsuario.getAll());
 		mostrarFormulario(request);
 
@@ -194,7 +199,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void buscar(HttpServletRequest request) {
 		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
-		ArrayList<Material> materiales = daoMaterial.search(search);
+		ArrayList<Material> materiales = daoMaterial.search(search,id_usuario);
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -202,7 +207,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (daoMaterial.delete(id)) {
+		if (daoMaterial.delete(id, id_usuario)) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
@@ -214,8 +219,10 @@ public class MaterialesController extends HttpServlet {
 	private void mostrarFormulario(HttpServletRequest request) {
 
 		Material material = new Material();
+	
 		if (id > -1) {
-			material = daoMaterial.getById(id);
+			
+			material = daoMaterial.getById(id,id_usuario);
 
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
@@ -229,11 +236,11 @@ public class MaterialesController extends HttpServlet {
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = daoMaterial.getAll();
+		materiales = daoMaterial.getAll(id_usuario);
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
-	}
+	}   
 
 	/**
 	 * Recogemos todos los posibles parametros enviados
@@ -242,6 +249,10 @@ public class MaterialesController extends HttpServlet {
 	 */
 	private void recogerParametros(HttpServletRequest request) {
 
+		
+		
+		int id_usuario =(Usuario)(request.getSession().getAttribute("usuario")).getId();
+		
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
 		} else {
@@ -277,7 +288,8 @@ public class MaterialesController extends HttpServlet {
 		else {
 			usuario = new Usuario();
 			usuario.setId(-1);
-		}
+		}		
+		
 		
 		
 		

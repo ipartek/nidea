@@ -11,6 +11,9 @@ YA ESTAS LOGEADO EN EL FRONTOFFICE <br>
 
 applicationScope (JSP ) == ServletContext ( servlet ) <br>
 
+
+<a href="frontoffice/materiales">Mis Materiales</a>
+
 <h2>Usuarios Conectados</h2>
 
 
