@@ -26,9 +26,22 @@
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
 	    </div>
-	   
 	  </div>
-	</div>
+	  <div class="input-group ">
+	    <label for="precio" class="col-sm-2 col-form-label">Usuario</label>
+	    
+	  <select name="idusuario">
+		<c:forEach items="${usuarios}" var="usuario">
+
+		  <option ${(usuario.id==material.usuario.id)?"selected":""} value="${usuario.id}">${usuario.nombre}</option>
+		
+			</c:forEach>
+			</select>
+			</div>
+	
+	
+	  
+
 	<br>  
 	
 		<c:if test="${material.id == -1}">
@@ -50,7 +63,7 @@
 			   
 					    <!-- Button trigger modal -->
 						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Cuidado
+						  Eliminar
 						</button>
 						
 						<!-- Modal -->
@@ -82,6 +95,7 @@
 		</c:if>	  
 	</form>
 </div>
+
 
 
 <jsp:include page="/templates/footer.jsp"></jsp:include>

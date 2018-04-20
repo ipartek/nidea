@@ -59,7 +59,7 @@ public class MaterialDAO implements Persistible<Material> {
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `id` = ? ;";
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, u.`nombre` as `nombre_usuario`, u.`id`as `id_usuario` FROM `material`as m,`usuario` as u WHERE m.`id`=? AND  m.`id_usuario`= u.`id` ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -93,12 +93,14 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?, `id_usuario`=? WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
+			
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -112,12 +114,13 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES ( ? , ? );";
+		String sql = "INSERT INTO `material` (`nombre`, `precio`, `id_usuario`) VALUES ( ? , ?, ? );";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setFloat(3, pojo.getUsuario().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -159,7 +162,7 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
-
+			
 			Usuario u = new Usuario();
 			u.setId(rs.getInt("id_usuario"));
 			u.setNombre(rs.getString("nombre_usuario"));
