@@ -220,11 +220,18 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	private void listar(HttpServletRequest request) {
-		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = dao.getAll();
-
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+		session = request.getSession();
+		
+		if (null != session.getAttribute("usuario")) {
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+			ArrayList<Material> materiales = new ArrayList<Material>();
+			materiales = dao.getByUser(usuario.getId());
+			request.setAttribute("materiales", materiales);
+			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+		} else {
+			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
+			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
+		}
 	}
 
 	@Override
