@@ -70,7 +70,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=FrontofficeMaterialesController.OP_ELIMINAR%>">
+						        <a href="frontoffice/materiales?id=${material.id}&op=<%=FrontofficeMaterialesController.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>

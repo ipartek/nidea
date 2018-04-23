@@ -5,7 +5,7 @@
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
-<h1>Materiales</h1>
+<h1>Mis Materiales</h1>
 
 <div class="row">
 
@@ -41,10 +41,9 @@
 		<c:forEach items="${materiales}" var="material">
 			<tr>			
 				<td>
-					<a href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a>
+					<a href="frontoffice/materiales?id=${material.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a>
 				</td>		
 				<td>${material.precio} &euro;</td>			
-				<td>${material.usuario.nombre}</td>
 			</tr>	
 		</c:forEach>
 		

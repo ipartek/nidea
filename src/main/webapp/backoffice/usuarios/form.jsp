@@ -1,5 +1,6 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.UsuariosController"%>
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeUsuariosController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -14,15 +15,15 @@
 	
 	<form action="backoffice/usuarios" method="post">
 	  <div class="form-group row">
-	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
+	    <label for="id_usuario" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
-	      <input type="text" class="form-control" name="id" readonly value="${usu.id}">
+	      <input type="text" class="form-control" name="id_usuario" readonly value="${usu.id}">
 	    </div>
 	  </div>
 	  <div class="form-group row">
-	    <label for="nombre" class="col-sm-2 col-form-label">Nombre Usuario</label>
+	    <label for="nombre_usuario" class="col-sm-2 col-form-label">Nombre Usuario</label>
 	    <div class="col-sm-5">
-	      <input type="text" value="${usu.nombre}" class="form-control" name="nombre" placeholder="Introduce el nombre del usuario" >
+	      <input type="text" value="${usu.nombre}" class="form-control" name="nombre_usuario" placeholder="Introduce el nombre del usuario" >
 	    </div>
 	  </div>
 	  <div class="input-group ">
@@ -39,7 +40,7 @@
 	  <div class="input-group ">
 	    <label for="rol" class="col-sm-2 col-form-label">Rol del usuario</label>
 	    <div class="input-group-append">
-	    	<select name="id_usuario">
+	    	<select name="rol_id">
 		      <c:forEach items="${roles}" var="r">
 		      	<option value="${r.id}">${r.nombre}</option>
 		      </c:forEach>
@@ -49,7 +50,7 @@
 	<c:if test="${usuarios.id_usuarios == -1}">
 		<div class="form-group row">
 			<div class="col-sm-12">
-			 	<input type="hidden" name="op" value="<%=UsuariosController.OP_GUARDAR%>"> 	
+			 	<input type="hidden" name="op" value="<%=BackofficeUsuariosController.OP_GUARDAR%>"> 	
 			    <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			</div>
 		 </div>
@@ -57,7 +58,7 @@
 	<c:if test="${usuarios.id_usuarios > -1}">  
 		<div class="form-group row">
 			<div class="col-sm-6">
-			    <input type="hidden" name="op" value="<%=UsuariosController.OP_GUARDAR%>"> 	
+			    <input type="hidden" name="op" value="<%=BackofficeUsuariosController.OP_GUARDAR%>"> 	
 			     <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			 </div>
 		<div class="col-sm-6">		      
@@ -80,7 +81,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/usuarios?id=${usuarios.id}&op=<%=UsuariosController.OP_ELIMINAR%>">
+						        <a href="backoffice/usuarios?id=${usuarios.id}&op=<%=BackofficeUsuariosController.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>

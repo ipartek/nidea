@@ -1,4 +1,5 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
+
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -36,8 +37,8 @@
 	    <label for="id_usuario" class="col-sm-2 col-form-label">Usuarios</label>
 	    <div class="input-group-append">
 	    	<select name="id_usuario">
-		      <c:forEach items="${usuarios}" var="u">
-		      	<option value="${u.id}" >${u.nombre}</option>
+		      <c:forEach items="${usuarios}" var="usuario">
+		      	<option value="${usuario.id}" ${(usuario.id==material.usuario.id)?"selected":""} >${usuario.nombre}</option>
 		      </c:forEach>
 	      </select>
 	    </div>
@@ -47,7 +48,7 @@
 	<c:if test="${material.id == -1}">
 		<div class="form-group row">
 			<div class="col-sm-12">
-			 	<input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			 	<input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
 			    <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			</div>
 		 </div>
@@ -55,7 +56,7 @@
 	<c:if test="${material.id > -1}">  
 		<div class="form-group row">
 			<div class="col-sm-6">
-			    <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			    <input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
 			     <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			 </div>
 		<div class="col-sm-6">		      
@@ -78,7 +79,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>">
+						        <a href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>

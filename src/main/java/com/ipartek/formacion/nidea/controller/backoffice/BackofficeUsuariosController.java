@@ -29,7 +29,7 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class UsuariosController
  */
 @WebServlet("/backoffice/usuarios")
-public class UsuariosController extends HttpServlet implements Operable {
+public class BackofficeUsuariosController extends HttpServlet implements Operable {
 	private static final long serialVersionUID = 1L;
        
 	private static final String VIEW_INDEX = "usuarios/index.jsp";
@@ -140,7 +140,7 @@ public class UsuariosController extends HttpServlet implements Operable {
 
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
-		if (request.getParameter("id") != null) {
+		if (request.getParameter("id_usuario") != null) {
 			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
 		} else {
 			id_usuario = -1;

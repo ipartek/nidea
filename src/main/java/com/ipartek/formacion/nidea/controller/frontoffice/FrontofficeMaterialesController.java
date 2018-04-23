@@ -34,7 +34,7 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
 
-	
+
 
 	ValidatorFactory factory;
 	Validator validator;
@@ -48,11 +48,14 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 	private String search; // para el buscador por nombre matertial
 	private int op; // operacion a realizar
 
+	//Usuario logeado
+	Usuario usuario;
+	
+	
 	// parametros del Material
-	private int id;
+	private int id;	
 	private String nombre;
 	private float precio;
-	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -153,14 +156,15 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
-		Usuario usuario = new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario.setId(id_usuario);
-			material.setUsuario(usuario);
+			
+			Usuario u = new Usuario();
+			u.setId(usuario.getId());
+			material.setUsuario(u);
 			
 
 			if (request.getParameter("precio") != null) {
@@ -189,8 +193,8 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
-		request.setAttribute("usuarios", usuarios);
+
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
@@ -206,7 +210,7 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (daoMaterial.delete(id)) {
+		if (daoMaterial.deleteByUser(id, usuario.getId())) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
@@ -214,6 +218,7 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 		listar(request);
 
 	}
+	
 
 	private void mostrarFormulario(HttpServletRequest request) {
 
@@ -224,8 +229,8 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
-		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
-		request.setAttribute("usuarios", usuarios);
+
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -233,7 +238,7 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = daoMaterial.getAll();
+		materiales = daoMaterial.getAllByUser(usuario.getId());
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -267,13 +272,10 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 			nombre = "";
 		}
 		
-		if (request.getParameter("id_usuario")!= null) {
-			id_usuario =Integer.parseInt(request.getParameter("id_usuario"));
-			
-		}
-		else {
-			id_usuario= -1;
-		}
+		
+		usuario = (Usuario)request.getSession().getAttribute("usuario");
+		
+		
 
 	}
 

@@ -1,5 +1,5 @@
 <%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.UsuariosController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeUsuariosController"%>
 
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
