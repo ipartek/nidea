@@ -4,7 +4,7 @@
 <%@include file="/templates/alert.jsp" %>
 
 <h3>Material</h3>
-${material}
+<%-- ${material} --%>
 
 <div class="container">
 	<div class="form-group row">

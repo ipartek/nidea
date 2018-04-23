@@ -74,9 +74,9 @@ public class MaterialDAO implements Persistible<Material> {
 	}
 
 	@Override
-	public boolean save(Material pojo) throws Exception {
+	public boolean saveById(Material pojo, int idUsuario) throws Exception {
 		boolean resul = false;
-
+		
 		// sanear el nombre
 		pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
 
@@ -88,22 +88,23 @@ public class MaterialDAO implements Persistible<Material> {
 					throw e;
 				}
 			} else {
-				resul = modificar(pojo);
+				resul = modificar(pojo, idUsuario);
 			}
 		}
 
 		return resul;
 	}
 
-	private boolean modificar(Material pojo) {
+	private boolean modificar(Material pojo, int idUsuario) {
 		boolean resul = false;
-		String sql = "UPDATE material SET nombre= ? , precio= ? , id_usuario = ? WHERE id= ?;";
+		String sql = "UPDATE material SET nombre= ? , precio= ? , id_usuario = ? WHERE id= ? AND id_usuario = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getUsuario().getId());
 			pst.setInt(4, pojo.getId());
+			pst.setInt(5, idUsuario);
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -242,6 +243,12 @@ public class MaterialDAO implements Persistible<Material> {
 			e.printStackTrace();
 		}
 		return resul;
+	}
+
+	@Override
+	public boolean save(Material pojo) throws SQLException, Exception {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

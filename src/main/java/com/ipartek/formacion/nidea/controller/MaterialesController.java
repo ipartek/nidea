@@ -18,7 +18,6 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
-import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
@@ -190,7 +189,7 @@ public class MaterialesController extends HttpServlet {
 				}
 				// Validaciones OK
 			} else {
-					if (daoMaterial.save(material)) {
+					if (daoMaterial.saveById(material, usuario.getId())) {
 						alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
 					} else {
 						alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);

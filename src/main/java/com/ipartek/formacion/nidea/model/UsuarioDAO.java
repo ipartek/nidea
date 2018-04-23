@@ -164,4 +164,10 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return usuario;
 	}
 
+	@Override
+	public boolean saveById(Material pojo, int idUsuario) throws Exception {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

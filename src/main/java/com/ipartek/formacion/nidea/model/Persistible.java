@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ipartek.formacion.nidea.pojo.Material;
+
 public interface Persistible<P> {
 
 	/**
@@ -53,5 +55,7 @@ public interface Persistible<P> {
 	 * 
 	 */
 	public P mapper(ResultSet rs) throws SQLException;
+
+	boolean saveById(Material pojo, int idUsuario) throws Exception;
 
 }
