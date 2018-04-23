@@ -1,4 +1,3 @@
-
 <%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
@@ -6,9 +5,9 @@
 
 <div class="container">
 	<div class="form-group row">
-		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
+		<a class="btn btn-outline-dark btn-lg" href="frontoffice/materiales">Volver</a>
 	</div>
-	<form action="backoffice/materiales" method="post">
+	<form action="frontoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
@@ -29,18 +28,7 @@
 	    </div>	   
 	  </div>
 	  
-	   <div class="input-group ">
-	    <label for="id_usuario" class="col-sm-2 col-form-label">Usuario</label>
-	    <div class="input-group-append">
-	      <select name="id_usuario">
-	      		<c:forEach items="${usuarios}" var="usuario">	
-	      			<option value="${usuario.id}"  ${(usuario.id==material.usuario.id)?"selected":""}  >${usuario.nombre}</option>
-	      		</c:forEach>
-	      </select>
-	    </div>
-	   
-	  </div>
-	  
+	
 	</div>
 	<br>  
 	
@@ -81,7 +69,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
+						        <a href="frontoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>

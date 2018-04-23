@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.RolDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Rol;
@@ -21,16 +22,11 @@ import com.mysql.jdbc.MysqlDataTruncation;
  * Servlet implementation class BackofficeRolesController
  */
 @WebServlet("/backoffice/roles")
-public class BackofficeRolesController extends HttpServlet {
+public class BackofficeRolesController extends HttpServlet implements Operable {
 	private static final long serialVersionUID = 1L;
 
 	private static final String VIEW_FORM = "/backoffice/rol/form.jsp";
 	private static final String VIEW_INDEX = "/backoffice/rol/index.jsp";
-
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 2;
-	public static final int OP_ELIMINAR = 3;
-	public static final int OP_GUARDAR = 4;
 
 	private RequestDispatcher dispatcher;
 	private Alert alert;
