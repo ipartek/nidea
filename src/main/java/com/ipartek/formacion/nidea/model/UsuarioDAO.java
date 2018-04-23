@@ -137,7 +137,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		boolean resul = false;
 		String sql = "INSERT INTO usuario (nombre, password, id_rol) VALUES (?,?,?);";
 		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+				PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
 			pst.setInt(3, pojo.getRol().getId());
