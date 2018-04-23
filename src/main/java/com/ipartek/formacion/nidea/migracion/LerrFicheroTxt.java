@@ -46,7 +46,7 @@ public class LerrFicheroTxt {
 			
 			
 			while ((sCurrentLine = br.readLine()) != null) {
-				campos = sCurrentLine.split(",");
+				campos = sCurrentLine.split(","); 
 				
 				age = Integer.parseInt((campos[3]));
 				
