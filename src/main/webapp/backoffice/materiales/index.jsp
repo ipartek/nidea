@@ -31,7 +31,7 @@
        </tr>
    </thead>
    <tbody>
-            
+      
 	<c:forEach items="${materiales}" var="material">
 		<tr>			
 			<td>

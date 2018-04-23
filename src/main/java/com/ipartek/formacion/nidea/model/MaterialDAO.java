@@ -55,6 +55,25 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return lista;
 	}
+	public ArrayList<Material> getAllUsuario(int idUsu) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id AND material.id_usuario=? ORDER BY material.id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection()) {
+				
+				PreparedStatement pst = con.prepareStatement(sql);
+				pst.setInt(1, idUsu);
+				ResultSet rs = pst.executeQuery();
+			Material m = null;
+			while (rs.next()) {
+				m = mapper(rs);
+				lista.add(m);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
 
 	@Override
 	public Material getById(int id) {
@@ -72,6 +91,7 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return material;
 	}
+	
 
 	@Override
 	public boolean save(Material pojo) {
@@ -100,6 +120,26 @@ public class MaterialDAO implements Persistible<Material> {
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getUsuario().getId());
 			pst.setInt(4, pojo.getId());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+	private boolean modificarUsuario(Material pojo,int idUsu ) {
+		boolean resul = false;
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ? ,`id_usuario`=? WHERE  `id`= ? AND `id_usuario`=?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
+			pst.setInt(5, idUsu);
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -152,6 +192,22 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return resul;
 	}
+	//delete para usuario
+	public boolean deleteUsuario(int id,int idUsu) {
+		boolean resul = false;
+		String sql = "DELETE FROM `material` WHERE  `id`= ? AND `id_usuario`= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, id);
+			pst.setInt(2, idUsu);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
 
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
@@ -161,7 +217,7 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
-			if(rs.getInt("id_usuario") > 1){
+			if(rs.getInt("id_usuario") > 0){
 				Usuario u = new Usuario();
 				u.setId(rs.getInt("id_usuario"));
 				u.setNombre(rs.getString("nombre_usuario"));

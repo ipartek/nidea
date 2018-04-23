@@ -21,7 +21,7 @@
       <c:if test="${!empty usuario}">
       	<nav class="my-2 my-md-0 mr-md-10">
       		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
-      		<a href="#" class="badge badge-secondary">${usuario}</a>
+      		<a href="#" class="badge badge-secondary">${usuario.nombre}</a>
       	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
       	</nav>   	
       </c:if>
