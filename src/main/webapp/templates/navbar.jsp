@@ -17,9 +17,12 @@
       	<li class="nav-item">
 			<a class="nav-link" href="calculadora">Calculadora</a> 
 		</li>
+		<li class="nav-item">
+				<a class="nav-link" href="materiales">Materiales</a>
+			</li>	
 		<c:if test="${usuario.rol.id == 2 }">
 			<li class="nav-item">
-				<a class="nav-link" href="materiales">Mis Materiales</a>
+				<a class="nav-link" href="frontoffice/materiales">Mis Materiales</a>
 			</li>		
 		</c:if>     
 	    <c:if test="${usuario.rol.id == 1 }">  

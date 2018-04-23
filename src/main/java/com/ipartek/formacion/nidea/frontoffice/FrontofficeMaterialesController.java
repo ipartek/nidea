@@ -1,4 +1,4 @@
-package com.ipartek.formacion.nidea.controller.backoffice;
+package com.ipartek.formacion.nidea.frontoffice;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -22,23 +23,23 @@ import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
-import com.mysql.jdbc.MysqlDataTruncation;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
- * Servlet implementation class BackofficeMateriales
+ * Servlet implementation class MaterialesController
  */
-@WebServlet("/backoffice/materiales")
-public class BackofficeMaterialesController extends HttpServlet implements Operable{
+@WebServlet("/frontoffice/materiales")
+public class FrontofficeMaterialesController extends HttpServlet implements Operable {
 	private static final long serialVersionUID = 1L;
 
-	private static final String VIEW_INDEX = "/backoffice/materiales/index.jsp";
-	private static final String VIEW_FORM = "/backoffice/materiales/form.jsp";
+	private static final String VIEW_INDEX = "/frontoffice/materiales/index.jsp";
+	private static final String VIEW_FORM = "/frontoffice/materiales/form.jsp";
+	private static final String VIEW_LOGIN = "/login.jsp";
 
 	private RequestDispatcher dispatcher;
 	private Alert alert;
 	private MaterialDAO dao;
 	private UsuarioDAO usuarioDao;
+	private HttpSession session;
 
 	// Parametros del material
 	private int id;
@@ -54,7 +55,6 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 	private ValidatorFactory factory;
 	private Validator validator;
 
-	// se ejecuta al iniciar la servlet y solo una vez
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -82,45 +82,30 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		doProcess(request, response);
 	}
 
-	/**
-	 * Une los metodos doGet y doPost
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 */
 	private void doProcess(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		try {
-
 			alert = null;
-
 			recogerParametros(request);
 
 			switch (op) {
 			case OP_MOSTRAR_FORMULARIO:
 				mostrarFormulario(request);
 				break;
-
 			case OP_BUSQUEDA:
 				buscar(request);
 				break;
-
 			case OP_ELIMINAR:
 				eliminar(request);
 				break;
-
 			case OP_GUARDAR:
 				guardar(request);
 				break;
-
 			default:
 				listar(request);
 				break;
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
@@ -128,21 +113,63 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			alert = new Alert();
 
 		} finally {
-			// request.setAttribute("materiales", materiales);
 			request.setAttribute("alert", alert);
 			dispatcher.forward(request, response);
 		}
 
 	}
 
+	private void mostrarFormulario(HttpServletRequest request) {
+		session = request.getSession();
+		if (null != session.getAttribute("usuario")) {
+			Material material = new Material();
+			if (id != -1) {
+				material = dao.getById(id);
+			}
+			request.setAttribute("material", material);
+			dispatcher = request.getRequestDispatcher(VIEW_FORM);
+		} else {
+			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
+			alert = new Alert("Debe estar logeado para crear materiales: ", Alert.TIPO_WARNING);
+		}
+
+	}
+
+	private void buscar(HttpServletRequest request) {
+
+		session = request.getSession();
+
+		if (null != session.getAttribute("usuario")) {
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+			ArrayList<Material> materiales = new ArrayList<Material>();
+			materiales = dao.getByNameAndUser(search, usuario.getId());
+			request.setAttribute("materiales", materiales);
+			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+		} else {
+			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
+			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
+		}
+	}
+
+	private void eliminar(HttpServletRequest request) {
+		session = request.getSession();
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
+		if (dao.deleteByUser(id, usuario.getId())) {
+			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
+		} else {
+			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
+		}
+		listar(request);
+	}
+
 	private void guardar(HttpServletRequest request) {
+		session = request.getSession();
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 		Material material = new Material();
 		material.setId(id);
 		material.setNombre(nombre);
 		material.setUsuario(usuario);
-
-		request.setAttribute("usuarios", usuarioDao.getAll());
 
 		try {
 			if (request.getParameter("precio") != null) {
@@ -170,64 +197,15 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			e.printStackTrace();
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
-		} 
- 
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-
 	}
 
-	private void eliminar(HttpServletRequest request) {
-		if (dao.delete(id)) {
-			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
-		} else {
-			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
-		}
-
-		listar(request);
-
-	}
-
-	private void buscar(HttpServletRequest request) {
-		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = dao.getByName(search);
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-	}
-
-	private void listar(HttpServletRequest request) {
-
-		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = dao.getAll();
-
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-
-	}
-
-	private void mostrarFormulario(HttpServletRequest request) {
-		Material material = new Material();
-
-		if (id != -1) {
-			material = dao.getById(id);
-		}
-		request.setAttribute("material", material);
-		request.setAttribute("usuarios", usuarioDao.getAll());
-		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-	}
-
-	/**
-	 * recogemos todos los posibles parametros enviados
-	 * 
-	 * @param request
-	 */
 	private void recogerParametros(HttpServletRequest request) {
-
-		usuario = null;
 
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
@@ -242,14 +220,23 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		}
 
 		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
-
-		if (request.getParameter("id_usuario") != null) {
-			usuario = usuarioDao.getById(Integer.parseInt(request.getParameter("id_usuario")));
-		}
-
 	}
 
-	// se ejecuta al parar el servidor de aplicaciones
+	private void listar(HttpServletRequest request) {
+		session = request.getSession();
+
+		if (null != session.getAttribute("usuario")) {
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+			ArrayList<Material> materiales = new ArrayList<Material>();
+			materiales = dao.getByUser(usuario.getId());
+			request.setAttribute("materiales", materiales);
+			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+		} else {
+			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
+			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
+		}
+	}
+
 	@Override
 	public void destroy() {
 		super.destroy();
@@ -258,5 +245,4 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		factory = null;
 		validator = null;
 	}
-
 }

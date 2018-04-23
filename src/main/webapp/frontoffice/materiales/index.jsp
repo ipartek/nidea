@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.MaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -13,20 +14,20 @@
 
 <%@include file="/templates/alert.jsp"%>
 
-<form action="materiales" method="get" class="form-inline">
+<form action="frontoffice/materiales" method="get" class="form-inline">
 
 	<input type="hidden" name="op"
-		value="<%=MaterialesController.OP_BUSQUEDA%>"> <input
+		value="<%=Operable.OP_BUSQUEDA%>"> <input
 		type="search" name="search" class="form-control mr-sm-2" required
 		placeholder="Nombre del material" aria-label="Search"> <input
 		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
-	<a class="btn btn-warning my-2 my-sm-0" href="materiales?op=-1">LIMPIAR</a>
+	<a class="btn btn-warning my-2 my-sm-0" href="frontoffice/materiales?op=-1">LIMPIAR</a>
 
 </form>
 <hr>
 
 <a
-	href="materiales?id=-1&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>"
+	href="frontoffice/materiales?id=-1&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
 <hr>
 
@@ -46,7 +47,7 @@
 				<tr>
 					<td>${material.id}</td>
 					<td><a
-						href="materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
+						href="frontoffice/materiales?id=${material.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
 					<td>${material.precio}€</td>
 					<td>${material.usuario.nombre}</td>
 				</tr>

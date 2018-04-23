@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -18,7 +19,7 @@
 <form action="backoffice/materiales" method="get" class="form-inline">
 
 	<input type="hidden" name="op"
-		value="<%=BackofficeMaterialesController.OP_BUSQUEDA%>"> <input
+		value="<%=Operable.OP_BUSQUEDA%>"> <input
 		type="search" name="search" class="form-control mr-sm-2" required
 		placeholder="Nombre del material" aria-label="Search"> <input
 		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
@@ -29,7 +30,7 @@
 <hr>
 
 <a
-	href="backoffice/materiales?id=-1&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>"
+	href="backoffice/materiales?id=-1&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
 
 
@@ -51,7 +52,7 @@
 			<tr>
 				<td>${material.id}</td>
 				<td><a
-					href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
+					href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
 				<td>${material.precio}€</td>
 				<td>${material.usuario.nombre}</td>
 			</tr>

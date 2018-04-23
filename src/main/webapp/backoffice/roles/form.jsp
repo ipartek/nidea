@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeRolesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -28,13 +29,13 @@
 
 	<c:if test="${rol.id == -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeRolesController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-success btn-block">Crear</button>
 	</c:if>
 
 	<c:if test="${rol.id != -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeRolesController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-primary btn-block">Modificar</button>
 		
 
@@ -67,7 +68,7 @@
 						</div>
 						
 						<a class="btn btn-danger btn-block"
-							href="backoffice/roles?id=${rol.id}&op=<%=BackofficeRolesController.OP_ELIMINAR %>">Eliminar</a>
+							href="backoffice/roles?id=${rol.id}&op=<%=Operable.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

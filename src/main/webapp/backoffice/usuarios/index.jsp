@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeUsuariosController"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
@@ -19,7 +20,7 @@
 <form action="backoffice/usuarios" method="get" class="form-inline">
 
 	<input type="hidden" name="op"
-		value="<%=BackofficeUsuariosController.OP_BUSQUEDA%>"> <input
+		value="<%=Operable.OP_BUSQUEDA%>"> <input
 		type="search" name="search" class="form-control mr-sm-2" required
 		placeholder="Nombre del Usuario" aria-label="Search"> <input
 		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
@@ -30,7 +31,7 @@
 <hr>
 
 <a
-	href="backoffice/usuarios?id=-1&op=<%=BackofficeUsuariosController.OP_MOSTRAR_FORMULARIO%>"
+	href="backoffice/usuarios?id=-1&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Usuario</a>
 <hr>
 
@@ -49,7 +50,7 @@
 
 			<tr>
 				<td>${usuario.id}</td>
-				<td><a href="backoffice/usuarios?id=${usuario.id}&op=<%=BackofficeUsuariosController.OP_MOSTRAR_FORMULARIO %>">${usuario.nombre}</a></td>
+				<td><a href="backoffice/usuarios?id=${usuario.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO %>">${usuario.nombre}</a></td>
 				<td>${usuario.rol.id}</td>
 				<td>${usuario.rol.nombre}</td>
 			</tr>

@@ -1,20 +1,19 @@
 <%@page import="com.ipartek.formacion.nidea.controller.MaterialesController"%>
-<%@page
-	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
 <%@include file="/templates/head.jsp"%>
 <%@include file="/templates/navbar.jsp"%>
 
-<a href="materiales" class="btn btn-primary">Volver</a>
+<a href="frontoffice/materiales" class="btn btn-primary">Volver</a>
 <hr>
 
 <h1>Materiales Form</h1>
 
 <%@include file="/templates/alert.jsp"%>
 
-<form action="materiales" method="get">
+<form action="frontoffice/materiales" method="get">
 	<div class="form-group">
 		<label for="id">Id:</label> <input type="number" class="form-control"
 			id="id" name="id" placeholder="Id" readonly value="${material.id }">
@@ -74,7 +73,7 @@
 							<p>${material.precio }</p>
 						</div>
 						<a class="btn btn-danger btn-block"
-							href="materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR %>">Eliminar</a>
+							href="frontoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

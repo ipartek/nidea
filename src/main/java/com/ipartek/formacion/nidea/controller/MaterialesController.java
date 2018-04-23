@@ -29,18 +29,10 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/materiales")
-public class MaterialesController extends HttpServlet {
+public class MaterialesController extends HttpServlet implements Operable{
 	private static final long serialVersionUID = 1L;
 
-	private static final String VIEW_INDEX = "/frontoffice/materiales/index.jsp";
-	private static final String VIEW_FORM = "/frontoffice/materiales/form.jsp";
-	private static final String VIEW_LOGIN = "/login.jsp";
-
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 2;
-	public static final int OP_ELIMINAR = 3;
-	public static final int OP_GUARDAR = 4;
-	public static final int OP_MOSTRAR_CRUD = 5;
+	private static final String VIEW_INDEX = "/materiales.jsp";
 
 	private RequestDispatcher dispatcher;
 	private Alert alert;
@@ -97,18 +89,18 @@ public class MaterialesController extends HttpServlet {
 			recogerParametros(request);
 
 			switch (op) {
-			case OP_MOSTRAR_FORMULARIO:
+			/*case OP_MOSTRAR_FORMULARIO:
 				mostrarFormulario(request);
-				break;
+				break;*/
 			case OP_BUSQUEDA:
 				buscar(request);
 				break;
-			case OP_ELIMINAR:
+			/*case OP_ELIMINAR:
 				eliminar(request);
 				break;
 			case OP_GUARDAR:
 				guardar(request);
-				break;
+				break;*/
 			default:
 				listar(request);
 				break;
@@ -125,7 +117,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 	}
-
+/*
 	private void mostrarFormulario(HttpServletRequest request) {
 		session = request.getSession();
 		if (null != session.getAttribute("usuario")) {
@@ -141,23 +133,15 @@ public class MaterialesController extends HttpServlet {
 		}
 
 	}
-
+*/
 	private void buscar(HttpServletRequest request) {
-
-		session = request.getSession();
-
-		if (null != session.getAttribute("usuario")) {
-			Usuario usuario = (Usuario) session.getAttribute("usuario");
+		
 			ArrayList<Material> materiales = new ArrayList<Material>();
-			materiales = dao.getByNameAndUser(search, usuario.getId());
+			materiales = dao.getByName(search);
 			request.setAttribute("materiales", materiales);
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-		} else {
-			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
-			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
-		}
 	}
-
+/*
 	private void eliminar(HttpServletRequest request) {
 		if (dao.delete(id)) {
 			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
@@ -165,8 +149,9 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
 		}
 		listar(request);
-	}
+	}*/
 
+	/*
 	private void guardar(HttpServletRequest request) {
 		session = request.getSession();
 		Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -209,7 +194,7 @@ public class MaterialesController extends HttpServlet {
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
-
+*/
 	private void recogerParametros(HttpServletRequest request) {
 
 		if (request.getParameter("op") != null) {
@@ -228,18 +213,12 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	private void listar(HttpServletRequest request) {
-		session = request.getSession();
-
-		if (null != session.getAttribute("usuario")) {
-			Usuario usuario = (Usuario) session.getAttribute("usuario");
+		
 			ArrayList<Material> materiales = new ArrayList<Material>();
-			materiales = dao.getByUser(usuario.getId());
+			materiales = dao.getAll();
 			request.setAttribute("materiales", materiales);
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-		} else {
-			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
-			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
-		}
+		
 	}
 
 	@Override

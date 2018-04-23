@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -40,13 +41,13 @@
 
 	<c:if test="${material.id == -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeMaterialesController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-success btn-block">Crear</button>
 	</c:if>
 
 	<c:if test="${material.id != -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeMaterialesController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-primary btn-block">Modificar</button>
 
 
@@ -86,7 +87,7 @@
 							<p>${material.usuario.nombre }</p>
 						</div>
 						<a class="btn btn-danger btn-block"
-							href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_ELIMINAR %>">Eliminar</a>
+							href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeUsuariosController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -43,13 +44,13 @@
 
 	<c:if test="${usuario.id == -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeUsuariosController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-success btn-block">Crear</button>
 	</c:if>
 
 	<c:if test="${usuario.id != -1}">
 		<input type="hidden" name="op"
-			value="<%=BackofficeUsuariosController.OP_GUARDAR%>">
+			value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-primary btn-block">Modificar</button>
 
 		<!-- Button trigger modal -->
@@ -84,7 +85,7 @@
 							<p>${usuario.rol.nombre }</p>
 						</div>
 						<a class="btn btn-danger btn-block"
-							href="backoffice/usuarios?id=${usuario.id}&op=<%=BackofficeUsuariosController.OP_ELIMINAR %>">Eliminar</a>
+							href="backoffice/usuarios?id=${usuario.id}&op=<%=Operable.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

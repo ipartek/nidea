@@ -261,6 +261,47 @@ public class MaterialDAO implements Persistible<Material> {
 		return resultado;
 	}
 
+
+	public boolean deleteByUser(int id_material, int id_usuario) {
+
+		boolean resultado = false;
+		Connection con = null;
+		PreparedStatement pst = null;
+
+		try {
+			con = ConnectionManager.getConnection();
+			String sql = "DELETE FROM `material` as m, usuario as u WHERE  m.id = ? AND m.id_usurio = ?;";
+
+			pst = con.prepareStatement(sql);
+			pst.setInt(1, id_material);
+			pst.setInt(1, id_usuario);
+			
+			int affetedRows = pst.executeUpdate();
+
+			if (affetedRows == 1) {
+				resultado = true;
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+
+				if (pst != null) {
+					pst.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return resultado;
+	}
+	
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
 
