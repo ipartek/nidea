@@ -1,4 +1,4 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackOfficeMaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -44,7 +44,7 @@
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			   	  <input type="hidden" name="op" value="<%=BackOfficeMaterialesController.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			  </div>
 		  </div>
@@ -53,7 +53,7 @@
 		<c:if test="${material.id > -1}">  
 			  <div class="form-group row">
 			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			      <input type="hidden" name="op" value="<%=BackOfficeMaterialesController.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			    </div>
 			    <div class="col-sm-6">		      

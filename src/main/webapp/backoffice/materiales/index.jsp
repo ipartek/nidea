@@ -1,4 +1,4 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackOfficeMaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -8,12 +8,12 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<a class="btn btn-outline-primary" href="backoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-primary" href="backoffice/materiales?op=<%=BackOfficeMaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div> 
 
 	<div class="col-md-6">
 		<form action="backoffice/materiales" method="get">
-			<input type="hidden" name="op" value="<%=MaterialesController.OP_BUSQUEDA%>">
+			<input type="hidden" name="op" value="<%=BackOfficeMaterialesController.OP_BUSQUEDA%>">
 			<input type="text" name="search" required placeholder="Nombre del Material">
 			<input type="submit" value="Buscar" class="btn btn-outline-primari">	
 		</form>

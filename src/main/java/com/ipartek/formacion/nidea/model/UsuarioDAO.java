@@ -38,7 +38,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	public ArrayList<Usuario> getAll() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
-						"FROM usuario as u, rol as r WHERE u.id_rol = r.id ORDER BY u.`id` DESC;";
+						"FROM usuario as u, rol as r WHERE u.id_rol = r.id ORDER BY u.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			// Class.forName("com.mysql.jdbc.Driver");
 			// final String URL =
