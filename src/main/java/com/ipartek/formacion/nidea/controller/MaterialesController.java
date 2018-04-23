@@ -22,6 +22,7 @@ import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
  * Servlet implementation class MaterialesController
@@ -118,7 +119,7 @@ public class MaterialesController extends HttpServlet {
 				mostrarFormulario(request);
 				break;
 			case OP_ELIMINAR:
-				materiales = eliminar(request, response, usuario);
+				eliminar(request, response, usuario);
 				break;
 			case OP_BUSQUEDA:
 				//buscar(request);
@@ -133,14 +134,14 @@ public class MaterialesController extends HttpServlet {
 				listar(request, usuario);
 				break;
 			}
-
+		} catch (MySQLIntegrityConstraintViolationException sql_integrity) {
+			alert = new Alert("El material creado ya existe", Alert.TIPO_WARNING);
 		} catch (Exception e) {
 			alert = new Alert();
 			e.printStackTrace();
 
 		} finally {
 			request.setAttribute("alert", alert);
-			request.setAttribute("materiales", materiales);
 			try {
 				dispatcher.forward(request, response);
 			} catch (ServletException | IOException e) {
@@ -151,9 +152,8 @@ public class MaterialesController extends HttpServlet {
 		
 	}
 	
-	private ArrayList<Material> eliminar(HttpServletRequest request, HttpServletResponse response, Usuario usuario) {
+	private void eliminar(HttpServletRequest request, HttpServletResponse response, Usuario usuario) {
 		
-		ArrayList<Material> materiales = new ArrayList<Material>();
 
 		if (daoMaterial.safeDelete(id, usuario.getId())) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
@@ -161,11 +161,11 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
 		}
 
-		return mostrarCatalogo(request);
+		listar(request, usuario);
 		
 	}
 
-	private void guardar(HttpServletRequest request, Usuario usuario) {
+	private void guardar(HttpServletRequest request, Usuario usuario) throws Exception {
 
 		Material material = new Material();
 
@@ -190,18 +190,18 @@ public class MaterialesController extends HttpServlet {
 				}
 				// Validaciones OK
 			} else {
-				if (daoMaterial.save(material)) {
-					alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
-				} else {
-					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
-				}
+					if (daoMaterial.save(material)) {
+						alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
+					} else {
+						alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
+					}
 			}
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-
+		request.setAttribute("alert", alert);
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 		

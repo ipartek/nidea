@@ -188,10 +188,13 @@ public class MaterialesController extends HttpServlet {
 					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
 				}
 			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
+		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
+		} catch (Exception e) {
+			e.printStackTrace();
+			alert = new Alert();
 		}
 
 		request.setAttribute("material", material);

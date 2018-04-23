@@ -74,7 +74,7 @@ public class MaterialDAO implements Persistible<Material> {
 	}
 
 	@Override
-	public boolean save(Material pojo) {
+	public boolean save(Material pojo) throws Exception {
 		boolean resul = false;
 
 		// sanear el nombre
@@ -82,7 +82,11 @@ public class MaterialDAO implements Persistible<Material> {
 
 		if (pojo != null) {
 			if (pojo.getId() == -1) {
-				resul = crear(pojo);
+				try {
+					resul = crear(pojo);
+				} catch (Exception e) {
+					throw e;
+				}
 			} else {
 				resul = modificar(pojo);
 			}
@@ -111,7 +115,7 @@ public class MaterialDAO implements Persistible<Material> {
 		return resul;
 	}
 
-	private boolean crear(Material pojo) {
+	private boolean crear(Material pojo) throws Exception {
 		boolean resul = false;
 		String sql = "INSERT INTO material (nombre, precio, id_usuario) VALUES ( ? , ? , ?);";
 		try (Connection con = ConnectionManager.getConnection();
@@ -133,6 +137,8 @@ public class MaterialDAO implements Persistible<Material> {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			// MySQLIntegrityConstraintViolationException --> el material creado ya existe en la BD
+			throw e;
 		}
 		return resul;
 	}
