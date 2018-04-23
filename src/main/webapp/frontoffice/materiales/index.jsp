@@ -1,4 +1,4 @@
-<%@page import="com.ipartek.formacion.nidea.controller.frontoffice.MaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.frontoffice.FrontofficeMaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -8,12 +8,12 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<a class="btn btn-outline-primary" href="frontoffice/materiales?op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-primary" href="frontoffice/materiales?op=<%=FrontofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div> 
 
 	<div class="col-md-6">
 		<form action="frontoffice/materiales" method="get">
-			<input type="hidden" name="op" value="<%=MaterialesController.OP_BUSQUEDA%>">
+			<input type="hidden" name="op" value="<%=FrontofficeMaterialesController.OP_BUSQUEDA%>">
 			<input type="text" name="search" required placeholder="Nombre del Material">
 			<input type="submit" value="Buscar" class="btn btn-outline-primari">	
 		</form>
@@ -35,7 +35,7 @@
 	<c:forEach items="${materiales}" var="material">
 		<tr>			
 			<td>
-				<a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a>
+				<a href="frontoffice/materiales?id=${material.id}&op=<%=FrontofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a>
 			</td>		
 			<td>${material.precio} &euro;</td>			
 			<td>${material.usuario.nombre}</td>

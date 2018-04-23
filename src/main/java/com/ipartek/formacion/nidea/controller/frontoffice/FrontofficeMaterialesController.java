@@ -16,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
@@ -26,16 +27,14 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/frontoffice/materiales")
-public class MaterialesController extends HttpServlet {
+public class FrontofficeMaterialesController extends HttpServlet implements Operable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
 
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
+
 
 	ValidatorFactory factory;
 	Validator validator;
@@ -49,12 +48,15 @@ public class MaterialesController extends HttpServlet {
 	private String search; // para el buscador por nombre matertial
 	private int op; // operacion a realizar
 
+	//Usuario logeado
+	Usuario usuario;
+	
+	
 	// parametros del Material
-	private int id;
+	private int id;	
 	private String nombre;
 	private float precio;
-	private int id_usuario;
-	
+
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
 	 */
@@ -78,7 +80,7 @@ public class MaterialesController extends HttpServlet {
 		validator = null;
 		factory = null;
 	}
-	
+
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -87,10 +89,10 @@ public class MaterialesController extends HttpServlet {
 		super.service(request, response);
 		System.out.println("Despues de Ejecutar doGET o doPost");
 	}
-   
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -98,13 +100,14 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doProcess(request, response);
 	}
-	
+
 	/**
 	 * Unimos las peticiones doGet y doPost, vamos que hacemos los mismo!!!
 	 * 
@@ -153,14 +156,16 @@ public class MaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
-		Usuario usuario=new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario=daoUsuario.getById(id_usuario);
-			material.setUsuario(usuario);
+			
+			Usuario u = new Usuario();
+			u.setId(usuario.getId());
+			material.setUsuario(u);
+			
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -189,8 +194,8 @@ public class MaterialesController extends HttpServlet {
 					Alert.TIPO_WARNING);
 		}
 
-		request.setAttribute("material", daoMaterial.getAll());
 		request.setAttribute("usuarios", daoUsuario.getAll());
+		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -205,7 +210,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (daoMaterial.delete(id)) {
+		if (daoMaterial.deleteByUser(id, usuario.getId())) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
@@ -232,7 +237,7 @@ public class MaterialesController extends HttpServlet {
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = daoMaterial.getMaterialByIdUser(session.getUsuario());
+		materiales = daoMaterial.getAllByUser(usuario.getId());
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -266,13 +271,11 @@ public class MaterialesController extends HttpServlet {
 			nombre = "";
 		}
 		
-		if (request.getParameter("user") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("user"));
-		} else {
-			id_usuario = -1;
-		}
+		
+		usuario = (Usuario)request.getSession().getAttribute("usuario");
+		
+		
 
 	}
-
 
 }
