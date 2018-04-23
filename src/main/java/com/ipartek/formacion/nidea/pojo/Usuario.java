@@ -22,6 +22,9 @@ public class Usuario {
 	@NotNull(message = "Seleccione un rol valido")
 	@Valid
 	private Rol rol;
+	
+	@NotNull(message = "El email no puede ser nulo")
+	private String email;
 
 	public Usuario() {
 		super();
@@ -29,6 +32,7 @@ public class Usuario {
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
+		this.email = "";
 	}
 
 	public String getPass() {
@@ -69,9 +73,17 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
+	public String getEmail() {
+		return email;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + ", email=" + email
+				+ "]";
+	}
 }
