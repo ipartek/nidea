@@ -71,19 +71,34 @@ public class MaterialDAO implements Persistible<Material> {
 			pst.setString(1, "%" + search + "%");
 
 			try (ResultSet rs = pst.executeQuery()) {
-
 				while (rs.next()) {
 					lista.add(mapper(rs));
 				}
-
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return lista;
+	}
 
+	public ArrayList<Material> getByNameAndUser(String search, int id_usuario) {
+
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND m.nombre LIKE ? AND m.id_usuario = ? ORDER BY m.id DESC LIMIT 500;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+
+			pst.setString(1, "%" + search + "%");
+			pst.setInt(2, id_usuario);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	@Override
@@ -115,24 +130,24 @@ public class MaterialDAO implements Persistible<Material> {
 	public ArrayList<Material> getByUser(int id_usuario) {
 		ArrayList<Material> lista = new ArrayList<Material>();
 		String sql = "SELECT m.id as id, m.nombre as nombre, m.precio as precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE m.id_usuario = u.id AND m.id_usuario = ?;";
-		
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql)){
-			
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+
 			pst.setInt(1, id_usuario);
-			try (ResultSet rs = pst.executeQuery()){
+			try (ResultSet rs = pst.executeQuery()) {
 				Material m = null;
-				while(rs.next()) {
+				while (rs.next()) {
 					m = new Material();
 					m = mapper(rs);
 					lista.add(m);
 				}
-			}			
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return lista;
 	}
+
 	@Override
 	public boolean save(Material pojo) {
 		boolean resultado = false;

@@ -61,7 +61,7 @@ public class MaterialesController extends HttpServlet {
 	// Validaciones
 	private ValidatorFactory factory;
 	private Validator validator;
-	
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
@@ -143,10 +143,19 @@ public class MaterialesController extends HttpServlet {
 	}
 
 	private void buscar(HttpServletRequest request) {
-		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = dao.getByName(search);
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+
+		session = request.getSession();
+
+		if (null != session.getAttribute("usuario")) {
+			Usuario usuario = (Usuario) session.getAttribute("usuario");
+			ArrayList<Material> materiales = new ArrayList<Material>();
+			materiales = dao.getByNameAndUser(search, usuario.getId());
+			request.setAttribute("materiales", materiales);
+			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+		} else {
+			dispatcher = request.getRequestDispatcher(VIEW_LOGIN);
+			alert = new Alert("Debe estar logeado para ver sus materiales: ", Alert.TIPO_WARNING);
+		}
 	}
 
 	private void eliminar(HttpServletRequest request) {
@@ -193,8 +202,7 @@ public class MaterialesController extends HttpServlet {
 			e.printStackTrace();
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -221,7 +229,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void listar(HttpServletRequest request) {
 		session = request.getSession();
-		
+
 		if (null != session.getAttribute("usuario")) {
 			Usuario usuario = (Usuario) session.getAttribute("usuario");
 			ArrayList<Material> materiales = new ArrayList<Material>();
