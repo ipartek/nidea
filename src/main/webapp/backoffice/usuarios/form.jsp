@@ -1,13 +1,13 @@
-<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
 
 <div class="container">
 	<div class="form-group row">
-		<a class="btn btn-outline-dark btn-lg" href="frontoffice/materiales">Volver</a>
+		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
 	</div>
-	<form action="frontoffice/materiales" method="post">
+	<form action="backoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
@@ -28,13 +28,26 @@
 	      <br>
 	    </div>
 	  </div>
-	  <br>	  
+	  <br>
+	  <div class="form-group row">
+	    <label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
+	    <div class="input-group-append">
+	    <select name="user">
+		   <c:forEach items="${usuarios}" var="usuario">
+		  	<option ${(usuario.id==material.usuario.id)?"selected":""} value=${usuario.id} >${usuario.nombre}</option>
+		  	</c:forEach>
+		</select>
+	     
+	      <br>
+	    </div>
+	  </div>
+	  
 	</div>
 	<br>
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
+			   	  <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			  </div>
 		  </div>
@@ -43,7 +56,7 @@
 		<c:if test="${material.id > -1}">  
 			  <div class="form-group row">
 			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
+			      <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			    </div>
 			    <div class="col-sm-6">		      
@@ -68,7 +81,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="freontoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
+						        <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>
