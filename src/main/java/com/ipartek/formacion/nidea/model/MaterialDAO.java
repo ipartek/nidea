@@ -230,9 +230,10 @@ public class MaterialDAO implements Persistible<Material> {
 	public boolean safeDelete(int idMaterial, int idUsuario) {
 
 		boolean resul = false;
-		String sql = "DELETE FROM material WHERE id= ?;";
+		String sql = "DELETE FROM material WHERE id= ? AND id_usuario = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, idMaterial);
+			pst.setInt(2, idUsuario);
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resul = true;
