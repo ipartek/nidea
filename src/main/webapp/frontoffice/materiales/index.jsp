@@ -8,7 +8,7 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<a class="btn btn-outline-primari" href="frontoffice/materiales?op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-primary" href="frontoffice/materiales?op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div> 
 
 	<div class="col-md-6">

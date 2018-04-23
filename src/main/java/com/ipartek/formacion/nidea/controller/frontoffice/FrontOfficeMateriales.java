@@ -38,7 +38,7 @@ public class FrontOfficeMateriales extends HttpServlet implements Operable {
 	ValidatorFactory factory;
 	Validator validator;
 
-	private RequestDispatcher dispatcher;fff
+	private RequestDispatcher dispatcher;
 	private Alert alert;
 	private MaterialDAO daoMaterial;
 	private UsuarioDAO daoUsuario;

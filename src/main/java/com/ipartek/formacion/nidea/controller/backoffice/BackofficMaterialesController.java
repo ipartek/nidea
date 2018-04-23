@@ -196,6 +196,7 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 		}
 
 		request.setAttribute("material", material);
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}

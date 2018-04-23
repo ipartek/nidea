@@ -1,4 +1,4 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -47,7 +47,7 @@
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			   	  <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			  </div>
 		  </div>
@@ -56,7 +56,7 @@
 		<c:if test="${material.id > -1}">  
 			  <div class="form-group row">
 			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=MaterialesController.OP_GUARDAR%>"> 	
+			      <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			    </div>
 			    <div class="col-sm-6">		      
@@ -81,7 +81,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_ELIMINAR%>">
+						        <a href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>
