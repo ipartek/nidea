@@ -33,11 +33,11 @@
 	  </div>
 	  <br>
 	  <div class="input-group ">
-	    <label for="usuario" class="col-sm-2 col-form-label">Usuarios</label>
+	    <label for="id_usuario" class="col-sm-2 col-form-label">Usuarios</label>
 	    <div class="input-group-append">
 	    	<select name="id_usuario">
 		      <c:forEach items="${usuarios}" var="u">
-		      	<option value="${u.id}">${u.nombre}</option>
+		      	<option value="${u.id}" >${u.nombre}</option>
 		      </c:forEach>
 	      </select>
 	    </div>

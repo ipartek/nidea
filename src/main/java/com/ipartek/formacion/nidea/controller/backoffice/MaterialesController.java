@@ -161,7 +161,8 @@ public class MaterialesController extends HttpServlet {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			material.getUsuario().setId(id_usuario);
+			usuario.setId(id_usuario);
+			material.setUsuario(usuario);
 			
 
 			if (request.getParameter("precio") != null) {
@@ -190,7 +191,8 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-
+		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
+		request.setAttribute("usuarios", usuarios);
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
