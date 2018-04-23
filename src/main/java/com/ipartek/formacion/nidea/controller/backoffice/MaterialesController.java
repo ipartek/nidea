@@ -16,27 +16,27 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
 /**
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/backoffice/materiales")
-public class MaterialesController extends HttpServlet {
+public class MaterialesController extends HttpServlet implements Operable{
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
 
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
+
 
 	ValidatorFactory factory;
 	Validator validator;
@@ -45,6 +45,7 @@ public class MaterialesController extends HttpServlet {
 	private Alert alert;
 	private MaterialDAO daoMaterial;
 	private UsuarioDAO daoUsuario;
+	private Usuario usuario;
 
 	// parametros comunes
 	private String search; // para el buscador por nombre matertial
@@ -152,16 +153,17 @@ public class MaterialesController extends HttpServlet {
 		}
 	}
 
-	private void guardar(HttpServletRequest request) {
+	private void guardar(HttpServletRequest request) throws MysqlDataTruncation, MySQLIntegrityConstraintViolationException {
 
 		Material material = new Material();
-		Usuario usuario = new Usuario();
-
+	
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			material.getUsuario().setId(id);
+			material.getUsuario().setId(id_usuario);
+			
+			
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -189,7 +191,7 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 

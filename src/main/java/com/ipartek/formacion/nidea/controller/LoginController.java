@@ -24,7 +24,7 @@ public class LoginController extends HttpServlet {
 
 	private String view = "";
 	private static final String VIEW_BACKOFFICE = "backoffice/index.jsp";
-	private static final String VIEW_FRONTOFFICE = "frontoffice/index.jsp";
+	private static final String VIEW_FRONTOFFICE = "frontoffice/materiales";
 	private static final String VIEW_LOGIN = "login.jsp";
 
 	private Alert alert = new Alert();
