@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeRolesController"%>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -17,7 +18,7 @@
 <%@include file="/templates/alert.jsp"%>
 <form action="backoffice/roles" method="get" class="form-inline">
 
-	<input type="hidden" name="op" value="<%=BackofficeRolesController.OP_BUSQUEDA%>">
+	<input type="hidden" name="op" value="<%=Operable.OP_BUSQUEDA%>">
 	<input type="search" name="search" class="form-control mr-sm-2" required placeholder="Nombre del Rol" aria-label="Search"> 
 	<input class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
 	<a class="btn btn-warning my-2 my-sm-0" href="backoffice/roles?op=-1">LIMPIAR</a>
@@ -26,7 +27,7 @@
 <hr>
 
 <a
-	href="backoffice/roles?id=-1&op=<%=BackofficeRolesController.OP_MOSTRAR_FORMULARIO%>"
+	href="backoffice/roles?id=-1&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Rol</a>
 <hr>
 

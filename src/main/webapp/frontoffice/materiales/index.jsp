@@ -1,5 +1,6 @@
 <%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 
+
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -9,14 +10,14 @@
 <div class="row">
 
 	<div class="col-md-12">
-		<a class="btn btn-outline-dark float-right" href="backoffice/materiales?op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-dark float-right" href="frontoffice/materiales?op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div>
 </div> 
 
 <!-- BUSCADOR -->
 <div class="row">
 	<div class=" input-group">
-		<form action="backoffice/materiales" method="get">
+		<form action="frontoffice/materiales" method="get">
 			<div class=" input-group">
 				<input type="hidden" name="op" value="<%=Operable.OP_BUSQUEDA%>">
 				<input  type="text"class="form-control " name="search" required placeholder="Nombre del material">
@@ -32,7 +33,7 @@
 	       <tr>
 	           <th>Nombre</th>
 	           <th>Precio</th>
-	           <th>Usuario</th>                
+	                      
 	       </tr>
 	   </thead>
 	   <tbody>

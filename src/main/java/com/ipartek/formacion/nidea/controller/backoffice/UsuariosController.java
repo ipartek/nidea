@@ -16,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.RolDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
@@ -28,16 +29,12 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class UsuariosController
  */
 @WebServlet("/backoffice/usuarios")
-public class UsuariosController extends HttpServlet {
+public class UsuariosController extends HttpServlet implements Operable {
 	private static final long serialVersionUID = 1L;
        
 	private static final String VIEW_INDEX = "usuarios/index.jsp";
 	private static final String VIEW_FORM = "usuarios/form.jsp";
 	
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
 
 	ValidatorFactory factory;
 	Validator validator;

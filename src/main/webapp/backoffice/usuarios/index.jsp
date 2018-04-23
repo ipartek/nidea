@@ -1,5 +1,6 @@
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@page import="com.ipartek.formacion.nidea.controller.backoffice.UsuariosController"%>
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.MaterialesController"%>
+
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -9,7 +10,7 @@
 <div class="row">
 
 	<div class="col-md-12">
-		<a class="btn btn-outline-dark float-right" href="backoffice/usuarios?op=<%=UsuariosController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-dark float-right" href="backoffice/usuarios?op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div>
 </div> 
 
@@ -18,7 +19,7 @@
 	<div class=" input-group">
 		<form action="backoffice/usuarios" method="get">
 			<div class=" input-group">
-				<input type="hidden" name="op" value="<%=UsuariosController.OP_BUSQUEDA%>">
+				<input type="hidden" name="op" value="<%=Operable.OP_BUSQUEDA%>">
 				<input  type="text"class="form-control " name="search" required placeholder="Nombre del usuario">
 				<input type="submit"  value="Buscar" >
 			</div>
@@ -40,7 +41,7 @@
 		<c:forEach items="${usuarios}" var="usu">
 			<tr>			
 				<td>
-					<a href="backoffice/usuarios?id=${usu.id}&op=<%=UsuariosController.OP_MOSTRAR_FORMULARIO%>">${usu.nombre}</a>
+					<a href="backoffice/usuarios?id=${usu.id}&op=<%=Operable.OP_MOSTRAR_FORMULARIO%>">${usu.nombre}</a>
 				</td>		
 				<td>${usu.pass}</td>			
 				<td>${usu.rol.nombre}</td>

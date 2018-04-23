@@ -14,17 +14,30 @@
      <!-- <a class="btn btn-outline-primary" href="loginUsuario.jsp">Login Usuario</a> -->
       
       
-      <c:if test="${empty usuario}">
+     <c:if test="${empty usuario}">
       	<a class="btn btn-outline-primary" href="login">Login</a>
-      </c:if>
-            
-      <c:if test="${!empty usuario}">
+      </c:if> 
+      <c:if test="${!empty usuario}" >
+      	<!-- Frontoffice -->    
+      <c:if test="${usuario.rol.id == 2}">
       	<nav class="my-2 my-md-0 mr-md-10">
       		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
-      		<a href="#" class="badge badge-secondary">${usuario}</a>
+      		<a href="#" class="badge badge-primary">${usuario.nombre}</a>
       	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
       	</nav>   	
       </c:if>
+        
+       <!-- backoffice -->    
+      <c:if test="${usuario.rol.id == 1}">
+      	<nav class="my-2 my-md-0 mr-md-10">
+      		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
+      		<a class="p-2 text-dark" href="backoffice/roles">Roles</a>
+      		<a href="#" class="badge badge-secondary">${usuario.nombre}</a>
+      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
+      	</nav>   	
+      </c:if>
+      </c:if>
+      
 
      
     </div>

@@ -1,4 +1,4 @@
-package com.ipartek.formacion.nidea.controller.backoffice;
+package com.ipartek.formacion.nidea.controller.frontoffice;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
@@ -25,18 +26,15 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
 /**
  * Servlet implementation class MaterialesController
  */
-@WebServlet("/backoffice/materiales")
-public class MaterialesController extends HttpServlet {
+@WebServlet("/frontoffice/materiales")
+public class FrontofficeMaterialesController extends HttpServlet implements Operable{
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
 
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
+	
 
 	ValidatorFactory factory;
 	Validator validator;
