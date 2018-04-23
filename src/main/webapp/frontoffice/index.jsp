@@ -15,7 +15,7 @@ applicationScope (JSP ) == ServletContext ( servlet ) <br>
 
 
 <a
-	href="frontoffice/materiales/index.jsp">Materiales
+	href="frontoffice/materiales">Materiales
 
 </a>
 <hr>

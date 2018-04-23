@@ -16,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
@@ -26,7 +27,7 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/backoffice/materiales")
-public class MaterialesController extends HttpServlet {
+public class BackofficMaterialesController extends HttpServlet implements Operable {
 
 	private static final long serialVersionUID = 1L;
 
