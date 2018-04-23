@@ -72,12 +72,12 @@ public class LerrFicheroTxt {
 				
 			}
 
-	
+	/*	} catch ( e) {
+			e.printStackTrace();
+		}*/
 
 	
 
 
 	}
-	}
-}
-
+	}}
