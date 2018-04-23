@@ -68,7 +68,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 
 	@Override
-	public boolean save(Usuario pojo){
+	public boolean save(Usuario pojo) {
 		boolean resultado = false;
 
 		if (pojo != null) {
@@ -85,7 +85,26 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resultado;
 	}
 
-	private boolean modificar(Usuario pojo){
+	public boolean save(Usuario pojo, int id_uSession) {
+		boolean resultado = false;
+
+		if (pojo != null) {
+			// Sanitize nombre
+			pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
+			if (pojo.getId() == -1) {
+				resultado = crear(pojo);
+			} else {
+				if (pojo.getId() == id_uSession) {
+					resultado = modificar(pojo);
+				}
+			}
+		}
+
+		return resultado;
+	}
+
+	private boolean modificar(Usuario pojo) {
 		boolean resultado = false;
 
 		String sql = "UPDATE `nidea`.`usuario` SET `nombre`=?, `password`=?, `id_rol`=? WHERE  `id`=?;";
@@ -105,7 +124,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resultado;
 	}
 
-	private boolean crear(Usuario pojo){
+	private boolean crear(Usuario pojo) {
 		boolean resultado = false;
 		String sql = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`) VALUES (?, ?, ?);";
 
@@ -164,7 +183,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		return resultado;
 	}
-
+	
 	@Override
 	public Usuario mapper(ResultSet rs) throws SQLException {
 		Usuario usuario = null;
@@ -227,8 +246,5 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		}
 		return resul;
 	}
-
-
-
-
+	
 }

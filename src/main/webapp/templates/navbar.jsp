@@ -42,8 +42,10 @@
     <ul class="navbar-nav"> 
     	<c:if test="${usuario != null }">	    
 	    	<li class="nav-item nav-link">
-	    		<i class="fa fa-user" aria-hidden="true"></i> ${usuario.nombre } 
-        	</li>	    
+		    	<a href="frontoffice/usuarios" class="nav-link">
+		    		<i class="fa fa-user" aria-hidden="true"></i> ${usuario.nombre } 
+		    	</a>
+	    	</li>	    
     	</c:if>
     	<c:if test="${empty usuario }">
     		<li class="nav-item">

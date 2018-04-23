@@ -1,4 +1,4 @@
-package com.ipartek.formacion.nidea.frontoffice;
+package com.ipartek.formacion.nidea.controller.frontoffice;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -187,10 +187,10 @@ public class FrontofficeMaterialesController extends HttpServlet implements Oper
 				}
 				// Validaciones OK
 			} else {
-				if (dao.save(material)) {
+				if (dao.save(material, usuario.getId())) {
 					alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
 				} else {
-					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
+					alert = new Alert("Lo sentimos pero no se ha podido guardar el material", Alert.TIPO_WARNING);
 				}
 			}
 		} catch (NumberFormatException e) {
