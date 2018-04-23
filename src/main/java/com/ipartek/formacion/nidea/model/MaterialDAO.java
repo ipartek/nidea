@@ -221,6 +221,8 @@ public class MaterialDAO implements Persistible<Material> {
 				Usuario u = new Usuario();
 				u.setId(rs.getInt("id_usuario"));
 				u.setNombre(rs.getString("nombre_usuario"));
+//Añadir rol
+				
 				m.setUsuario(u);
 			}
 			

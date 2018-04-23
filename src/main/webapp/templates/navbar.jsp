@@ -19,12 +19,29 @@
       </c:if>
             
       <c:if test="${!empty usuario}">
-      	<nav class="my-2 my-md-0 mr-md-10">
-      		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
-      		<a href="#" class="badge badge-secondary">${usuario.nombre}</a>
-      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
-      	</nav>   	
-      </c:if>
+      
+		 <c:if test="${usuario.rol.id == 2}">      
+	      	<!-- Frontoffice -->      
+	      	<nav class="my-2 my-md-0 mr-md-10">
+	      		<a class="p-2 text-dark" href="frontoffice/materiales">Mis Materiales</a>      		
+	      		<a href="#" class="badge badge-primary">${usuario.nombre}</a>
+	      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
+	      	</nav>
+	     </c:if> 	
+      
+       <c:if test="${usuario.rol.id == 1}"> 
+	      	<!-- Backoffice -->
+	      	<nav class="my-2 my-md-0 mr-md-10">
+	      		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
+	      		<a class="p-2 text-dark" href="backoffice/roles">Roles</a>
+	      		<a class="p-2 text-dark" href="backoffice/usuarios">Usuarios</a>
+	      		<a href="#" class="badge badge-secondary">${usuario.nombre}</a>
+	      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
+	      	</nav>
+      	</c:if>
+      	
+      	   	
+</c:if>
 
      
     </div>
