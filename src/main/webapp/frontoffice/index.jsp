@@ -31,3 +31,9 @@ applicationScope (JSP ) == ServletContext ( servlet ) <br>
 
 
 <%@include file="/templates/footer.jsp" %>
+
+
+
+
+
+<%@include file="/templates/footer.jsp" %>

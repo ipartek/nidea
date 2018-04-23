@@ -1,5 +1,3 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
-<%@page import="com.ipartek.formacion.nidea.controller.MaterialesController"%>
 <%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
@@ -7,9 +5,9 @@
 
 <div class="container">
 	<div class="form-group row">
-		<a class="btn btn-outline-dark btn-lg" href="backoffice/materiales">Volver</a>
+		<a class="btn btn-outline-dark btn-lg" href="frontoffice/materiales">Volver</a>
 	</div>
-	<form action="backoffice/materiales" method="post">
+	<form action="frontoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
@@ -27,29 +25,17 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
-	    </div>
+	    </div>	   
 	  </div>
-	  <div class="input-group ">
-	    <label for="precio" class="col-sm-2 col-form-label">Usuario</label>
-	    
-	  <select name="idusuario">
-		<c:forEach items="${usuarios}" var="usuario">
-
-		  <option ${(usuario.id==material.usuario.id)?"selected":""} value="${usuario.id}">${usuario.nombre}</option>
-		
-			</c:forEach>
-			</select>
-			</div>
-	
-	
 	  
-
+	
+	</div>
 	<br>  
 	
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
+			   	  <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			  </div>
 		  </div>
@@ -58,14 +44,14 @@
 		<c:if test="${material.id > -1}">  
 			  <div class="form-group row">
 			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
+			      <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			    </div>
 			    <div class="col-sm-6">		      
 			   
 					    <!-- Button trigger modal -->
 						<button type="button" class="btn btn-danger btn-lg btn-block" data-toggle="modal" data-target="#exampleModal">
-						  Eliminar
+						  Cuidado
 						</button>
 						
 						<!-- Modal -->
@@ -83,7 +69,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_ELIMINAR%>">
+						        <a href="frontoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>
@@ -97,7 +83,6 @@
 		</c:if>	  
 	</form>
 </div>
-
 
 
 <jsp:include page="/templates/footer.jsp"></jsp:include>
