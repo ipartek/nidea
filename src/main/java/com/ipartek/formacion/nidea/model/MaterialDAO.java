@@ -175,8 +175,8 @@ public class MaterialDAO implements Persistible<Material> {
 
 	public ArrayList<Material> search(String nombreBuscar) {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre_usuario FROM `material` as m, usuario as u "
-				+ "WHERE m.`nombre` LIKE ? "
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre as nombre_usuario FROM `material` as m, usuario as u "
+				+ "WHERE u.id = m.id_usuario AND m.`nombre` LIKE ? "
 				+ "ORDER BY m.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
@@ -257,8 +257,8 @@ public class MaterialDAO implements Persistible<Material> {
 
 	public ArrayList<Material> search(String nombreBuscar, int idUsuarioSession) {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre_usuario FROM `material` as m, usuario as u "
-				+ "WHERE m.`nombre` LIKE ?  AND m.id_usuario = ?"
+		String sql = "SELECT m.`id`, m.`nombre`, m.`precio`, m.id_usuario, u.nombre as nombre_usuario FROM `material` as m, usuario as u "
+				+ "WHERE  u.id = m.id_usuario AND m.`nombre` LIKE ? AND m.id_usuario = ?"
 				+ "ORDER BY m.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 

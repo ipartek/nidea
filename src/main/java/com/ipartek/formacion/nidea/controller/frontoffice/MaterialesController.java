@@ -251,7 +251,7 @@ public class MaterialesController extends HttpServlet {
 
 		
 		
-		int id_usuario =(Usuario)(request.getSession().getAttribute("usuario")).getId();
+		//int id_usuario =((HttpSession) request.getSession().getAttribute("usuario"))).getId();
 		
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
