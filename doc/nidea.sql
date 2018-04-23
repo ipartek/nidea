@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         localhost
--- Versión del servidor:         5.7.14 - MySQL Community Server (GPL)
+-- Versión del servidor:         5.7.21-log - MySQL Community Server (GPL)
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             9.4.0.5125
 -- --------------------------------------------------------
@@ -28,15 +28,18 @@ CREATE TABLE IF NOT EXISTS `material` (
   UNIQUE KEY `nombre_UNIQUE` (`nombre`),
   KEY `fk_material_usuario1_idx` (`id_usuario`),
   CONSTRAINT `fk_material_usuario1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla nidea.material: ~2 rows (aproximadamente)
-DELETE FROM `material`;
+-- Volcando datos para la tabla nidea.material: ~7 rows (aproximadamente)
 /*!40000 ALTER TABLE `material` DISABLE KEYS */;
-INSERT INTO `material` (`id`, `nombre`, `precio`, `id_usuario`) VALUES
-	(1, 'papel', 1.12, 1),
-	(2, 'carton', 2.12, 1),
-	(3, 'fornica', 8.67, 2);
+REPLACE INTO `material` (`id`, `nombre`, `precio`, `id_usuario`) VALUES
+	(2, 'carton espi', 3.29, 3),
+	(3, 'fornica', 12, 2),
+	(4, 'gomaespuma', 15.39, 3),
+	(5, 'velcro', 10.99, 3),
+	(7, 'cristal', 12, 1),
+	(9, 'con', 6.9, 2),
+	(10, 'goma', 22, 2);
 /*!40000 ALTER TABLE `material` ENABLE KEYS */;
 
 -- Volcando estructura para tabla nidea.rol
@@ -49,9 +52,8 @@ CREATE TABLE IF NOT EXISTS `rol` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- Volcando datos para la tabla nidea.rol: ~2 rows (aproximadamente)
-DELETE FROM `rol`;
 /*!40000 ALTER TABLE `rol` DISABLE KEYS */;
-INSERT INTO `rol` (`id`, `nombre`) VALUES
+REPLACE INTO `rol` (`id`, `nombre`) VALUES
 	(1, 'admin'),
 	(2, 'user');
 /*!40000 ALTER TABLE `rol` ENABLE KEYS */;
@@ -63,18 +65,21 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `nombre` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `id_rol` int(11) NOT NULL,
+  `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`,`id_rol`),
   UNIQUE KEY `nombre_UNIQUE` (`nombre`),
+  UNIQUE KEY `email` (`email`),
   KEY `fk_usuario_rol_idx` (`id_rol`),
   CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- Volcando datos para la tabla nidea.usuario: ~2 rows (aproximadamente)
-DELETE FROM `usuario`;
+-- Volcando datos para la tabla nidea.usuario: ~4 rows (aproximadamente)
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` (`id`, `nombre`, `password`, `id_rol`) VALUES
-	(1, 'administrador', '123456', 1),
-	(2, 'pepe', '123456', 2);
+REPLACE INTO `usuario` (`id`, `nombre`, `password`, `id_rol`, `email`) VALUES
+	(1, 'administrador', '123456', 1, 'admin@nidea.com'),
+	(2, 'pepe', '123456', 2, 'pepe@nidea.com'),
+	(3, 'espinete', 'erizorosa', 2, 'espinete@nidea.com'),
+	(4, 'aingeru', '123456', 2, 'aingeru@nidea.com');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
