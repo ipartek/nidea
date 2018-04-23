@@ -16,6 +16,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+import com.ipartek.formacion.nidea.controller.Operable;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
@@ -26,17 +27,13 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/backoffice/materiales")
-public class MaterialesController extends HttpServlet {
+public class BackofficeMaterialesController extends HttpServlet implements Operable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
-
-	public static final int OP_MOSTRAR_FORMULARIO = 1;
-	public static final int OP_BUSQUEDA = 14;
-	public static final int OP_ELIMINAR = 13;
-	public static final int OP_GUARDAR = 2;
+	
 
 	ValidatorFactory factory;
 	Validator validator;
@@ -47,14 +44,14 @@ public class MaterialesController extends HttpServlet {
 	private UsuarioDAO daoUsuario;
 
 	// parametros comunes
-	private String search; // para el buscador por nombre material
+	private String search; // para el buscador por nombre matertial
 	private int op; // operacion a realizar
 
 	// parametros del Material
 	private int id;
+	private int id_usuario;
 	private String nombre;
 	private float precio;
-	private int id_usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -155,15 +152,15 @@ public class MaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
-		Usuario usuario= new Usuario();
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario=daoUsuario.getById(id_usuario);
-			material.setUsuario(usuario);
 			
+			Usuario u = new Usuario();
+			u.setId(id_usuario);
+			material.setUsuario(u);
 			
 
 			if (request.getParameter("precio") != null) {
@@ -193,6 +190,7 @@ public class MaterialesController extends HttpServlet {
 					Alert.TIPO_WARNING);
 		}
 
+		request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
@@ -268,12 +266,14 @@ public class MaterialesController extends HttpServlet {
 		} else {
 			nombre = "";
 		}
-		if (request.getParameter("usuario") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("usuario"));
+		
+		if (request.getParameter("id_usuario") != null) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
 		} else {
 			id_usuario = -1;
 		}
-
+		
+		
 
 	}
 

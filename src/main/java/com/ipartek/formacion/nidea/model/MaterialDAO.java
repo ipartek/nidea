@@ -55,11 +55,32 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return lista;
 	}
+	
+	public ArrayList<Material> getAllByUser(int idUsuario) {
+		ArrayList<Material> lista = new ArrayList<Material>();
+		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.id_usuario = u.id AND material.id_usuario = ? ORDER BY material.id DESC LIMIT 500";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);
+				) {
+			
+				pst.setInt(1, idUsuario);
+				
+				try( ResultSet rs = pst.executeQuery(); ){					
+					while (rs.next()) {						
+						lista.add(mapper(rs));
+					}
+				}		
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+	}
 
 	@Override
 	public Material getById(int id) {
 		Material material = null;
-		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM `material`,`usuario` as u WHERE material.`id` = ? AND material.id_usuario = u.id ;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM material as m, usuario as u WHERE m.id_usuario = u.id AND m.id = ? ;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setInt(1, id);
 			try (ResultSet rs = pst.executeQuery()) {
@@ -93,13 +114,14 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?, `id_usuario`=? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?, `id_usuario`= ? WHERE  `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getUsuario().getId());
 			pst.setInt(4, pojo.getId());
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				resul = true;
@@ -112,14 +134,14 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`, `id_usuario`) VALUES ( ? , ?, ? );";
+		String sql = "INSERT INTO `material` (`nombre`, `precio`,`id_usuario` ) VALUES ( ? , ?, ? );";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setFloat(3, pojo.getUsuario().getId());
-			
+			pst.setInt(3, pojo.getUsuario().getId());
+
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
 				// recuperar ID generado de forma automatica
@@ -151,6 +173,22 @@ public class MaterialDAO implements Persistible<Material> {
 		}
 		return resul;
 	}
+	
+	public boolean deleteByUser(int idMaterial, int idUsuario) {
+		boolean resul = false;
+		String sql = "DELETE FROM `material` WHERE  `id`= ? AND `id_usuario`=? ;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setInt(1, idMaterial);
+			pst.setInt(2, idUsuario);
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
 
 	@Override
 	public Material mapper(ResultSet rs) throws SQLException {
@@ -160,13 +198,11 @@ public class MaterialDAO implements Persistible<Material> {
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
-			
 
 			Usuario u = new Usuario();
 			u.setId(rs.getInt("id_usuario"));
 			u.setNombre(rs.getString("nombre_usuario"));
 			m.setUsuario(u);
-			
 
 		}
 		return m;
@@ -174,7 +210,7 @@ public class MaterialDAO implements Persistible<Material> {
 
 	public ArrayList<Material> search(String nombreBuscar) {
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT `id`, `nombre`, `precio` FROM `material` WHERE `nombre` LIKE ? ORDER BY `id` DESC LIMIT 500;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' FROM material as m, usuario as u WHERE m.id_usuario = u.id AND m.nombre LIKE ? ORDER BY u.id DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, "%" + nombreBuscar + "%");
