@@ -1,22 +1,39 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.constraints.NotNull;
+
 public class Usuario {
 
 	public static final int ROL_ADMIN = 1;
 	public static final int ROL_USER = 2;
-
+	@NotNull
 	private int id;
+	@NotNull
 	private String nombre;
+	
+	@NotNull
 	private String pass;
+	@NotNull
 	private Rol rol;
-
+	@NotNull
+	private String email;
 	public Usuario() {
 		super();
 		this.id = -1;
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
+		this.email = "";
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 
 	public String getPass() {
 		return pass;
