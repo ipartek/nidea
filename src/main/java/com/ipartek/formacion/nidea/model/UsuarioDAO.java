@@ -37,7 +37,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public ArrayList<Usuario> getAll() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, u.email, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
 						"FROM usuario as u, rol as r WHERE u.id_rol = r.id ORDER BY u.`id` DESC LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			// Class.forName("com.mysql.jdbc.Driver");
@@ -62,7 +62,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public Usuario getById(int id) {
 		Usuario u = null;
-		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, u.email, r.id as 'rol_id', r.nombre as 'rol_nombre'" + 
 						"FROM usuario as u, rol as r WHERE u.id_rol = r.id AND u.`id` = ?;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -106,11 +106,35 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	private boolean modificar(Usuario pojo) throws SQLIntegrityConstraintViolationException {
 		boolean resul = false;
 
-		String sql = "UPDATE `material` SET `nombre`=?,`password`=? WHERE  `id`=?;";
+		String sql = "UPDATE `usuario` SET `nombre`=?, `password`=?, `email`=?, `id_rol'=? WHERE `id`=?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
-			pst.setInt(3, pojo.getId());
+			pst.setString(3, pojo.getEmail());
+			pst.setInt(4, pojo.getRol().getId());
+			pst.setInt(5, pojo.getId());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (SQLIntegrityConstraintViolationException e) {
+			throw new SQLIntegrityConstraintViolationException();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+	
+	private boolean modificarByUser(Usuario pojo) throws SQLIntegrityConstraintViolationException {
+		boolean resul = false;
+
+		String sql = "UPDATE `usuario` SET `nombre`=?,`password`=?,`email`=? WHERE `id`=?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setString(3, pojo.getEmail());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -127,10 +151,12 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	private boolean crear(Usuario pojo) throws SQLIntegrityConstraintViolationException {
 		boolean resul = false;
 
-		String sql = "INSERT INTO `usuario` (`nombre`, `password`) VALUES (?, ?);";
+		String sql = "INSERT INTO `usuario` (`nombre`, `password`, `email`, `id_rol`) VALUES (?, ?, ?, ?);";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
+			pst.setString(3, pojo.getEmail());
+			pst.setInt(4, pojo.getRol().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -183,7 +209,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	public Usuario check(String nombre, String pass) {
 		Usuario resul = null;
-		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' "
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, u.email, r.id as 'rol_id', r.nombre as 'rol_nombre' "
 				+ "FROM usuario as u, rol as r " + "WHERE u.id_rol = r.id AND u.nombre=? and u.password = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, nombre);
@@ -206,6 +232,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		u.setId(rs.getInt("usuario_id"));
 		u.setNombre(rs.getString("usuario_nombre"));
 		u.setPass(rs.getString("password"));
+		u.setEmail(rs.getString("email"));
 
 		// Rol del usuario
 		Rol rol = new Rol();

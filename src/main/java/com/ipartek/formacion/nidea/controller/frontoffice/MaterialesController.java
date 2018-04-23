@@ -55,7 +55,6 @@ public class MaterialesController extends HttpServlet {
 	private String nombre;
 	private float precio;
 	private Usuario usuario;
-	private int id_usuario;
 	
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -156,7 +155,7 @@ public class MaterialesController extends HttpServlet {
 		try {
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario.setId(id_usuario);
+			usuario.setId(usuario.getId());
 			material.setUsuario(usuario);
 
 			if (request.getParameter("precio") != null) {
@@ -185,7 +184,7 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-
+		request.setAttribute("alert", alert);
 		request.setAttribute("material", material);
 		request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
@@ -266,12 +265,6 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
-		}
-		
-		if (request.getParameter("id_usuario") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
-		} else {
-			id_usuario = -1;
 		}
 	}
 }

@@ -129,16 +129,54 @@ public class MaterialDAO implements Persistible<Material> {
 
 		return resul;
 	}
+	
+	public boolean saveByUser(Material pojo, Usuario usuario) {
+		boolean resul = false;
+
+		// sanear el nombre
+		pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
+		if (pojo != null) {
+			if (pojo.getId() == -1) {
+				resul = crear(pojo);
+			} else {
+				resul = modificarByUser(pojo,usuario);
+			}
+		}
+
+		return resul;
+	}
 
 	private boolean modificar(Material pojo) {
 		boolean resul = false;
-		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?,`id_usuario`=? WHERE  `id`= ?;";
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?,`id_usuario`=? WHERE `id`= ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getUsuario().getId());
 			pst.setInt(4, pojo.getId());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+	
+	private boolean modificarByUser(Material pojo,Usuario user) {
+		boolean resul = false;
+		String sql = "UPDATE `material` SET `nombre`= ? , `precio`= ?,`id_usuario`=? WHERE  `id`= ? AND `id_usuario`= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
+			pst.setInt(5, pojo.getUsuario().getId());
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {

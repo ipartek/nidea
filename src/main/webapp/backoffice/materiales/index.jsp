@@ -1,4 +1,4 @@
-<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackOfficeMaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>
 <%@include file="/templates/alert.jsp" %>
@@ -8,12 +8,12 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<a class="btn btn-outline-primary" href="backoffice/materiales?op=<%=BackOfficeMaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
+		<a class="btn btn-outline-primary" href="backoffice/materiales?op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>">Crear Nuevo</a>
 	</div> 
 
 	<div class="col-md-6">
 		<form action="backoffice/materiales" method="get">
-			<input type="hidden" name="op" value="<%=BackOfficeMaterialesController.OP_BUSQUEDA%>">
+			<input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_BUSQUEDA%>">
 			<input type="text" name="search" required placeholder="Nombre del Material">
 			<input type="submit" value="Buscar" class="btn btn-outline-primari">	
 		</form>
@@ -24,10 +24,11 @@
 
 <table class="tabla table table-striped table-bordered" style="width:100%">
    <thead>
-       <tr>
-           <th>Nombre</th>
-           <th>Precio</th>
-           <th>Usuario</th>                
+		<tr>
+			<th>Id</th>
+			<th>Nombre</th>
+			<th>Precio</th>
+			<th>Usuario</th>                
        </tr>
    </thead>
    <tbody>
@@ -37,17 +38,20 @@
 						<c:when test = "${material.precio>=6.0 && material.precio<25.0}">
 	           	 			<td class="text-primary"> ${material.id}</td>
 	           	 			<td> <a class="text-primary" href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
-	           	 			<td class="text-primary"> ${material.precio} &euro;</td>	
+	           	 			<td class="text-primary"> ${material.precio} &euro;</td>
+	           	 			<td class="text-primary"> ${material.usuario.nombre}</td>
 	        			</c:when>
 	        			<c:when test = "${material.precio>=25.0}">
 	        				<td class="text-danger"> ${material.id}</td>
 	           	 			<td> <a class="text-danger" href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
 	           	 			<td class="text-danger"> ${material.precio} &euro;</td>
+	           	 			<td class="text-danger"> ${material.usuario.nombre}</td>
 	        			</c:when>	
 						<c:otherwise>
 	            			<td class='bajo'>${material.id}</td>
 	            			<td class='bajo'><a class='bajo' href="backoffice/materiales?id=${material.id}&op=<%=MaterialesController.OP_MOSTRAR_FORMULARIO%>">${material.nombre}</a></td>
 	            			<td class='bajo'>${material.precio} &euro;</td>
+	            			<td class="bajo"> ${material.usuario.nombre}</td>
 	         			</c:otherwise>
 					</c:choose>
 				</tr>

@@ -26,7 +26,7 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
  * Servlet implementation class MaterialesController
  */
 @WebServlet("/backoffice/materiales")
-public class BackOfficeMaterialesController extends HttpServlet {
+public class BackofficeMaterialesController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 

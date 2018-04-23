@@ -1,4 +1,3 @@
-
 <%@page import="com.ipartek.formacion.nidea.controller.frontoffice.MaterialesController"%>
 <%@include file="/templates/head.jsp" %>
 <%@include file="/templates/navbar.jsp" %>

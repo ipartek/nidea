@@ -8,6 +8,7 @@ public class Usuario {
 	private int id;
 	private String nombre;
 	private String pass;
+	private String email;
 	private Rol rol;
 
 	public Usuario() {
@@ -15,6 +16,7 @@ public class Usuario {
 		this.id = -1;
 		this.pass = "";
 		this.nombre = "";
+		this.email = "";
 		this.rol = new Rol();
 	}
 
@@ -24,6 +26,14 @@ public class Usuario {
 
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public Rol getRol() {
@@ -58,7 +68,7 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", email=" + email + ", rol=" + rol
+				+ "]";
 	}
-
 }

@@ -27,10 +27,6 @@
 	      <span class="input-group-text">&euro;</span>
 	    </div>
 		</div>
-		<div class="input-group ">
-			<label for="id_usuario" class="col-sm-2 col-form-label">Dueño</label>
-			<input type ="text" class="form-control" name="id_usuario" readonly value="${usuario.id}">
-		</div>
 	  </div>
 	</div>
 	<br>  
