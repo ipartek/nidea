@@ -55,11 +55,11 @@ public class MaterialesController extends HttpServlet {
 	private int id;
 	private String nombre;
 	private float precio;
-	private Usuario usuario;
+	
 	
 	//usuarios
 	
-	private int id_usuario;
+	private Usuario usuario;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -165,8 +165,15 @@ public class MaterialesController extends HttpServlet {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			material.setPrecio(precio);
-			material.setUsuario(usuario);	
+			
+			Usuario u = new Usuario();
+			u.setId(usuario.getId());
+			material.setUsuario(usuario);
+			
+			if (request.getParameter("precio") != null) {
+				precio = Float.parseFloat(request.getParameter("precio"));
+				material.setPrecio(precio);
+			}
 
 			// Validaciones Incorrectas
 			Set<ConstraintViolation<Material>> violations = validator.validate(material);
@@ -191,7 +198,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		
-		request.setAttribute("material", daoMaterial.getAll(id_usuario));
+		request.setAttribute("material", daoMaterial.getAll(usuario.getId()));
 		request.setAttribute("usuarios",daoUsuario.getAll());
 		mostrarFormulario(request);
 
@@ -199,7 +206,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void buscar(HttpServletRequest request) {
 		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
-		ArrayList<Material> materiales = daoMaterial.search(search,id_usuario);
+		ArrayList<Material> materiales = daoMaterial.search(search,usuario.getId());
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -207,7 +214,7 @@ public class MaterialesController extends HttpServlet {
 
 	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-		if (daoMaterial.delete(id, id_usuario)) {
+		if (daoMaterial.delete(id, usuario.getId())) {
 			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
 		} else {
 			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
@@ -222,7 +229,7 @@ public class MaterialesController extends HttpServlet {
 	
 		if (id > -1) {
 			
-			material = daoMaterial.getById(id,id_usuario);
+			material = daoMaterial.getById(id,usuario.getId());
 
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
@@ -236,7 +243,7 @@ public class MaterialesController extends HttpServlet {
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Material> materiales = new ArrayList<Material>();
-		materiales = daoMaterial.getAll(id_usuario);
+		materiales = daoMaterial.getAll(usuario.getId());
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
@@ -250,9 +257,6 @@ public class MaterialesController extends HttpServlet {
 	private void recogerParametros(HttpServletRequest request) {
 
 		
-		
-		//int id_usuario =((HttpSession) request.getSession().getAttribute("usuario"))).getId();
-		
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
 		} else {
@@ -262,8 +266,7 @@ public class MaterialesController extends HttpServlet {
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
 		if (request.getParameter("id") != null) {
-			int idForm=Integer.parseInt(request.getParameter("id"));
-			id = idForm;
+			id=Integer.parseInt(request.getParameter("id"));			
 		} else {
 			id = -1;
 		}
@@ -274,22 +277,9 @@ public class MaterialesController extends HttpServlet {
 		} else {
 			nombre = "";
 		}
-		if (request.getParameter("precio") != null) {
-			precio = Float.parseFloat(request.getParameter("precio"));
-		}
-		else{
-			precio=0.0f;
-		}
-		if (request.getParameter("usuario") != null)
-		{
-			int id_usuario=Integer.parseInt(request.getParameter("usuario"));
-			usuario=daoUsuario.getById(id_usuario);
-		}
-		else {
-			usuario = new Usuario();
-			usuario.setId(-1);
-		}		
 		
+		
+		usuario = (Usuario)request.getSession().getAttribute("usuario");
 		
 		
 		

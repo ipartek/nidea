@@ -219,7 +219,7 @@ public class MaterialDAO implements Persistible<Material> {
 		ArrayList<Material> lista = new ArrayList<Material>();
 		String sql = "SELECT material.id, material.nombre, precio, u.id as 'id_usuario', u.nombre as 'nombre_usuario' "
 				+ "FROM `material`,`usuario` as u "
-				+ "WHERE material.id_usuario = u.id  AND material.id_usuario = ?"
+				+ "WHERE material.id_usuario = u.id  AND material.id_usuario = ? "
 				+ "ORDER BY material.id DESC LIMIT 500";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);				
