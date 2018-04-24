@@ -258,8 +258,11 @@ public class MaterialesController extends HttpServlet {
 		} else {
 			id = -1;
 		}
-		if (request.getParameter("usuario") != null) {
-			usuario_id = Integer.parseInt(request.getParameter("usuario"));
+		if (request.getParameter("id_usuario") != null) {
+			usuario_id = Integer.parseInt(request.getParameter("id_usuario"));
+			if(request.getParameter("id_usuario_cambio")!=null && request.getParameter("id_usuario_cambio")!="" ) {
+				usuario_id =Integer.parseInt(request.getParameter("id_usuario_cambio"));
+			}
 		} else {
 			usuario_id = 1;
 		}

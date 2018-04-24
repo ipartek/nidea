@@ -82,7 +82,36 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			return lista;
 
 		}
+		/**
+		 * Lista de usuarios solo con id Nombre, usar solo para la API REST
+		 * @param nombre String con el nombre a buscar
+		 * @return
+		 */
+		public List<Usuario> getAllApiByName(String nombre) {
 
+			ArrayList<Usuario> lista = new ArrayList<Usuario>();
+			String sql = "SELECT id, nombre FROM usuario WHERE nombre like ? ORDER BY nombre ASC LIMIT 500;";
+
+			try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+				pst.setString(1, "%"+nombre+"%");
+				try (ResultSet rs = pst.executeQuery();) {
+					Usuario usuario = null;
+					while (rs.next()) {
+						usuario = new Usuario();
+						usuario.setNombre(rs.getString("nombre"));
+						usuario.setId(rs.getInt("id"));
+						
+						lista.add(usuario);
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			return lista;
+
+		}
 	@Override
 	public Usuario getById(int id) {
 		// TODO Auto-generated method stub

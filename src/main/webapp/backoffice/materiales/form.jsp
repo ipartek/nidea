@@ -27,15 +27,58 @@
 	      <span class="input-group-text">&euro;</span>
 	    </div>
 	  </div>
-	  	    <div class="form-group">
-	  <label for="sel1">Select Creador:</label>
-	  <select class="form-control" id="usuario" name="usuario">
-	  <c:forEach items="${users}" var="user">
-	  	<option value="${user.id}" ${(user.id==material.usuario.id)?"selected":""}>${user.nombre}</option>	
-	  </c:forEach>
-		  </select>
+
+		<div class="input-group">
+		<label for="id_usuario" class="col-sm-2 col-form-label">Usuario</label>
+		<input type="text" value="${material.usuario.nombre }" disabñes readonly/>
+		<p>Cambiar usuario</p>
+		<input type="search" id="search" placeholder="Nombre de usuario" onkeyup="buscarUsuario(event)"/> 
+		<input type="hidden" name="id_usuario" value="${material.usuario.id}">
+		<select id="sUsuarios" name="id_usuario_cambio">
+		
+		</select>
 		</div>
-	</div>
+		<script>
+		function buscarUsuario(event) {
+			//console.log('buscarUsuario: click%o',event);
+			var nombreBuscar = event.target.value;
+			console.log('nombre:',nombreBuscar);
+			
+			var options ='';
+			
+			var select = document.getElementById('sUsuarios');
+			
+			var url="api/usuario?nombre="+nombreBuscar;
+			
+			//llamada ajax
+			if(event.target.value!=''){
+				var xhttp = new XMLHttpRequest();
+				  xhttp.onreadystatechange = function() {
+				    if (this.readyState == 4 && this.status == 200) {
+				    	var data = JSON.parse(this.responseText);
+				     	console.log('retorna datos %o',data);
+				     	data.forEach(el =>{
+				     		options+='<option value="'+el.id+'">'+el.nombre+'</option>';
+				     		
+				     	});
+				     	select.innerHTML = options;
+				    	 
+				    }
+				    if (this.readyState == 4 && this.status == 204){
+				    	options='<option value="">No existe</option>';
+				    	select.innerHTML = options;
+				    }
+				  };
+				  xhttp.open("GET", url, true);
+				  xhttp.send();
+			}else{
+				options='';
+		    	select.innerHTML = options;
+			}
+		
+			
+		}
+		</script>
 	<br>  
 	
 		<c:if test="${material.id == -1}">
