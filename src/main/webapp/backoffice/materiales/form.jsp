@@ -27,29 +27,62 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
-	    </div>
+	    </div>	   
 	  </div>
-	  <div class="input-group ">
-	    <label for="precio" class="col-sm-2 col-form-label">Usuario</label>
-	    
-	  <select name="idusuario">
-		<c:forEach items="${usuarios}" var="usuario">
-
-		  <option ${(usuario.id==material.usuario.id)?"selected":""} value="${usuario.id}">${usuario.nombre}</option>
-		
-			</c:forEach>
-			</select>
-			</div>
-	
-	
 	  
-
+	   <div class="input-group">
+	    <div class="col">
+		    <label for="id_usuario" class="col-sm-2 col-form-label">Usuario</label>
+		    <input type="text" value="${material.usuario.nombre}" disabled readonly />
+	    </div>
+	  	<div class="col">
+	  	  <p>Cambiar usuario</p>
+	      <input type="search" id="search" placeholder="Nombre usuario" onkeyup="buscarUsuario(event)">
+	      <input type="hidden" name="id_usuario" value="${material.usuario.id}">
+	      <select id="sUsuarios" name="id_usuario_cambio"></select>
+	     </div> 	   
+	  </div>
+	  
+	  <script>
+	  		function buscarUsuario( event ){
+	  			//console.log('buscarUsuario: click %o', event);
+	  			var nombreBuscar = event.target.value;
+	  			console.log('nombre %s', nombreBuscar);
+	  			var url = "api/usuario?nombre=" + nombreBuscar;
+	  			
+	  			var options = '';
+	  			var select = document.getElementById('sUsuarios');
+	  			//eliminar opstions antiguas
+	  			select.innerHTML = "";
+	  			
+	  			//llamada Ajax
+	  			var xhttp = new XMLHttpRequest();
+	  		    xhttp.onreadystatechange = function() {
+	  		    	//llamada terminada y correcta
+	  		        if (this.readyState == 4 && this.status == 200) {
+	  		        	var data = JSON.parse(this.responseText);
+	  		            console.log('retorna datos %o', data);
+	  		            data.forEach( el => {
+	  		            	options += '<option value="'+ el.id + '">'+el.nombre+'</option>';
+	  		            });
+	  		            select.innerHTML = options;
+	  		       }
+	  		    };
+	  		    xhttp.open("GET", url , true);
+	  		    xhttp.send(); 
+	  			
+	  			
+	  			
+	  		}	  
+	  </script>
+	  
+	</div>
 	<br>  
 	
 		<c:if test="${material.id == -1}">
 		   <div class="form-group row">
 			   <div class="col-sm-12">
-			   	  <input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
+			   	  <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-primary btn-lg btn-block">Crear</button>
 			  </div>
 		  </div>
@@ -58,7 +91,7 @@
 		<c:if test="${material.id > -1}">  
 			  <div class="form-group row">
 			    <div class="col-sm-6">
-			      <input type="hidden" name="op" value="<%=BackofficeMaterialesController.OP_GUARDAR%>"> 	
+			      <input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>"> 	
 			      <button type="submit" class="btn btn-success btn-lg btn-block">Modificar</button>
 			    </div>
 			    <div class="col-sm-6">		      
@@ -83,7 +116,7 @@
 						      </div>
 						      <div class="modal-footer">
 						        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-						        <a href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_ELIMINAR%>">
+						        <a href="backoffice/materiales?id=${material.id}&op=<%=Operable.OP_ELIMINAR%>">
 						        	<button type="button" class="btn btn-primary">Aceptar</button>
 						        </a>
 						      </div>
@@ -97,6 +130,7 @@
 		</c:if>	  
 	</form>
 </div>
+
 
 
 

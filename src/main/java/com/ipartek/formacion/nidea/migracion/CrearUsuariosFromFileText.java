@@ -12,13 +12,15 @@ public class CrearUsuariosFromFileText {
 
 	public static void main(String[] args) throws SQLException {
 		System.out.println("Crear usuarios desde un fichero de texto");
-		final String URL = "jdbc:mysql://localhost/spoty?user=root&password="; 
-		final String sql = "INSERT INTO `usuario` (`nombre`, `password`, `id_rol`) VALUES (?, '123456', '2');";
+		final String URL = "jdbc:mysql://localhost/spoty?user=root&password=root"; 
+		final String sql = "INSERT INTO `usuario` (`nombre`, `password`, `id_rol`,`email`) VALUES (?, '123456', '2',?);";
 		Connection con = null;
 		PreparedStatement pst = null;
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			con = DriverManager.getConnection(URL);
+			con.setAutoCommit(false);
 			 
 			 for (int i=0; i<5; i++) {
 				 pst = con.prepareStatement(sql);
