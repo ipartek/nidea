@@ -196,7 +196,7 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 		}
 
 		request.setAttribute("material", material);
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -230,7 +230,7 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
 
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		
 
