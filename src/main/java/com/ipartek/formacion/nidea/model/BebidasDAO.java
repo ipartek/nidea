@@ -3,9 +3,11 @@ package com.ipartek.formacion.nidea.model;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.ipartek.formacion.nidea.pojo.Bebida;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 public class BebidasDAO implements Persistible<Bebida> {
 
@@ -41,6 +43,12 @@ public class BebidasDAO implements Persistible<Bebida> {
 
 	@Override
 	public Material getMaterialByIdUser(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Usuario> getAllByName() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -192,7 +192,7 @@ public class MaterialesController extends HttpServlet {
 		}
 
 		request.setAttribute("material", material);
-		request.setAttribute("usuarios", daoUsuario.getAll());
+//		request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
