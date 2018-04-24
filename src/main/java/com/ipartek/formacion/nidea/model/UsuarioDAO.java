@@ -62,19 +62,43 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	@Override
 	public List<Usuario> getAll() {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password as password, u.id_rol as rol_id, r.nombre as rol_nombre FROM `usuario` as u, rol as r WHERE u.id_rol=r.id ORDER BY u.id ASC LIMIT 500;";
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' FROM usuario as u, rol as r  WHERE u.id_rol = r.id LIMIT 500;";
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
-				ResultSet rs = pst.executeQuery();) {
-			Usuario u = null;
+				ResultSet rs = pst.executeQuery()) {
+
 			while (rs.next()) {
-				u = mapper(rs);
-				lista.add(u);
+				lista.add(mapper(rs));
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		return lista;
+	}
+	
+	public List<Usuario> getAllApiByName(String nombre) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT id , nombre FROM usuario  WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 25;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, "%" + nombre + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+
+				Usuario usuario = null;
+				while (rs.next()) {
+					usuario = new Usuario();
+					usuario.setNombre( rs.getString("nombre"));
+					usuario.setId(rs.getInt("id"));
+					lista.add(usuario);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 		return lista;
 	}
 

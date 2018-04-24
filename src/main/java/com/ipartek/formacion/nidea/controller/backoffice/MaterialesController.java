@@ -189,7 +189,7 @@ public class MaterialesController extends HttpServlet implements Operable{
 		}
 
 		request.setAttribute("material", material);
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -223,7 +223,7 @@ public class MaterialesController extends HttpServlet implements Operable{
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
 
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
