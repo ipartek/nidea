@@ -9,8 +9,8 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
 
 public class LeerFichero {
 
-	//private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas_lite.txt";
-	private static final String FILENAME = "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas_lite.txt";
+	private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas_lite.txt";
+	//private static final String FILENAME = "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas_lite.txt";
 	
 	
 	final String SQL="INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`,`email`,`edad`,`dni`) VALUES (?, '123456', '2',?,?,?);";

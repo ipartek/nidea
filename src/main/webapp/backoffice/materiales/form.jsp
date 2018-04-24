@@ -12,14 +12,15 @@
 	<!--  <p>Informacion de usuario ${usuario} </p>-->
 	
 	
-	<form action="backoffice/materiales" method="post">
+<form action="backoffice/materiales" method="post">
 	  <div class="form-group row">
 	    <label for="id" class="col-sm-2 col-form-label">ID:</label>
 	    <div class="col-sm-2">
 	      <input type="text" class="form-control" name="id" readonly value="${material.id}">
 	    </div>
 	  </div>
-	  <div class="form-group row">
+
+  <div class="form-group row">
 	    <label for="nombre" class="col-sm-2 col-form-label">Material</label>
 	    <div class="col-sm-5">
 	      <input type="text" value="${material.nombre}" class="form-control" name="nombre" placeholder="Introduce el nombre del material" >
@@ -30,24 +31,63 @@
 	    <div class="input-group-append">
 	      <input type="text" class="form-control" value="${material.precio}" name="precio" placeholder="Introduce el precio">
 	      <span class="input-group-text">&euro;</span>
-	    </div>
-	    
-	    <div>
-	    <select id="usuario" name="id_usuario">
-	    
-	 <c:forEach var="user" items="${usuarios}">
-	 
-	 	<option value="${user.id}" ${(user.id==material.usuario.id)?"selected":""}  >${user.nombre}</option> <!--  Meter la condicion para que coja el usuario -->
-	 	
-	
-	</c:forEach>
-	   
-	    
-	    </select>
-	    </div>
-	   
+	    </div>	   
 	  </div>
+	    
+
+	   <div class="input-group">
+	    <div class="col">
+		    <label for="id_usuario" class="col-sm-2 col-form-label">Usuario</label>
+		    <input type="text" value="${material.usuario.nombre}" disabled readonly />
+	    </div>
+	  	<div class="col">
+	  	  <p>Cambiar usuario</p>
+	      <input type="search" id="search" placeholder="Nombre usuario" onkeyup="buscarUsuario(event)">
+	      <input type="hidden" name="id_usuario" value="${material.usuario.id}">
+	      <select id="sUsuarios" name="id_usuario_cambio"></select>
+	     </div> 	   
+	  </div>
+	  
+	  <script>
+	  		function buscarUsuario( event ){
+	  			//console.log('buscarUsuario: click %o', event);
+	  			var nombreBuscar = event.target.value;
+	  			console.log('nombre %s', nombreBuscar);
+	  			var url = "api/usuario?nombre=" + nombreBuscar;
+	  			
+	  			var options = '';
+	  			var select = document.getElementById('sUsuarios');
+	  			//eliminar opstions antiguas
+	  			select.innerHTML = "";
+	  			
+	  		//llamada Ajax
+	  				  			var xhttp = new XMLHttpRequest();
+	  				  		    xhttp.onreadystatechange = function() {
+	  				  		    	//llamada terminada y correcta
+	  				  		        if (this.readyState == 4 && this.status == 200) {
+	  				  		        	var data = JSON.parse(this.responseText);
+	  				  		            console.log('retorna datos %o', data);
+	  				  		            data.forEach( el => {
+	  				  		            	options += '<option value="'+ el.id + '">'+el.nombre+'</option>';
+	  				  		            });
+	  				  		            select.innerHTML = options;
+	  				  		       }
+	  				  		    };
+	  				  		    xhttp.open("GET", url , true);
+	  				  		    xhttp.send(); 
+	  			
+	  			
+	  			
+	  		}	  
+	  </script>
+	  
 	</div>
+
+	     
+	 
+	 	
+	    
+
 	<br>  
 	
 		<c:if test="${material.id == -1}">
@@ -99,8 +139,8 @@
 			    
 			  </div>
 		</c:if>	  
-	</form>
-</div>
+	
+
 
 
 <jsp:include page="/templates/footer.jsp"></jsp:include>
