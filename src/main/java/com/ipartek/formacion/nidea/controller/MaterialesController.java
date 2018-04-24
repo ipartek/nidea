@@ -47,6 +47,7 @@ public class MaterialesController extends HttpServlet {
 	private MaterialDAO daoMaterial;
 	private String search; // para el buscador por nombre matertial
 	private int op; // operacion a realizar
+	private int id_usuario;	// ID del usuario que crea el material
 	// parametros del Material
 	private int id;
 	private String nombre;
@@ -173,6 +174,9 @@ public class MaterialesController extends HttpServlet {
 			material.setId(id);
 			material.setNombre(nombre);
 			material.setUsuario(usuario);
+			Usuario u = new Usuario();
+			u.setId(id_usuario);
+			material.setUsuario(u);
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -263,6 +267,15 @@ public class MaterialesController extends HttpServlet {
 			nombre = nombre.trim();
 		} else {
 			nombre = "";
+		}
+		
+		// Recoger ID del usuario que crea el material
+		if(request.getParameter("id_usuario") != null) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+		} else if(request.getParameter("id_usuario_cambio") != null) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+		} else {
+			id_usuario = -1;
 		}
 
 	}

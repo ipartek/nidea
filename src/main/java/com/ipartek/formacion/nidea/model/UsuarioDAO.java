@@ -43,7 +43,8 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	public Usuario check(String nombre, String pass) {
 		Usuario resul = null;
 		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' "
-				+ "FROM usuario as u, rol as r " + "WHERE u.id_rol = r.id AND u.nombre=? and u.password = ?;";
+				+ "FROM usuario as u, rol as r "
+				+ "WHERE u.id_rol = r.id AND u.nombre=? and u.password = ? LIMIT 1000;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, nombre);
 			pst.setString(2, pass);
@@ -132,7 +133,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		return u;
 	}
-	
+
 	/**
 	 * Buscamos un usuario en la BD a partir del nombre y la constraseña
 	 * 
@@ -168,6 +169,36 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	public boolean saveById(Material pojo, int idUsuario) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	/**
+	 * Devuelve los Usuarios que coincidan con el termino de busqueda para el
+	 * 'nombre'
+	 * 
+	 * @param nombre:
+	 *            termino de busqueta para la columna nombre
+	 * @return: lista de usuarios con id y nombre
+	 */
+	public ArrayList<Usuario> getAllApiByName(String nombre) {
+		ArrayList<Usuario> listaUsuarios = null;
+		String sql = "SELECT id, nombre FROM usuario WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 20";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, "%" + nombre + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+				Usuario u = null;
+				listaUsuarios = new ArrayList<Usuario>();
+				while (rs.next()) {
+					u = new Usuario();
+					u.setId(rs.getInt("id"));
+					u.setNombre(rs.getString("nombre"));
+					listaUsuarios.add(u);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listaUsuarios;
 	}
 
 }
