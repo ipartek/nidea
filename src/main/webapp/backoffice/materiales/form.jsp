@@ -28,15 +28,49 @@
 	    </div>
 		</div>
 		<div class="input-group ">
+		<div class = "col">
 			<label for="id_usuario" class="col-sm-2 col-form-label">Dueño</label>
-			<select name="id_usuario" class="form-control">
-				<option value="-1">Seleccione Usuario</option>
-				<c:forEach items="${usuarios}" var="usuario">
-					<option value="${usuario.id}" ${usuario.id == material.usuario.id?'selected':''}>${usuario.nombre}</option>
-				</c:forEach>
-			</select>
+			<input type="text" value = "${material.usuario.nombre}" readonly>
 		</div>
-	
+		<div class = "col">	
+			Cambiar Usuario
+			<input type="search" id="search" placeholder="Nombre usuario" onkeyup="buscarUsuario(event)">
+			<input type="hidden" name="id_usuario" value="${material.usuario.id}">
+			<select id="sUsuarios" name="id_usuario_cambio"></select>
+		</div>
+		
+		<script type="text/javascript">
+		function buscarUsuario( event ){
+  			//console.log('buscarUsuario: click %o', event);
+  			var nombreBuscar = event.target.value;
+  			console.log('nombre %s', nombreBuscar);
+  			var url = "api/usuario?nombre=" + nombreBuscar;
+  			
+  			var options = '';
+  			var select = document.getElementById('sUsuarios');
+  			//eliminar opstions antiguas
+  			select.innerHTML = "";
+  			
+  			//llamada Ajax
+  			var xhttp = new XMLHttpRequest();
+  		    xhttp.onreadystatechange = function() {
+  		    	//llamada terminada y correcta
+  		        if (this.readyState == 4 && this.status == 200) {
+  		        	var data = JSON.parse(this.responseText);
+  		            console.log('retorna datos %o', data);
+  		            data.forEach( el => {
+  		            	options += '<option value="'+ el.id + '">'+el.nombre+'</option>';
+  		            });
+  		            
+  		       } else if (this.status == 204){
+  		    	   options = '<option value=-1>Busqueda sin coincidencias</option>';
+  		       }
+  		      select.innerHTML = options;
+  		    };
+  		    xhttp.open("GET", url , true);
+  		    xhttp.send(); 
+  		}
+		</script>
 	  </div>
 	</div>
 	<br>  

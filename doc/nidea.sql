@@ -63,8 +63,10 @@ CREATE TABLE IF NOT EXISTS `usuario` (
   `nombre` varchar(45) NOT NULL,
   `password` varchar(45) NOT NULL,
   `id_rol` int(11) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
   PRIMARY KEY (`id`,`id_rol`),
   UNIQUE KEY `nombre_UNIQUE` (`nombre`),
+  UNIQUE INDEX `email` (`email`),
   KEY `fk_usuario_rol_idx` (`id_rol`),
   CONSTRAINT `fk_usuario_rol` FOREIGN KEY (`id_rol`) REFERENCES `rol` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
@@ -72,9 +74,9 @@ CREATE TABLE IF NOT EXISTS `usuario` (
 -- Volcando datos para la tabla nidea.usuario: ~2 rows (aproximadamente)
 DELETE FROM `usuario`;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` (`id`, `nombre`, `password`, `id_rol`) VALUES
-	(1, 'administrador', '123456', 1),
-	(2, 'pepe', '123456', 2);
+INSERT INTO `usuario` (`id`, `nombre`, `password`, `email`, `id_rol`) VALUES
+	(1, 'administrador', '123456', 'admin@admin.com', 1),
+	(2, 'pepe', '123456', 'pepe@pepe.com', 2);
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

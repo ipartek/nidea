@@ -56,6 +56,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 	private float precio;
 	private Usuario usuario;
 	private int id_usuario;
+	private int id_usuario_cambio;
 
 	/**
 	 * Se ejecuta solo la 1º vez que llaman al Servlet
@@ -153,8 +154,12 @@ public class BackofficeMaterialesController extends HttpServlet {
 		try {
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario.setId(id_usuario);
 			material.setUsuario(usuario);
+			if (id_usuario_cambio!=-1) {
+				usuario.setId(id_usuario_cambio);
+			}else {
+				usuario.setId(id_usuario);
+			}
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -184,7 +189,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 		}
 
 		request.setAttribute("material", material);
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
 	}
@@ -218,7 +223,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
 
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -260,6 +265,11 @@ public class BackofficeMaterialesController extends HttpServlet {
 			nombre = "";
 		}
 		
+		if (request.getParameter("id_usuario_cambio") != null) {
+			id_usuario_cambio = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		} else {
+			id_usuario_cambio = -1;
+		}
 		if (request.getParameter("id_usuario") != null) {
 			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
 		} else {
