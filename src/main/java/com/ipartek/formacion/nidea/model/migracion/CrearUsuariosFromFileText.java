@@ -17,11 +17,11 @@ public class CrearUsuariosFromFileText {
 
 		// private static final String FILENAME =
 		// final String FILENAME =
-		// "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas_lite.txt";
+		// final String FILENAME ="C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas_lite.txt";
 		final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas.txt";
-
-		// final String FILENAME =
-		// "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas_lite.txt";
+		//final String FILENAME =  "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas.txt";
+		 
+		// final String FILENAME ="C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas_lite.txt";
 
 		final String SQL = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`,`email`) VALUES (?, '123456', '2',?);";
 		Connection con = null;
@@ -70,9 +70,12 @@ public class CrearUsuariosFromFileText {
 								if (campos.length != 7) {
 
 								}
-						} catch (ArrayIndexOutOfBoundsException e) {
+						}
+					
+						catch (ArrayIndexOutOfBoundsException e) {
 								e.printStackTrace();
 						}
+					
 						
 						try {
 								if (campos.length == 7) {
