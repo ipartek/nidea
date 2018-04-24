@@ -58,30 +58,33 @@ public class CrearUsuariosFromFileText {
 			while ((sCurrentLine = br.readLine()) != null) {
 
 				campos = sCurrentLine.split(",");
-
+				linea++;
+				
 				try {
 					if (campos.length != NUMERO_CAMPOS) {
 						error_campos++;
-						
+
 					} else {
 						// se mapea el nombre con los tres primeros campos que son nombres y apellidos
 						usuario = mapear(campos);
 
 						// Comprueba si los usuarios tienen la edad minima para entrar en la bbdd
-						if (!(Integer.parseInt(campos[3]) >= EDAD_MINIMA)) {
+						if (Integer.parseInt(campos[3]) < EDAD_MINIMA) {
 							error_edad++;
+
+						} else {
 							
-						} else {							
-							insertados++;
 							pst.setString(1, usuario.getNombre());
 							pst.setString(2, usuario.getEmail());
 
 							if (1 == pst.executeUpdate()) {
-								System.out.println("Usuario" + usuario.getNombre() + " insertado");
+								// System.out.println("Usuario" + usuario.getNombre() + " insertado");
+								insertados++;
 							} else {
 								System.out.println("******Error al insertar");
-							}							
-						} 
+							}
+						}
+						
 					}
 				}
 
@@ -96,15 +99,14 @@ public class CrearUsuariosFromFileText {
 						error_nombre++;
 					}
 				}
-				
+
 				// Comprueba si los campos son demasiado largos
 				catch (MysqlDataTruncation e) {
 					error_nombre_largo++;
 					// System.out.println(e.getLocalizedMessage());
 				}
-				linea++;
-				
-			}//while
+
+			} // while
 
 			// comitar cambios al terminar el proceso
 			con.commit();
@@ -118,10 +120,10 @@ public class CrearUsuariosFromFileText {
 			System.out.println("Errores de nombre demasiado largo " + error_nombre_largo);
 			System.out.println("Errores de duplicidad de email " + error_email);
 
-			System.out.println(
-					"Lineas erroneas " + (error_campos + error_edad + error_nombre + error_nombre_largo + error_email));
-			System.out.println("Lineas Totales "
-					+ (insertados + error_campos + error_edad + error_nombre + error_nombre_largo + error_email));
+			int errores = error_campos + error_edad + error_nombre + error_nombre_largo + error_email;
+
+			System.out.println("Lineas erroneas " + errores);
+			System.out.println("Lineas Totales " + (insertados + errores));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,7 +141,9 @@ public class CrearUsuariosFromFileText {
 	}
 
 	/**
-	 * Devuelve un usuario con los 3 primeros campos mapeados para el nombre y el email con el 5
+	 * Devuelve un usuario con los 3 primeros campos mapeados para el nombre y el
+	 * email con el 5
+	 * 
 	 * @param campos
 	 * @return
 	 */

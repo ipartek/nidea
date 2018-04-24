@@ -142,7 +142,7 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		material.setNombre(nombre);
 		material.setUsuario(usuario);
 
-		request.setAttribute("usuarios", usuarioDao.getAll());
+		//request.setAttribute("usuarios", usuarioDao.getAll());
 
 		try {
 			if (request.getParameter("precio") != null) {
@@ -216,7 +216,7 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			material = dao.getById(id);
 		}
 		request.setAttribute("material", material);
-		request.setAttribute("usuarios", usuarioDao.getAll());
+		//request.setAttribute("usuarios", usuarioDao.getAll());
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
 
@@ -243,7 +243,9 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 
 		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
 
-		if (request.getParameter("id_usuario") != null) {
+		if (request.getParameter("id_usuario_cambio") != null) {
+			usuario = usuarioDao.getById(Integer.parseInt(request.getParameter("id_usuario_cambio")));
+		} else if (request.getParameter("id_usuario") != null) {
 			usuario = usuarioDao.getById(Integer.parseInt(request.getParameter("id_usuario")));
 		}
 

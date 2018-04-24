@@ -31,23 +31,65 @@
 			required value="${material.precio }">
 	</div>
 	<div class="form-group">
-		<select name="id_usuario" class="form-control">
-			<option value="-1">Seleccione Usuario</option>
-			<c:forEach items="${usuarios }" var="usuario">
-				<option value="${usuario.id }" ${usuario.id == material.usuario.id?'selected':''}>${usuario.nombre }</option>
-			</c:forEach>
-		</select>
+		<label for="nombre_usuario">Nombre Usuario:</label> <input type="text"
+			class="form-control" id="nombre_usuario" name="nombre_usuario"
+			placeholder="Nombre Usuario" readonly
+			value="${material.usuario.nombre }">
+	</div>
+	<div class="form-group">
+		<input type="hidden" name="id_usuario" value="${material.usuario.id}">
+		<label for="search">Cambiar Usuario:</label> 
+		<div class="row col-md-12">
+			<div class="col">
+				<input class="form-control" type="search" name="search" id="search" onkeyup="buscarUsuario(event)"> 
+		 	</div>
+		 	<div class="row col-md-6">
+				<select	id="s_usuarios" name="id_usuario_cambio" class="form-control"></select>
+			</div>
+		</div>
 	</div>
 
+	<script type="text/javascript">
+		function buscarUsuario(event) {
+			//console.log('buscar usuario: click %s', event.target.value);		
+			var nombreBuscar = event.target.value;
+			var url = "api/usuario/?nombre=" + nombreBuscar;
+			console.log('Nombre: %s', nombreBuscar);
+
+			var options = '';
+			var select = document.getElementById("s_usuarios");
+			select.innerHTML = '';
+
+			//llamada ajax
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var data = JSON.parse(this.responseText);
+					console.log('retorna datos %o', data);
+					
+					data.forEach( el => {
+						options += '<option value="' + el.id + '">' + el.nombre +'</option>';
+					});
+					if ('' == nombreBuscar){
+						select.innerHTML = '';
+					} else {
+						select.innerHTML = options;
+					}					
+				}
+			};
+			xhttp.open("GET", url, true);
+			xhttp.send();
+			
+		}
+	</script>
+
 	<c:if test="${material.id == -1}">
-		<input type="hidden" name="op"
-			value="<%=Operable.OP_GUARDAR%>">
+		<input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-success btn-block">Crear</button>
 	</c:if>
 
 	<c:if test="${material.id != -1}">
-		<input type="hidden" name="op"
-			value="<%=Operable.OP_GUARDAR%>">
+		<input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>">
 		<button type="submit" class="btn btn-primary btn-block">Modificar</button>
 
 

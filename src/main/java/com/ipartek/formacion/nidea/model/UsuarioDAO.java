@@ -204,7 +204,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	public ArrayList<Usuario> getByName(String search) {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		String sql = "SELECT u.id as id_usuario, u.nombre as nombre_usuario, u.password, r.id as id_rol, r.nombre as nombre_rol FROM usuario AS u, rol as r WHERE u.id_rol = r.id AND u.nombre LIKE ? ORDER BY u.id DESC LIMIT 500;";
-
+				
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 			pst.setString(1, "%" + search + "%");
 			try (ResultSet rs = pst.executeQuery()) {
@@ -216,7 +216,33 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			e.printStackTrace();
 		}
 		return lista;
-
+	}
+	
+	/**
+	 * getByName para las llamadas de la api solo id y nombre
+	 * usar solo para la api rest
+	 * @param search String con el nombre a buscar
+	 * @return
+	 */
+	public ArrayList<Usuario> getByNameApi (String search) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT id, nombre FROM usuario WHERE nombre LIKE ? ORDER BY id DESC LIMIT 25;";
+		Usuario usuario = null;
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, "%" + search + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					usuario = new Usuario();
+					usuario.setId(rs.getInt("id"));
+					usuario.setNombre(rs.getString("nombre"));
+					lista.add(usuario);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	/**
