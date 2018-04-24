@@ -189,8 +189,8 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
 					Alert.TIPO_WARNING);
 		}
-		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
-		request.setAttribute("usuarios", usuarios);
+		//ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
+		//request.setAttribute("usuarios", usuarios);
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
@@ -224,8 +224,8 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		} else {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
-		ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
-		request.setAttribute("usuarios", usuarios);
+		//ArrayList<Usuario> usuarios= (ArrayList<Usuario>) daoUsuario.getAll();
+		//request.setAttribute("usuarios", usuarios);
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}

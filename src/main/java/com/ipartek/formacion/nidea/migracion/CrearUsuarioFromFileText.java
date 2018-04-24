@@ -8,11 +8,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.naming.ContextNotEmptyException;
+
 import com.ipartek.formacion.nidea.model.ConnectionManager;
 
 
 public class CrearUsuarioFromFileText {
-	private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspaces2\\nidea\\doc\\personas_little.txt";
+	private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspaces2\\nidea\\doc\\personas.txt";
 	
 	public static void main(String[] args) throws SQLException {
 		System.out.println("Crear usuarios desde un fichero de texto.");
@@ -46,9 +48,9 @@ public class CrearUsuarioFromFileText {
 			System.out.println("Comenzamos a leer fichero");
 			System.out.println("********************************************************************************************");
 			try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
-				
+					
 					String sCurrentLine;
-					int i=0;
+					int numLineas=0;
 					String campos [];
 					String nombre;
 					String ape1;
@@ -56,46 +58,90 @@ public class CrearUsuarioFromFileText {
 					int edad;
 					String dni;
 					String rol;
-					int j=0;
-					for (i = 0; i<5; i++) {
+					int menorEdad=0;
+					int contCampos=0;
+					int contNombre = 0;
+					int contEmail =0;
+					
 						while ((sCurrentLine = br.readLine()) != null) {
 							//System.out.println(sCurrentLine);
 							campos = sCurrentLine.split(",");
-							nombre = campos[0];
-							ape1= campos[1];
-							ape2 = campos[2];
-							edad = Integer.parseInt(campos[3]);
-							
-							if(edad > 18) {
-								
-								email = campos[4];
-								dni = campos[5];
-								rol = campos[6];
+							try{
+								if(sCurrentLine.length()>=7) {
+								nombre = campos[0];
+								ape1= campos[1];
+								ape2 = campos[2];
 								nombre_usuario = nombre+" "+ape1+" "+ape2;
-								//System.out.println("Linea " + i + " =>" +nombre + " "+ ape1 + " "+ape2);
-								System.out.println("Nombre: " + nombre_usuario);
-								System.out.println("Email: " + email);
-								System.out.println("Edad: "+ edad);
-								pst= con.prepareStatement(SQL);
-								pst.setString(1, nombre_usuario);
-								pst.setString(2, email);
-								pst.executeUpdate();
+								try{
+									if(nombre_usuario.length()<45) {
+										edad = Integer.parseInt(campos[3]);
+										try{
+											if(edad >= 18) {
+												email = campos[4];
+												try {
+													if(email.length()<45) {
+
+														dni = campos[5];
+														rol = campos[6];
+														//System.out.println("Linea " + i + " =>" +nombre + " "+ ape1 + " "+ape2);
+														System.out.println("Nombre: " + nombre_usuario);
+														System.out.println("Email: " + email);
+														System.out.println("Edad: "+ edad);
+														pst= con.prepareStatement(SQL);
+														pst.setString(1, nombre_usuario);
+														pst.setString(2, email);
+														try {
+															if(1 == pst.executeUpdate()){
+																System.out.println("Lineas insertadas");
+															}
+														}catch (Exception e) {
+															e.printStackTrace();
+														}
+													
+													}else {
+														contEmail++;
+													}
+													
+													
+												}catch (Exception e) {
+													e.printStackTrace();
+													
+													
+												}
+											}else {
+												menorEdad++;
+											}
+									}catch (Exception e) {
+										e.printStackTrace();
+									}		
+										
+							}else {
+								contNombre++;
 							}
-							else {
-								System.out.println("No es mayor de edad. Por LOPD no se puede agregar a BBDD");
-								j++;
-							}
-							
-							
+						}catch (Exception e) {
+									e.printStackTrace();
+									
 						}
-						
-						
+					}else {
+						contCampos++;
 					}
+				}catch (Exception e) {
+						e.printStackTrace();
+						
+				}
+				numLineas++;
+			}
+						
+						
+					int contNombreEmail = contNombre + contEmail;
 					System.out.println("----------------------------------------------------------------");
-					System.out.println("Total ficheros leidos=>"+i);
-					System.out.println("Total menores de edad=>"+j);
-					int z = i-j;
-					System.out.println("Lineas insertadas en BBDD =>"+z );
+					System.out.println("Total lineas leidas =>"+numLineas);
+					System.out.println("Total menores de edad =>"+menorEdad);
+					System.out.println("Lineas con menos de 7 campos => " +contCampos);
+					System.out.println("Lineas erroneas por email y/o nombre => " +contNombreEmail);
+				
+					int lineasInsertadas = numLineas-contNombreEmail-contCampos-menorEdad;
+					System.out.println("Lineas insertadas en BBDD =>"+lineasInsertadas );
 					
 				} catch (IOException e) {
 					e.printStackTrace();
