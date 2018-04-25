@@ -26,7 +26,7 @@ import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
  *
  */
 public class LerrFicheroTxt {
-	private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas.txt";
+	private static final String FILENAME = "C:\\Users\\Jorge\\eclipse2\\nidea\\doc\\personas.txt";
 
 	public static void main(String[] args) throws Exception {
 		final String URL = "jdbc:mysql://localhost/nidea?user=root&password=root";
@@ -83,11 +83,11 @@ public class LerrFicheroTxt {
 								cont_lineas_insertadas++;
 							} 
 
-							con.commit();
+							
 						} catch (MySQLIntegrityConstraintViolationException icve) {
-
-							cont_campoRep++;
-							con.rollback();
+							icve.printStackTrace();
+							cont_campoRep+=1;
+							
 						} catch (Exception e) {
 							e.printStackTrace();
 							con.rollback();
@@ -112,23 +112,20 @@ public class LerrFicheroTxt {
 				} else {
 
 					contador_campos++;
-
+					
 				}
-				System.out.println("Error edad " + contador_edad);
-				System.out.println("----------------");
-				System.out.println("Contador campos " + contador_campos);
-				System.out.println("----------------");
-				System.out.println("Campos repetidos " + cont_campoRep);
-				System.out.println("----------------");
-				System.out.println("Lineas insertadas " + cont_lineas_insertadas);
-				System.out.println("----------------");
-				System.out.println("lineas leidas " + lineas_leidas);
+				con.commit();
+
+		
 
 			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		}
 
 	}
+	
 }
