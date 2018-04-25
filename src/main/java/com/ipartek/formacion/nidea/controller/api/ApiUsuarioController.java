@@ -36,14 +36,14 @@ public class ApiUsuarioController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		
 		PrintWriter out = response.getWriter();
+		
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
 
 		// Recoger parametros
 		String nombre = request.getParameter("nombre");
-		if (nombre == null) {
-			nombre = "";
-		}
-
-		ArrayList<Usuario> usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
+		if ( nombre != null && !"".equals(nombre) ) {
+			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
+		}	
 
 		/*
 		 * usuarios.add(new Usuario(1, "Manolo Kabezabolo")); 

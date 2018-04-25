@@ -27,6 +27,7 @@
       </div>
      
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+      <a class="btn btn-lg btn-danger btn-block" href="Registro">¿ Aún no te has registrado ?</a>
       
     </form>
 
