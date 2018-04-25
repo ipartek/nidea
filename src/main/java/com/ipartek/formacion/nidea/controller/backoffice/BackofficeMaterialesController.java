@@ -269,18 +269,18 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		} else {
 			nombre = "";
 		}
-		
-		if (request.getParameter("id_usuario") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
-		} else {
-			id_usuario = -1;
-		}
-		
-		if (request.getParameter("id_usuario_cambio") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
-		} else {
-			id_usuario = -1;
-		}
+		// comprobar si hay que cambiar el usuario desde el select-options
+				if (request.getParameter("id_usuario_cambio") != null
+						&& !"-1".equals(request.getParameter("id_usuario_cambio"))) {
+					id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+				} else {
+
+					if (request.getParameter("id_usuario") != null) {
+						id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+					} else {
+						id_usuario = -1;
+					}
+				}
 		
 		
 

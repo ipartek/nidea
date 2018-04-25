@@ -11,15 +11,16 @@ import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class UsuarioDAO implements Persistible<Usuario> {
 
 	private static UsuarioDAO INSTANCE = null;
 
-	private UsuarioDAO() {
+	public UsuarioDAO() {
 	}
 
-	private synchronized static void createInstance() {
+	public synchronized static void createInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new UsuarioDAO();
 		}
@@ -31,37 +32,37 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		}
 		return INSTANCE;
 	}
-	
-		/**
-		 * Lista de usuarios SOLO con id y nombre, usar solo para la API REST
-		 * @param nombre String con el nombre a buscar
-		 * @return
-		 */
-			public List<Usuario> getAllApiByName(String nombre) {
-			ArrayList<Usuario> lista = new ArrayList<Usuario>();
-			String sql = "SELECT id , nombre FROM usuario  WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 25;";
-			try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
-	
-				pst.setString(1, "%" + nombre + "%");
-				try (ResultSet rs = pst.executeQuery()) {
-	
-					Usuario usuario = null;
-					while (rs.next()) {
-						usuario = new Usuario();
-						usuario.setNombre(rs.getString("nombre"));
-						usuario.setId(rs.getInt("id"));
-						lista.add(usuario);
-					}
+
+	/**
+	 * Lista de usuarios SOLO con id y nombre, usar solo para la API REST
+	 * 
+	 * @param nombre
+	 *            String con el nombre a buscar
+	 * @return
+	 */
+	public List<Usuario> getAllApiByName(String nombre) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT id , nombre FROM usuario  WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 25;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, "%" + nombre + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+
+				Usuario usuario = null;
+				while (rs.next()) {
+					usuario = new Usuario();
+					usuario.setNombre(rs.getString("nombre"));
+					usuario.setId(rs.getInt("id"));
+					lista.add(usuario);
 				}
-	
-			} catch (Exception e) {
-	 			e.printStackTrace();
-	 		}
-	
-	 		return lista;
-	 	}
-	
-	
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
 
 	/**
 	 * Buscamos un usuario por nombre y password
@@ -95,7 +96,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	public List<Usuario> getAll() {
 		List<Usuario> lista = new ArrayList<Usuario>();
 		String sql = "SELECT usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario',usuario.password as 'password',usuario.id_rol,rol.id as 'rol_id',rol.nombre as 'rol_nombre' FROM usuario,rol where usuario.id= rol.id;";
-		
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
 				ResultSet rs = pst.executeQuery();) {
@@ -109,9 +110,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			e.printStackTrace();
 		}
 		return lista;
-		
-		
-	
+
 	}
 
 	@Override
@@ -152,7 +151,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resul;
 	}
 
-	private boolean modificar(Usuario pojo) {
+	public boolean modificar(Usuario pojo) {
 		boolean resul = false;
 		String sql = "UPDATE usuario SET nombre=? as 'nombre_usuario', password=? as 'password', id_rol=? WHERE  id=?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -172,16 +171,18 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return resul;
 	}
 
-	private boolean crear(Usuario pojo) {
+	public boolean crear(Usuario pojo) {
 		boolean resul = false;
-		String sql = "INSERT INTO  usuario (nombre, password,id_rol) VALUES ( ?, ?, ? );";
-	
+		String sql = "INSERT INTO  usuario (nombre, password,id_rol,email) VALUES ( ?,?, ?, ? );";
+
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
-			pst.setInt(3, pojo.getRol().getId());
+			pst.setInt(3, 2);
+			pst.setString(4, pojo.getEmail());
+			
 
 			int affectedRows = pst.executeUpdate();
 			if (affectedRows == 1) {
@@ -193,11 +194,15 @@ public class UsuarioDAO implements Persistible<Usuario> {
 					}
 				}
 			}
-		} catch (Exception e) {
+		}catch (MySQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
+		}
+		
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return resul;
-		
+
 	}
 
 	@Override
@@ -231,5 +236,6 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		return u;
 	}
-
 }
+
+

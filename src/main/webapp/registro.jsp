@@ -1,23 +1,31 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Registro</title>
-</head>
-<body>
+<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/navbar.jsp" %>
+<%@include file="/templates/alert.jsp" %>
+<h2 class="text-center">Registro</h2>
 
-<form action="post">
+<form action="registro" method="post">
+<label for="name">Nombre</label>
 
-<input type="text" name="nombre">
-<input type="text" name="email">
-<input type="password" name="password">
-<input type="password" name="password2">
+<input type="text" name="nombre" value="manolo">
+<label for="email">Email</label>
 
+<input type="text" name="email" value="manolo@gmail.com">
+<label for="name">Password</label>
+<input type="password" name="password" value="manolo">
+<label for="password2">Repetir Password</label>
+<input type="password" name="password2" value="manolo">
+ <button id="boton" class="btn btn-lg btn-primary btn-block" type="submit" onblur="">Enviar</button>
 </form>
+  
+     
+<script type="text/javascript">
+
+function desactivar(){
+	
+	var boton=document.getElementById("boton").disabled=false;
+
+}
+</script>
 
 
-
-</body>
-</html>
+<jsp:include page="templates/footer.jsp"></jsp:include>
