@@ -86,7 +86,7 @@
                             <i class="fa fa-repeat"></i>
                         </div>
                         <input type="password" name="rePassword" class="form-control"
-                               id="rePpassword" placeholder="Password" required>
+                               id="rePassword" placeholder="Password" required>
                     </div>
                 </div>
             </div>
@@ -94,8 +94,12 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <button type="submit" class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
+                <button type="submit" id="boton" disabled class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
             </div>
         </div>
     </form>
 </div>
+
+<script src="js/registro.js"></script>
+
+<%@include file="/templates/footer.jsp" %>
