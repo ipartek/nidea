@@ -15,18 +15,24 @@ import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
- * Servlet implementation class ApiUsuarioController
+ * Servlet implementation class ApiRegisterController
  */
-@WebServlet("/api/usuario")
-public class ApiUsuarioController extends HttpServlet {
+@WebServlet("/api/register")
+public class ApiRegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public ApiRegisterController() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		
@@ -40,9 +46,6 @@ public class ApiUsuarioController extends HttpServlet {
 			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
 		}
 		
-
-		
-		
 		//respuesta
 		if ( usuarios.size() == 0) {
 			response.setStatus( HttpServletResponse.SC_NO_CONTENT );
@@ -50,7 +53,7 @@ public class ApiUsuarioController extends HttpServlet {
 			//por defecto siemrpe retorna 200 == SC_OK
 		}
 		out.print( new Gson().toJson(usuarios) );		
-		out.flush();		
+		out.flush();	
 	}
 
 	/**

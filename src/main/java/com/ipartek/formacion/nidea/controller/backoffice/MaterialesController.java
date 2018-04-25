@@ -152,14 +152,14 @@ public class MaterialesController extends HttpServlet implements Operable{
 	private void guardar(HttpServletRequest request) {
 
 		Material material = new Material();
-		Usuario usuario=new Usuario();
+		
 
 		try {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario=daoUsuario.getById(id_usuario);
-			material.setUsuario(usuario);
+			Usuario u=daoUsuario.getById(id_usuario);
+			material.setUsuario(u);
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -265,10 +265,16 @@ public class MaterialesController extends HttpServlet implements Operable{
 			nombre = "";
 		}
 		
-		if (request.getParameter("user") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("user"));
-		} else {
-			id_usuario = -1;
+		//comprobar si hay que cambiar el usuario desde el select-options
+		if ( request.getParameter("id_usuario_cambio") != null ) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		}else {
+		
+			if (request.getParameter("id_usuario") != null) {
+				id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+			} else {
+				id_usuario = -1;
+			}
 		}
 
 	}

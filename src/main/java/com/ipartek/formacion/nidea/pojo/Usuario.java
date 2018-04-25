@@ -9,6 +9,15 @@ public class Usuario {
 	private String nombre;
 	private String pass;
 	private Rol rol;
+	private String email;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Usuario() {
 		super();
@@ -16,6 +25,7 @@ public class Usuario {
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
+		this.email="";
 	}
 
 	public String getPass() {
@@ -58,7 +68,10 @@ public class Usuario {
 
 	@Override
 	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + ", email=" + email
+				+ "]";
 	}
+
+	
 
 }

@@ -29,6 +29,8 @@
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
       
     </form>
+    
+    <a href="registro" class="btn btn-lg btn-success">Registrarse</a>
 
 </div>
 <jsp:include page="templates/footer.jsp"></jsp:include>

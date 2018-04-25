@@ -10,6 +10,7 @@ import java.util.List;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.ipartek.formacion.nidea.util.Utilidades;
 
 public class UsuarioDAO implements Persistible<Usuario> {
 
@@ -78,6 +79,13 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return lista;
 	}
 	
+	/**
+	 * Lista de usuarios SOLO con id y nombre, usar solo para la API REST
+	 * 
+	 * @param nombre
+	 *            String con el nombre a buscar
+	 * @return
+	 */
 	public List<Usuario> getAllApiByName(String nombre) {
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		String sql = "SELECT id , nombre FROM usuario  WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 25;";
@@ -89,7 +97,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 				Usuario usuario = null;
 				while (rs.next()) {
 					usuario = new Usuario();
-					usuario.setNombre( rs.getString("nombre"));
+					usuario.setNombre(rs.getString("nombre"));
 					usuario.setId(rs.getInt("id"));
 					lista.add(usuario);
 				}
@@ -121,8 +129,66 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	@Override
 	public boolean save(Usuario pojo) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+
+		// sanear el nombre
+		pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
+		if (pojo != null) {
+			if (pojo.getId() == -1) {
+				resul = crear(pojo);
+			} else {
+				resul = modificar(pojo);
+			}
+		}
+
+		return resul;
+	}
+	
+	private boolean modificar(Usuario pojo) {
+		boolean resul = false;
+		String sql = "UPDATE `usuario` SET `nombre`= ? , `password`= ?, `id_rol`=?, `email`=? WHERE  `id`= ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setInt(3, pojo.getRol().getId());
+			pst.setString(4, pojo.getEmail());
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				resul = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+
+	private boolean crear(Usuario pojo) {
+		boolean resul = false;
+		String sql = "INSERT INTO `usuario` (`nombre`, `password`, `id_rol`, `email`) VALUES ( ? , ?, ?, ? );";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setInt(3, pojo.getRol().getId());
+			pst.setString(4, pojo.getEmail());
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				// recuperar ID generado de forma automatica
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+					while (rs.next()) {
+						pojo.setId(rs.getInt(1));
+						resul = true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
 	}
 
 	@Override

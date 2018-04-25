@@ -34,57 +34,17 @@
 		<br>
 		<div class="form-group row">
 			<label for="usuario" class="col-sm-2 col-form-label">Usuario</label>
-			<input type="text" class="form-inline"
-				value="${material.usuario.nombre}" disabled readonly>
+			<input type="text" class="form-inline" value="${material.usuario.nombre}" disabled readonly>
 		</div>
 		<div class="form-group row">
-			<label for="usuario_cambio" class="col-sm-2 col-form-label">Cambiar
-				usuario</label> <input type="search" class="form-inline" id="search"
+			<label for="usuario_cambio" class="col-sm-2 col-form-label">Cambiar usuario</label>
+			<input type="search" class="form-inline" id="search"
 				placeholder="Nombre usuario" onkeyup="buscarUsuario(event)">
 			<input type="hidden" name="id_usuario" value="${material.usuario.id}">
 			<select id="sUsuarios" name="id_usuario_cambio"></select>
 		</div>
-		<script>
-	  		function buscarUsuario( event ){
-	  			//console.log('buscarUsuario: click %o', event);
-	  			var nombreBuscar = event.target.value;
-	  			console.log('nombre %s', nombreBuscar);
-	  			var url = "api/usuario?nombre=" + nombreBuscar;
-	  			
-	  			var options = '';
-	  			var select = document.getElementById('sUsuarios');
-	  			//eliminar opstions antiguas
-	  			select.innerHTML = "";
-	  			
-	  			//llamada Ajax
-	  			var xhttp = new XMLHttpRequest();
-	  		    xhttp.onreadystatechange = function() {
-	  		    	//llamada terminada y correcta
-	  		        if (this.readyState == 4 && this.status == 200) {
-	  		        	var data = JSON.parse(this.responseText);
-	  		            console.log('retorna datos %o', data);
-	  		            data.forEach( el => {
-	  		            	options += '<option value="'+ el.id + '">'+el.nombre+'</option>';
-	  		            	
-	  		            });
-	  		              		          	
-	  		            select.innerHTML = options;
-	  		       }
-	  		        else if (this.status != 200){
-
-  		            	options = '<option value="-404">No se han encontrado</option>';
-	  		  		    select.innerHTML = options;
-  		            	
-	  		        }
-	  		        
-	  		    };
-	  		    xhttp.open("GET", url , true);
-	  		    xhttp.send(); 
-	  			
-	  			
-	  			
-	  		}	  
-	  </script>
+		<script src="js/buscarUsuarios.js"></script>
+		
 </div>
 <br>
 <c:if test="${material.id == -1}">
