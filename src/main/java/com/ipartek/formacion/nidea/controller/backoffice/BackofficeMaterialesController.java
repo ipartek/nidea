@@ -33,7 +33,6 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 
 	private static final String VIEW_INDEX = "materiales/index.jsp";
 	private static final String VIEW_FORM = "materiales/form.jsp";
-	
 
 	ValidatorFactory factory;
 	Validator validator;
@@ -157,10 +156,9 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 
 			material.setId(id);
 			material.setNombre(nombre);
-						
+
 			Usuario u = daoUsuario.getById(id_usuario);
-			material.setUsuario( u );
-			
+			material.setUsuario(u);
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -189,7 +187,7 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 					Alert.TIPO_WARNING);
 		}
 
-		//request.setAttribute("usuarios", daoUsuario.getAll());
+		// request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 
@@ -224,7 +222,7 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
 
-		//request.setAttribute("usuarios", daoUsuario.getAll());
+		// request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -265,20 +263,19 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		} else {
 			nombre = "";
 		}
-		
-		//comprobar si hay que cambiar el usuario desde el select-options
-		if ( request.getParameter("id_usuario_cambio") != null ) {
+
+		// comprobar si hay que cambiar el usuario desde el select-options
+		if (request.getParameter("id_usuario_cambio") != null
+				&& !"-1".equals(request.getParameter("id_usuario_cambio"))) {
 			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
-		}else {
-		
+		} else {
+
 			if (request.getParameter("id_usuario") != null) {
 				id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
 			} else {
 				id_usuario = -1;
 			}
-		}	
-		
-		
+		}
 
 	}
 
