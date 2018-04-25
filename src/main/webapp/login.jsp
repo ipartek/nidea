@@ -30,5 +30,8 @@
       
     </form>
 
+
+	<a href="registro.jsp">¿ Aún no te has registrado ?</a>
+
 </div>
 <jsp:include page="templates/footer.jsp"></jsp:include>
