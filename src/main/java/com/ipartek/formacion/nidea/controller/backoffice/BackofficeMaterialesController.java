@@ -149,17 +149,14 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 	private void guardar(HttpServletRequest request) {
 		Material material = new Material();
-		usuario = new Usuario();
+		
 
 		try {
 			material.setId(id);
 			material.setNombre(nombre);
+			
+			Usuario usuario = daoUsuario.getById(id_usuario);
 			material.setUsuario(usuario);
-			if (id_usuario_cambio!=-1) {
-				usuario.setId(id_usuario_cambio);
-			}else {
-				usuario.setId(id_usuario);
-			}
 
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -265,17 +262,16 @@ public class BackofficeMaterialesController extends HttpServlet {
 			nombre = "";
 		}
 		
-		if (request.getParameter("id_usuario_cambio") != null) {
-			id_usuario_cambio = Integer.parseInt(request.getParameter("id_usuario_cambio"));
-		} else {
-			id_usuario_cambio = -1;
+		if ( request.getParameter("id_usuario_cambio") != null && !"-1".equals(request.getParameter("id_usuario_cambio"))) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		}else {
+			if (request.getParameter("id_usuario") != null) {
+				id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+			} else {
+				id_usuario = -1;
+			}
 		}
-		if (request.getParameter("id_usuario") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
-		} else {
-			id_usuario = -1;
-		}
-
+		
 	}
 
 }

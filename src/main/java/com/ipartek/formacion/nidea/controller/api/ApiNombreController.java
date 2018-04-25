@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
+import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class ApiUsuarioController
  */
-@WebServlet("/api/usuario")
-public class ApiUsuarioController extends HttpServlet {
+@WebServlet("/api/nombre")
+public class ApiNombreController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -29,22 +30,25 @@ public class ApiUsuarioController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		
+		Alert alert = null;
 		//recoger parametros
 		String nombre = request.getParameter("nombre");
 		if(nombre != null && !"".equals(nombre)) {
-			usuarios = (ArrayList<Usuario>)UsuarioDAO.getInstance().getAllApiByName(nombre);
+			if (UsuarioDAO.getInstance().getRegistradosApi(nombre)) {
+				alert = new Alert("", Alert.TIPO_WARNING);
+				
+			}else {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);//204
+				
+				
+				// por defecto siempre devuelve 200 == HttpServletResponse.SC_OK
+			}
 		}
 		
 		
-		if (usuarios.size()==0) {
-			response.setStatus(HttpServletResponse.SC_NO_CONTENT);//204
-		}else {
-			// por defecto siempre devuelve 200 == HttpServletResponse.SC_OK
-		}
+		
 		//respuesta
-		out.print(new Gson().toJson(usuarios));
+		// out.print(new Gson().toJson(usuarios));
 		out.flush();
 	}
 

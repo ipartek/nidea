@@ -22,13 +22,12 @@
                value="123456" 
                class="form-control" 
                placeholder="Contraseña" required>
-               
-        <label for="password">Contraseña</label>
       </div>
      
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+      <a href="registro"><button type="button" class="btn btn-success btn-block">Registrarse</button></a>
       
     </form>
 
 </div>
-<jsp:include page="templates/footer.jsp"></jsp:include>
+<%@include file="templates/footer.jsp" %>

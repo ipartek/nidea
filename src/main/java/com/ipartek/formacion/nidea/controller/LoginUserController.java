@@ -51,7 +51,6 @@ public class LoginUserController extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-
 			// recoger parametros
 			int id = Integer.parseInt(request.getParameter("id"));
 			String nombre = request.getParameter("usuario");
@@ -64,7 +63,6 @@ public class LoginUserController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-
 			request.getRequestDispatcher("frontoffice/index.jsp").forward(request, response);
 		}
 

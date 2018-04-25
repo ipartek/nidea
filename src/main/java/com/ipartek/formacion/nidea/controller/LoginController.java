@@ -64,7 +64,6 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-
 			String nombre = request.getParameter("usuario");
 			String password = request.getParameter("password");
 
