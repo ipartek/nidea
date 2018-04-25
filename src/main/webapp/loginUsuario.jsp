@@ -23,6 +23,7 @@
                
         <label for="password">Contraseña</label>
       </div>
+      
      
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
       
