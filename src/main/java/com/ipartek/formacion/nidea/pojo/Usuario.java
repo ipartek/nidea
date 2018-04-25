@@ -13,6 +13,8 @@ public class Usuario {
 	@Size(min = 1, max = 45)
 	private String nombre;
 	
+	private String email;
+	
 	private String pass;
 	private Rol rol;
 
@@ -22,6 +24,7 @@ public class Usuario {
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
+		this.email ="";
 	}
 
 	public String getPass() {
@@ -62,9 +65,19 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
+	public String getEmail() {
+		return email;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", email=" + email + ", pass=" + pass + ", rol=" + rol
+				+ "]";
+	}
+
+	
 }

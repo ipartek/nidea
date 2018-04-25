@@ -160,6 +160,8 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			material.setId(id);
 			material.setNombre(nombre);
 			usuario.setId(id_usuario);
+			
+			
 			material.setUsuario(usuario);
 			
 
@@ -253,7 +255,7 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 		}
 
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
-
+		
 		if (request.getParameter("id") != null) {
 			id = Integer.parseInt(request.getParameter("id"));
 		} else {
@@ -267,13 +269,20 @@ public class BackofficeMaterialesController extends HttpServlet implements Opera
 			nombre = "";
 		}
 		
-		if (request.getParameter("id_usuario")!= null) {
-			id_usuario =Integer.parseInt(request.getParameter("id_usuario"));
-			
+		// comprobar si hay que cambiar el usuario desde el select-options
+		if (request.getParameter("id_usuario_cambio") != null
+				&& !"-1".equals(request.getParameter("id_usuario_cambio"))) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		}else {
+				if (request.getParameter("id_usuario")!= null) {
+					id_usuario =Integer.parseInt(request.getParameter("id_usuario"));
+					
+				}else {
+					id_usuario= -1;
+				}
+		
 		}
-		else {
-			id_usuario= -1;
-		}
+				
 
 	}
 

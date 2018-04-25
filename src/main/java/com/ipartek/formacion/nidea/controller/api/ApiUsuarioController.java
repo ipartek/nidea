@@ -28,17 +28,16 @@ public class ApiUsuarioController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		
-		//recoger parametros
+ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
 		
+		//recoger parametros
 		String nombre = request.getParameter("nombre");
-		if(nombre==null) {
-			nombre=" ";
+		if ( nombre != null && !"".equals(nombre) ) {
+			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
 		}
 		
 		//Pruebas
@@ -49,12 +48,20 @@ public class ApiUsuarioController extends HttpServlet {
 		usuarios.add(new Usuario(1,"Kojon prieto y guajalotes"));
 		*/
 		
-		ArrayList<Usuario> usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
+		
+		
+
 		if(usuarios.size()==0) {
 			response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			
 		}else {
 			//por defecto siempre retorna 200 == SC_OK
+			if(usuarios.size()!=0) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			}else {
+				//otro error. no aparece u se pone msg???
+			}
+			
 		}
 		
 		

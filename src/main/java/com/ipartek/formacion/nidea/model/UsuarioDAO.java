@@ -15,6 +15,8 @@ import com.ipartek.formacion.nidea.util.Utilidades;
 public class UsuarioDAO implements Persistible<Usuario> {
 
 	private static UsuarioDAO INSTANCE = null;
+	
+	private static final int ROL_ID=2;
 
 	private UsuarioDAO() {
 	}
@@ -172,6 +174,35 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
 			pst.setInt(3, pojo.getRol().getId());
+			
+
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				// recuperar ID generado de forma automatica
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+					while (rs.next()) {
+						pojo.setId(rs.getInt(1));
+						resul = true;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+	
+	
+	public boolean saveUsuario(Usuario pojo) {
+		boolean resul = false;
+		String sql = "INSERT INTO usuario (nombre, password,email, id_rol) VALUES (?,?,?,?);";
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setString(3, pojo.getEmail());
+			pst.setInt(4,ROL_ID );
+			
 			
 
 			int affectedRows = pst.executeUpdate();
