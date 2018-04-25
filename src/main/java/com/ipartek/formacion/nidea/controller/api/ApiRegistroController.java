@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,39 +16,19 @@ import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
- * Servlet implementation class ApiUsuarioController
+ * Servlet implementation class ApiRegistroController
  */
-@WebServlet("/api/usuario")
-public class ApiUsuarioController extends HttpServlet {
+@WebServlet("/api/registro")
+public class ApiRegistroController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-   
+    
+
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		
-		PrintWriter out = response.getWriter();
-		
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
-		
-		//recoger parametros
-		String nombre = request.getParameter("nombre");
-		if ( nombre != null && !"".equals(nombre) ) {
-			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
-		}
-		
-		//respuesta
-		if ( usuarios.size() == 0) {
-			response.setStatus( HttpServletResponse.SC_NO_CONTENT );
-		}else {
-			//por defecto siemrpe retorna 200 == SC_OK
-		}
-		out.print( new Gson().toJson(usuarios) );		
-		out.flush();		
 	}
 
 	/**

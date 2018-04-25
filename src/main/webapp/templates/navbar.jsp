@@ -15,6 +15,7 @@
       
       <c:if test="${empty usuario}">
       	<a class="btn btn-outline-primary" href="login">Login</a>
+      	<a class="btn btn-outline-primary" href="registro">Registrarse</a>
       </c:if>
             
       <c:if test="${!empty usuario}">
