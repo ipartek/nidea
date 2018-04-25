@@ -98,7 +98,7 @@ public class RegistroController extends HttpServlet {
 					alerta = new Alert("Usuario o Email estan repetidos");
 					request.getRequestDispatcher(VIEW_REGISTRO).forward(request, response);
 				}
-				;
+				
 
 			}
 
