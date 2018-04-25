@@ -55,58 +55,57 @@ public class RegistroController extends HttpServlet {
 		doProcess(request, response);
 
 	}
-	
 
-	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doProcess(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		Alert alerta=null;
+		Alert alerta = null;
 		String nombre = request.getParameter("nombre");
 		String password = request.getParameter("password");
 		String password2 = request.getParameter("password2");
 		String email = request.getParameter("email");
 
-		if (nombre == "") {
-			System.out.println("Nombre vacio");
-		
+		try {
 
-			if (email == "") {
-	
-				System.out.println("Email vacio");
-				
-				if (!password.equals(password2)) {
-					System.out.println("Contraseñas diferentes");
-				} 
-				if(password==null && password2==null) {
-					System.out.println("El campo contraseña es nulo");
-			}
+			if (nombre.equals("")) {
+				System.out.println("Nombre vacio");
+
+				if (email.equals("")) {
+
+					System.out.println("Email vacio");
+
+					if (!password.equals(password2)) {
+						System.out.println("Contraseñas diferentes");
+					}
+					if (password == null && password2 == null) {
+						System.out.println("El campo contraseña es nulo");
+					}
 				}
-			
-			request.getRequestDispatcher(VIEW_REGISTRO).forward(request, response);
-		}
-		else {
-			
-			pojo.setEmail(email);
-			pojo.setNombre(nombre);
-			pojo.setPass(password);
-		
-		
-			
-			if(daoUsuario.crear(pojo)) {
-				
-				alerta= new Alert("Registro Correcto,introduce tus credenciales");
-				request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
-			}
-			else{
-				
-				alerta= new Alert("Usuario o Email estan repetidos");
+
 				request.getRequestDispatcher(VIEW_REGISTRO).forward(request, response);
-			};
-		
-		
-		
+			} else {
+
+				pojo.setEmail(email);
+				pojo.setNombre(nombre);
+				pojo.setPass(password);
+
+				if (daoUsuario.crear(pojo)) {
+
+					alerta = new Alert("Registro Correcto,introduce tus credenciales");
+					request.getRequestDispatcher(VIEW_LOGIN).forward(request, response);
+				} else {
+
+					alerta = new Alert("Usuario o Email estan repetidos");
+					request.getRequestDispatcher(VIEW_REGISTRO).forward(request, response);
+				}
+				;
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
-	
-}
-	
+
 }
