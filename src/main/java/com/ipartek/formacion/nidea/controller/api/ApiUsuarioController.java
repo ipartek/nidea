@@ -32,14 +32,13 @@ public class ApiUsuarioController extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
+		
 		//recoger parametros
 		String nombre = request.getParameter("nombre");
-		if ( nombre == null ) {
-			nombre = "";
+		if ( nombre != null && !"".equals(nombre) ) {
+			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
 		}
-		
-		ArrayList<Usuario> usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
-		
 		
 		//respuesta
 		if ( usuarios.size() == 0) {

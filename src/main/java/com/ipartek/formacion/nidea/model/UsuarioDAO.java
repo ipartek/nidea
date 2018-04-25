@@ -48,7 +48,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 					Usuario usuario = null;
 					while (rs.next()) {
 						usuario = new Usuario();
-						usuario.setNombre( rs.getString("nombre"));
+						usuario.setNombre(rs.getString("nombre"));
 						usuario.setId(rs.getInt("id"));
 						lista.add(usuario);
 					}
@@ -116,16 +116,18 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	@Override
 	public Usuario getById(int id) {
-		Usuario usuario = null;
-		String sql = "SELECT  usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario',usuario.password as 'password', usuario.id_rol, rol.nombre as 'rol_nombre',rol.id as 'rol_id'FROM  usuario,rol WHERE usuario.id =1; ;";
+		Usuario usuario = new Usuario();
+		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' FROM usuario as u, rol as r  WHERE u.id_rol = r.id AND u.id = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
 			pst.setInt(1, id);
-			
 			try (ResultSet rs = pst.executeQuery()) {
+
 				while (rs.next()) {
 					usuario = mapper(rs);
 				}
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
