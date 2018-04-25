@@ -1,3 +1,6 @@
+<%@page import="com.ipartek.formacion.nidea.controller.frontoffice.FrontofficeUsuariosController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.frontoffice.FrontofficeMaterialesController"%>
+<%@page import="com.ipartek.formacion.nidea.controller.Operable"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -50,6 +53,9 @@
     	<c:if test="${empty usuario }">
     		<li class="nav-item">
 				<a class="btn btn-outline-primary" href="login">Login</a>
+			</li>
+			<li class="nav-item">
+				<a class="btn btn-outline-primary" href="registro">Registro</a>
 			</li>
 		</c:if>
 

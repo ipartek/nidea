@@ -30,32 +30,41 @@ public class ApiUsuariosController extends HttpServlet {
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		
+
 		PrintWriter out = response.getWriter();
 
-		// recoger parametros
-		String nombre = request.getParameter("nombre");
-		if (null == nombre) {
-			nombre = "";
+		if (null != request.getParameter("nombre")) {
+			// recoger parametros
+			String nombre = request.getParameter("nombre");
+			if (null == nombre) {
+				nombre = "";
+			}
+
+			if ("".equals(nombre)) {
+				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+			} else {
+				ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+				usuarios = UsuarioDAO.getInstance().getByNameApi(nombre);
+				response.setStatus(HttpServletResponse.SC_OK);
+				out.println(new Gson().toJson(usuarios));
+			}
+			
+		} else if (null != request.getParameter("nombreExacto")) {
+
+			String nombreExacto = request.getParameter("nombreExacto");
+			
+			if("".equals(nombreExacto)) {
+				response.setStatus(HttpServletResponse.SC_OK);
+			} else {
+				Usuario usuario = new Usuario();
+				usuario = UsuarioDAO.getInstance().getByExactNameApi(nombreExacto);
+				if (usuario.getId() == Usuario.USUARIO_INDEFINIDO) {
+					response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+				} else {
+					response.setStatus(HttpServletResponse.SC_OK);
+				}
+			}
 		}
-		
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = UsuarioDAO.getInstance().getByNameApi(nombre);
-				
-		
-		out.println(new Gson().toJson(usuarios));
-		
-		
-		
-		/*
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios.add(new Usuario(1, "Manolo"));
-		usuarios.add(new Usuario(2, "Escorbuto"));
-		usuarios.add(new Usuario(3, "Cojon"));
-		
-		out.println(new Gson().toJson(usuarios));
-		*/
-		
 		out.flush();
 	}
 

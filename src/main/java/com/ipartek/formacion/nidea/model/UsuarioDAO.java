@@ -126,13 +126,14 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 	private boolean crear(Usuario pojo) {
 		boolean resultado = false;
-		String sql = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`) VALUES (?, ?, ?);";
+		String sql = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`, `email`) VALUES (?, ?, ?, ?);";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setString(2, pojo.getPass());
 			pst.setInt(3, pojo.getRol().getId());
+			pst.setString(4, pojo.getEmail());
 
 			resultado = doSave(pst, pojo);
 
@@ -243,6 +244,25 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			e.printStackTrace();
 		}
 		return lista;
+	}
+	
+	public Usuario getByExactNameApi(String nombreExacto) {
+		Usuario u = new Usuario();
+		String sql = "SELECT id, nombre, email FROM usuario WHERE nombre = ? ";
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, nombreExacto);
+			try (ResultSet rs = pst.executeQuery()) {
+				if (rs.next()) {
+					u.setId(rs.getInt("id"));
+					u.setNombre(rs.getString("nombre"));
+					u.setEmail("email");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return u;
 	}
 
 	/**

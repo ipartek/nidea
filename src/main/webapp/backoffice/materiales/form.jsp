@@ -38,50 +38,20 @@
 	</div>
 	<div class="form-group">
 		<input type="hidden" name="id_usuario" value="${material.usuario.id}">
-		<label for="search">Cambiar Usuario:</label> 
+		<label for="search">Cambiar Usuario:</label>
 		<div class="row col-md-12">
 			<div class="col">
-				<input class="form-control" type="search" name="search" id="search" onkeyup="buscarUsuario(event)"> 
-		 	</div>
-		 	<div class="row col-md-6">
-				<select	id="s_usuarios" name="id_usuario_cambio" class="form-control"></select>
+				<input class="form-control" type="search" name="search" id="search"
+					onkeyup="buscarUsuario(event)">
+			</div>
+			<div class="row col-md-6">
+				<select id="s_usuarios" name="id_usuario_cambio"
+					class="form-control"></select>
 			</div>
 		</div>
 	</div>
 
-	<script type="text/javascript">
-		function buscarUsuario(event) {
-			//console.log('buscar usuario: click %s', event.target.value);		
-			var nombreBuscar = event.target.value;
-			var url = "api/usuario/?nombre=" + nombreBuscar;
-			console.log('Nombre: %s', nombreBuscar);
-
-			var options = '';
-			var select = document.getElementById("s_usuarios");
-			select.innerHTML = '';
-
-			//llamada ajax
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					var data = JSON.parse(this.responseText);
-					console.log('retorna datos %o', data);
-					
-					data.forEach( el => {
-						options += '<option value="' + el.id + '">' + el.nombre +'</option>';
-					});
-					if ('' == nombreBuscar){
-						select.innerHTML = '';
-					} else {
-						select.innerHTML = options;
-					}					
-				}
-			};
-			xhttp.open("GET", url, true);
-			xhttp.send();
-			
-		}
-	</script>
+	<script src="js/buscarUsuarios.js"></script>
 
 	<c:if test="${material.id == -1}">
 		<input type="hidden" name="op" value="<%=Operable.OP_GUARDAR%>">

@@ -8,6 +8,8 @@ public class Usuario {
 
 	public static final int ROL_ADMIN = 1;
 	public static final int ROL_USER = 2;
+	
+	public static final int USUARIO_INDEFINIDO = -1;
 
 	@NotNull(message = "El id de usuario no puede ser nulo")
 	private int id;
@@ -19,6 +21,9 @@ public class Usuario {
 	@NotNull(message = "La pass no puede ser nula")
 	private String pass;
 	
+	@NotNull(message = "La pass no puede ser nula")
+	private String confirm_pass;	
+	
 	@NotNull(message = "Seleccione un rol valido")
 	@Valid
 	private Rol rol;
@@ -28,7 +33,7 @@ public class Usuario {
 
 	public Usuario() {
 		super();
-		this.id = -1;
+		this.id = USUARIO_INDEFINIDO;
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
@@ -41,6 +46,14 @@ public class Usuario {
 
 	public void setPass(String pass) {
 		this.pass = pass;
+	}
+	
+	public String getConfirm_pass() {
+		return confirm_pass;
+	}
+
+	public void setConfirm_pass(String confirm_pass) {
+		this.confirm_pass = confirm_pass;
 	}
 
 	public Rol getRol() {
