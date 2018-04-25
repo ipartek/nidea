@@ -27,6 +27,7 @@
       </div>
      
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+      <a href="/nidea/registro.jsp" class="btn btn-lg btn-secondary btn-block" >Registrate</a>
       
     </form>
 

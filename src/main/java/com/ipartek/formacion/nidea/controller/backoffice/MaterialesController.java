@@ -161,8 +161,9 @@ public class MaterialesController extends HttpServlet {
 
 			material.setId(id);
 			material.setNombre(nombre);
-			material.getUsuario().setId(usuario_id);
-
+			
+			Usuario u = daoUsuario.getById(usuario_id);
+			material.setUsuario( u );
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
 				material.setPrecio(precio);

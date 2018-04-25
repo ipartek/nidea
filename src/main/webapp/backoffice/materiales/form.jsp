@@ -27,10 +27,10 @@
 	      <span class="input-group-text">&euro;</span>
 	    </div>
 	  </div>
-
+${material}
 		<div class="input-group">
 		<label for="id_usuario" class="col-sm-2 col-form-label">Usuario</label>
-		<input type="text" value="${material.usuario.nombre }" disabñes readonly/>
+		<input type="text" value="${material.usuario.nombre}"  readonly/>
 		<p>Cambiar usuario</p>
 		<input type="search" id="search" placeholder="Nombre de usuario" onkeyup="buscarUsuario(event)"/> 
 		<input type="hidden" name="id_usuario" value="${material.usuario.id}">

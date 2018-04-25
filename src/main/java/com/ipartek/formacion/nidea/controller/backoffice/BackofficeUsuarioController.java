@@ -187,7 +187,7 @@ public class BackofficeUsuarioController extends HttpServlet {
 		boolean update = false;
 		try {
 			if (id == -1) {
-				dao.create(nombre, pass);
+				//dao.create(nombre, pass);
 				alert = new Alert("Creado Nuevo Material ", Alert.TIPO_PRIMARY);
 				crear = true;
 				update = false;
@@ -196,15 +196,15 @@ public class BackofficeUsuarioController extends HttpServlet {
 				request.setAttribute("pass", pass);
 
 			} else {
-				dao.update(id, nombre, pass);
+				//dao.update(id, nombre, pass);
 				alert = new Alert("Modificado Usuario id: " + id, Alert.TIPO_PRIMARY);
 				crear = false;
 				update = true;
 
 			}
 
-		} catch (SQLIntegrityConstraintViolationException e) {
-			alert = new Alert("No podemos crear el usuario por que ya existe =( ", Alert.TIPO_DANGER);
+		//} catch (SQLIntegrityConstraintViolationException e) {
+			//alert = new Alert("No podemos crear el usuario por que ya existe =( ", Alert.TIPO_DANGER);
 
 		} catch (Exception e) {
 			alert = new Alert("Hubo un problema a la hora de crear, no pudimos crearlo ", Alert.TIPO_DANGER);
@@ -227,7 +227,7 @@ public class BackofficeUsuarioController extends HttpServlet {
 	private void buscar(HttpServletRequest request) {
 
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = dao.seach(search);
+		//usuarios = dao.seach(search);
 		request.setAttribute("materiales", usuarios);
 		dispacher = request.getRequestDispatcher(VIEW_INDEX);
 

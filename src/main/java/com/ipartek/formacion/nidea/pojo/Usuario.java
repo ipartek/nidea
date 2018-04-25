@@ -9,6 +9,7 @@ public class Usuario {
 	private String nombre;
 	private String pass;
 	private Rol rol;
+	private String email;
 
 	public Usuario() {
 		super();
@@ -16,6 +17,15 @@ public class Usuario {
 		this.pass = "";
 		this.nombre = "";
 		this.rol = new Rol();
+		this.email="";
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPass() {

@@ -114,14 +114,44 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		}
 	@Override
 	public Usuario getById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Usuario usuario = new Usuario();
+		String sql = "SELECT u.id as 'usuario_id', u.nombre as 'usuario_nombre', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' FROM usuario as u, rol as r  WHERE u.id_rol = r.id AND u.id = ?;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setInt(1, id);
+			try (ResultSet rs = pst.executeQuery()) {
+
+				while (rs.next()) {
+					usuario = mapper(rs);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return usuario;
+}
 
 	@Override
 	public boolean save(Usuario pojo) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resul = false;
+		String sql = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`, `email`) VALUES (?, ?, ?, ?);";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());
+			pst.setInt(3, Usuario.ROL_USER);
+			pst.setString(4, pojo.getEmail());
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+						resul = true;
+					}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return resul;
 	}
 
 	@Override
