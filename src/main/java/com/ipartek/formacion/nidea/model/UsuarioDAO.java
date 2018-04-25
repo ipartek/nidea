@@ -246,6 +246,15 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return lista;
 	}
 	
+	
+	/**
+	 * Para su uso por la api de usuarios
+	 * Busca por nombre y solo devuleve un usuario con id, nombre y email
+	 * 
+	 * @param nombreExacto
+	 * @return usuario vacio si no encuentra nada
+	 * 		usuario con id, nombre y email si encuentra
+	 */
 	public Usuario getByExactNameApi(String nombreExacto) {
 		Usuario u = new Usuario();
 		String sql = "SELECT id, nombre, email FROM usuario WHERE nombre = ? ";
@@ -261,7 +270,34 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		} 
+		return u;
+	}
+	
+	/**
+	 * Para su uso por la api de usuarios
+	 * Busca por email y solo devuleve un usuario con id, nombre y email
+	 * 
+	 * @param email
+	 * @return usuario vacio si no encuentra nada
+	 * 		usuario con id, nombre y email si encuentra
+	 */
+	public Usuario getByExactEmailApi(String email) {
+		Usuario u = new Usuario();
+		String sql = "SELECT id, nombre, email FROM usuario WHERE email = ? ";
+		
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, email);
+			try (ResultSet rs = pst.executeQuery()) {
+				if (rs.next()) {
+					u.setId(rs.getInt("id"));
+					u.setNombre(rs.getString("nombre"));
+					u.setEmail("email");
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
 		return u;
 	}
 
