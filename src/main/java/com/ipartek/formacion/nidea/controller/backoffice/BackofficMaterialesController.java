@@ -55,6 +55,7 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 
 	// parametros del Material
 	private int id;
+	private int id_usuario;
 	private String nombre;
 	private float precio;
 
@@ -163,7 +164,7 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 
 			material.setId(id);
 			material.setNombre(nombre);
-			usuario=daoUsuario.getById(idusuario);
+			usuario=daoUsuario.getById(id_usuario);
 			material.setUsuario(usuario);
 			
 			//crearusuaio con id y setear en material
@@ -275,10 +276,16 @@ public class BackofficMaterialesController extends HttpServlet implements Operab
 		} else {
 			nombre = "";
 		}
-		if (request.getParameter("idusuario") != null) {
-			idusuario = Integer.parseInt(request.getParameter("idusuario"));
-		} else {
-			idusuario = -1;
+		
+		if ( request.getParameter("id_usuario_cambio") != null ) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		}else {
+		
+			if (request.getParameter("id_usuario") != null) {
+				id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+			} else {
+				id_usuario = -1;
+			}
 		}
 			
 		}

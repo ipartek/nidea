@@ -34,19 +34,18 @@ public class ApiUsuarioController extends HttpServlet {
 	response.setContentType("application/json");
 	response.setCharacterEncoding("UTF-8");
 	PrintWriter out = response.getWriter();
+	ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
 	// recoger parametros
 	
 	String nombre = request.getParameter("nombre");
-	if(nombre==null) {
-		nombre="desconocido";
+	if(nombre!=null && !"".equals(nombre)) {
+	usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
 	}
 	
 	
 	
-	ArrayList<Usuario> usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
-//	usuarios.add(new Usuario(1,"Manolo Cabeza bolo"));
-	//usuarios.add(new Usuario(1,"Josu Eskorbuto"));
-	//usuarios.add(new Usuario(1,"Bertin Osborne"));
+	
+
 	//respuesta
 	if(usuarios.size()==0) {
 		response.setStatus(HttpServletResponse.SC_NO_CONTENT);
