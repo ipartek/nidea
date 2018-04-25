@@ -9,6 +9,9 @@ import java.util.List;
 
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
+import com.ipartek.formacion.nidea.util.Utilidades;
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public class UsuarioDAO implements Persistible<Usuario> {
 
@@ -57,6 +60,35 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		}
 		return resul;
 	}
+	
+	/**
+	 *  Lista de usuarios solo por id y nombre, usar solo para la API REST
+	 * @param nombre
+	 * @return
+	 */
+	public List<Usuario> getAllApiByName(String nombre) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT u.`id`,  u.`nombre`  "
+				+ "FROM usuario as u  WHERE u.nombre LIKE ? "
+				+ "ORDER BY u.`nombre` ASC LIMIT 500";
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, "%" + nombre + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {					
+					Usuario u = new Usuario();
+					u.setId(rs.getInt("id"));
+					u.setNombre(rs.getString("nombre"));					
+					lista.add(u);
+				}
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return lista;
+	}
 
 	@Override
 	public List<Usuario> getAll() {
@@ -101,10 +133,63 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 
 	@Override
-	public boolean save(Usuario pojo) {
+	public boolean save(Usuario pojo) throws MySQLIntegrityConstraintViolationException, MysqlDataTruncation {
+		boolean resultado = false;
+
+		if (pojo != null) {			
+
+			if (pojo.getId() == -1) {
+				resultado = crear(pojo);
+			} else {
+				resultado = modificar(pojo);
+			}
+		}
+
+		return resultado;
+	}
+
+	private boolean modificar(Usuario pojo) {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	private boolean crear(Usuario pojo) throws MySQLIntegrityConstraintViolationException, MysqlDataTruncation {
+		boolean resultado = false;
+		String sql = "INSERT INTO `nidea`.usuario (nombre, password, mail, id_rol) VALUES (?, ?, ?, ?);";
+		
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);) {
+
+			pst.setString(1, pojo.getNombre());
+			pst.setString(2, pojo.getPass());	
+			pst.setString(3, pojo.getMail());	
+			pst.setInt(4, Usuario.ROL_USER);	
+			
+			int affectedRows = pst.executeUpdate();
+			if (affectedRows == 1) {
+				// recuperar ID generado de forma automatica
+				try (ResultSet rs = pst.getGeneratedKeys()) {
+					while (rs.next()) {
+						pojo.setId(rs.getInt(1));
+						resultado = true;
+					}
+				}
+			}
+
+		} catch (MySQLIntegrityConstraintViolationException e) {
+			System.out.println("Usuario duplicado");
+			throw e;
+		} catch (MysqlDataTruncation e) {
+			System.out.println("Nombre muy largo");
+			throw e;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return resultado;
+	}
+	
+	
 
 	@Override
 	public boolean delete(int id) {
@@ -128,5 +213,6 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		return u;
 	}
-
+	
+	
 }

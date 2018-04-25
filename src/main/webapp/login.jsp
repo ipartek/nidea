@@ -4,6 +4,7 @@
 
 <div id="login">
 
+
   <form class="form-signin" action="login" method="post">     
 
       <div class="form-label-group">
@@ -26,9 +27,12 @@
         <label for="password">Contraseña</label>
       </div>
      
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>      
+    
       
     </form>
+    <a  href="registro.jsp">Registrarse</a>
+     
 
 </div>
 <jsp:include page="templates/footer.jsp"></jsp:include>

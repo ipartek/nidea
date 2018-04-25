@@ -52,6 +52,7 @@ public class MaterialesController extends HttpServlet {
 
 	// parametros del Material
 	private int id;
+	private int id_usuario;
 	private String nombre;
 	private float precio;
 	private Usuario usuario;
@@ -161,6 +162,7 @@ public class MaterialesController extends HttpServlet {
 			material.setId(id);
 			material.setNombre(nombre);
 			material.setPrecio(precio);
+			Usuario usuario = daoUsuario.getById(id_usuario);
 			material.setUsuario(usuario);	
 
 			// Validaciones Incorrectas
@@ -221,7 +223,7 @@ public class MaterialesController extends HttpServlet {
 			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
 		}
 
-		request.setAttribute("usuarios", daoUsuario.getAll());
+		//request.setAttribute("usuarios", daoUsuario.getAll());
 		request.setAttribute("material", material);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -269,7 +271,8 @@ public class MaterialesController extends HttpServlet {
 		else{
 			precio=0.0f;
 		}
-		if (request.getParameter("usuario") != null)
+		/* ya no sirve
+		 * if (request.getParameter("usuario") != null)
 		{
 			int id_usuario=Integer.parseInt(request.getParameter("usuario"));
 			usuario=daoUsuario.getById(id_usuario);
@@ -277,7 +280,19 @@ public class MaterialesController extends HttpServlet {
 		else {
 			usuario = new Usuario();
 			usuario.setId(-1);
-		}
+		}*/
+		
+		//comprobar si hay que cambiar el usuario desde el select-options
+		if ( request.getParameter("id_usuario_cambio") != null ) {
+			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
+		}else {
+		
+			if (request.getParameter("id_usuario") != null) {
+				id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
+			} else {
+				id_usuario = -1;
+			}
+		}	
 		
 		
 		

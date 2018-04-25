@@ -117,7 +117,7 @@ public class BackofficeUsuariosController extends HttpServlet {
 
 	private void buscar(HttpServletRequest request) {
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = dao.getByName(search);
+		//usuarios = dao.getByName(search);
 		request.setAttribute("usuarios", usuarios);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 	}
@@ -189,7 +189,7 @@ public class BackofficeUsuariosController extends HttpServlet {
 	private void listar(HttpServletRequest request) {
 
 		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-		usuarios = dao.getAll();
+		//usuarios = dao.getAll();
 
 		request.setAttribute("usuarios", usuarios);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);

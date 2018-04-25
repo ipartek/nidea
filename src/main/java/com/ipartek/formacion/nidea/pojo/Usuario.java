@@ -8,12 +8,14 @@ public class Usuario {
 	private int id;
 	private String nombre;
 	private String pass;
+	private String mail;
 	private Rol rol;
 
 	public Usuario() {
 		super();
 		this.id = -1;
 		this.pass = "";
+		this.mail ="";
 		this.nombre = "Elija un usuario";
 		this.rol = new Rol();
 	}
@@ -56,9 +58,20 @@ public class Usuario {
 		this.nombre = nombre;
 	}
 
-	@Override
-	public String toString() {
-		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", rol=" + rol + "]";
+	public String getMail() {
+		return mail;
 	}
 
+	public void setMail(String mail) {
+		this.mail = mail;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nombre=" + nombre + ", pass=" + pass + ", mail=" + mail + ", rol=" + rol + "]";
+	}
+	
+	
+
+	
 }
