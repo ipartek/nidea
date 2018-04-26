@@ -98,7 +98,6 @@ public class ApiUsuariosController extends HttpServlet {
 				usuario = UsuarioDAO.getInstance().getByExactEmailApi(search);
 				break;
 			}
-			usuario = UsuarioDAO.getInstance().getByExactEmailApi(search);
 			if (usuario.getId() == Usuario.USUARIO_INDEFINIDO) {
 				response.setStatus(HttpServletResponse.SC_NO_CONTENT);
 			} else {

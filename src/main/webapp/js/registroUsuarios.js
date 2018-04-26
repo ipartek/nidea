@@ -79,7 +79,8 @@ function validar() {
 
 /**
  * Contruye la url para hacer la busqueda por nombre a traves de otra promise en
- * la bbdd 
+ * la bbdd
+ * 
  * @returns promise con valor booleano
  */
 function validarNombre() {
@@ -88,31 +89,27 @@ function validarNombre() {
 	var url = "api/usuario/?nombreExacto=" + nombreBuscar;
 
 	return new Promise(function(resolve, reject) {
-		// llamada ajax
-		var promise = validarPromise(url, nombreBuscar);
-
-		promise.then(function(result) {
-			//console.log('resultado nombre %s', result);
+		validarPromise(url, nombreBuscar).then(function(result) {
+			// console.log('resultado nombre %s', result);
 			resolve(result);
 		});
 	});
 }
 
 /**
- * Contruye la url para hacer la busqueda por email a traves de otra promise en la bbdd
+ * Contruye la url para hacer la busqueda por email a traves de otra promise en
+ * la bbdd
+ * 
  * @returns promise con valor booleano
  */
 function validarEmail() {
 
 	var emailBuscar = email.value;
 	var url = "api/usuario/?email=" + emailBuscar;
-
-	return new Promise(function(resolve, reject) {
-		// llamada ajax
-		var promise = validarPromise(url, emailBuscar);
-
-		promise.then(function(result) {
-			//console.log('resultado email %s', result);
+	
+	return new Promise (function(resolve,reject){
+		validarPromise(url, emailBuscar).then(function(result) {
+			// console.log('resultado email %s', result);
 			resolve(result);
 		});
 	});
