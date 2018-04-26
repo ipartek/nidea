@@ -2,185 +2,158 @@ package com.ipartek.formacion.nidea.model.migracion;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.sql.PreparedStatement;
 
 public class CrearUsuariosFromFileText {
 
+	//private static final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas.txt";
+	private static final String FILENAME =  "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas.txt";
+
 	public static void main(String[] args) throws SQLException {
-
-		System.out.println("CREAR USUARIOS DESDE UN FICHERO DE TEXTO");
-
-		// private static final String FILENAME =
-		// final String FILENAME =
-		// final String FILENAME ="C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas_lite.txt";
-		final String FILENAME = "C:\\desarrollo\\jee-oxygen\\workspace2\\nidea\\doc\\personas.txt";
-		//final String FILENAME =  "C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas.txt";
-		 
-		// final String FILENAME ="C:\\repositorio_nuevocurso\\eclipseoxigen\\workspace_nuevo\\nidea\\doc\\personas_lite.txt";
-
-		final String SQL = "INSERT INTO `nidea`.`usuario` (`nombre`, `password`, `id_rol`,`email`) VALUES (?, '123456', '2',?);";
+		System.out.println("Crear usuarios desde un fichero de texto.");
+		
+		final String URL = "jdbc:mysql://localhost/nidea?user=root&password=root";
+		final String SQL = "INSERT INTO `usuario` (`nombre`, `password`, `email`, `id_rol`) VALUES (?, '123456',?, '2');";
 		Connection con = null;
 		PreparedStatement pst = null;
-		final String URL = "jdbc:mysql://localhost/nidea?user=root&password=root";
-
-		// Validaciones
-
-		int duplicados = 0;
-		int linea = 0;
-		int insertados = 0;
-		int error_de_campos = 0;
-		int menores_de_edad = 0;
-
-		// Declaracion de variables
-
-		String sCurrentLine;
-		String nombre = "";
-		String ape1 = "";
-		String ape2 = "";
+		String nombre_usuario = null;
 		String email;
-		String edad;
-		String campos[];
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
 
-		con = DriverManager.getConnection(URL);
+			con = DriverManager.getConnection(URL);
+			//Importante para que te haga el rollback cuando falle y no te guarde nada en la bbdd y comite los cambios cuanto tu le digas
+			con.setAutoCommit(false);
 
-		// Asignacion de valores a las nuevas variables
-
-		try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
-
-			while ((sCurrentLine = br.readLine()) != null) {
-
-				campos = sCurrentLine.split(",");
-				nombre = campos[0];
-				ape1 = campos[1];
-				ape2 = campos[2];
-				edad = campos[3];
-				email = campos[4];
-
-				String nombrecompleto = nombre + " " + ape1 + " " + ape2;
-				try {
-						Class.forName("com.mysql.jdbc.Driver");
-						con.setAutoCommit(false); // Si es auto update casca
-
-						try {
-								if (campos.length != 7) {
-
-								}
-						}
+			System.out.println("Comenzamos a leer fichero");
+			System.out.println("********************************************************************************************");
+			try (BufferedReader br = new BufferedReader(new FileReader(FILENAME))) {
 					
-						catch (ArrayIndexOutOfBoundsException e) {
-								e.printStackTrace();
-						}
+					String sCurrentLine;
+					int numLineas=0;
+					String campos [];
+					String nombre;
+					String ape1;
+					String ape2;
+					int edad;
+					String dni;
+					String rol;
+					int menorEdad=0;
+					int contCampos=0;
+					int contNombre = 0;
+					int contEmail =0;
 					
-						
-						try {
-								if (campos.length == 7) {
+						while ((sCurrentLine = br.readLine()) != null) {
+							//System.out.println(sCurrentLine);
+							campos = sCurrentLine.split(",");
+							try{
+								if(sCurrentLine.length()>=7) {
+								nombre = campos[0];
+								ape1= campos[1];
+								ape2 = campos[2];
+								nombre_usuario = nombre+" "+ape1+" "+ape2;
+								try{
+									if(nombre_usuario.length()<45) {
+										edad = Integer.parseInt(campos[3]);
+										try{
+											if(edad >= 18) {
+												email = campos[4];
+												try {
+													if(email.length()<45) {
 
-									if (Integer.parseInt(edad) >= 18) {
-
-										pst = con.prepareStatement(SQL);
-										pst.setString(1, nombrecompleto);
-										pst.setString(2, email);
-							
-							
-										if (1 == pst.executeUpdate()) {
-
-											System.out.println("Usuario" + nombrecompleto + " insertado");
-
-						/*Tercer if*/	} else {
-
-												System.out.println("******Error al insertar");
-
+														dni = campos[5];
+														rol = campos[6];
+														//System.out.println("Linea " + i + " =>" +nombre + " "+ ape1 + " "+ape2);
+														System.out.println("Nombre: " + nombre_usuario);
+														System.out.println("Email: " + email);
+														System.out.println("Edad: "+ edad);
+														pst= con.prepareStatement(SQL);
+														pst.setString(1, nombre_usuario);
+														pst.setString(2, email);
+														try {
+															if(1 == pst.executeUpdate()){
+																System.out.println("Lineas insertadas");
+															}
+														}catch (Exception e) {
+															e.printStackTrace();
+														}
+													
+													}else {
+														contEmail++;
+													}
+													
+													
+												}catch (Exception e) {
+													e.printStackTrace();
+													
+													
 												}
-
-										System.out.println("linea " + linea + "=> " + nombrecompleto);
-										insertados++;
+											}else {
+												menorEdad++;
+											}
+									}catch (Exception e) {
+										e.printStackTrace();
+									}		
 										
-					/*Segundo if*/		} else {
-													menores_de_edad++;
-												}
-							/*Primer if*/} else {
-										error_de_campos++;
-										}
-								
-						 }catch (MySQLIntegrityConstraintViolationException e) /* Restriccion de datos duplicados */ {
-
-									duplicados++;
-									e.printStackTrace();
-									System.out.println(e.getLocalizedMessage());
-									}
-
-
-				/* 4 try */catch (MysqlDataTruncation e) /* Limite de longitud de datos */ {
-								
-							e.printStackTrace();
-							nombrecompleto = nombrecompleto.substring(0, 40);
+							}else {
+								contNombre++;
 							}
-
+						}catch (Exception e) {
+									e.printStackTrace();
+									
+						}
+					}else {
+						contCampos++;
+					}
+				}catch (Exception e) {
+						e.printStackTrace();
 						
-				linea++;
-
-				System.out.println(nombrecompleto + email);
-			
-				}finally {
+				}
+				numLineas++;
+			}
+						
+						
+					int contNombreEmail = contNombre + contEmail;
+					System.out.println("----------------------------------------------------------------");
+					System.out.println("Total lineas leidas =>"+numLineas);
+					System.out.println("Total menores de edad =>"+menorEdad);
+					System.out.println("Lineas con menos de 7 campos => " +contCampos);
+					System.out.println("Lineas erroneas por email y/o nombre => " +contNombreEmail);
+				
+					int lineasInsertadas = numLineas-contNombreEmail-contCampos-menorEdad;
+					System.out.println("Lineas insertadas en BBDD =>"+lineasInsertadas );
 					
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-			} //Final del While
-			// comitar cambios al terminar el proceso
+			//comitar cambios al terminar el proceso
 			con.commit();
-
-			System.out.println("Lineas leidas " + linea);
-			System.out.println("Lineas correctas " + insertados);
-
-			System.out.println("Errores de campos " + error_de_campos);
-			System.out.println("Errores de edad " + menores_de_edad);
-			System.out.println("Errores de duplicidad " + duplicados);
-			System.out.println("***************************************");
-
-			/*
-			 * for(int i=0; i<5; i++){
-			 * 
-			 * pst=con.prepareStatement(SQL); pst.setString(1, "usuario" + i);
-			 * 
-			 * if(1==pst.executeUpdate()) {
-			 * 
-			 * System.out.println(i + "Usuario Insertado");
-			 * 
-			 * /* if(i==2){ throw new Exception("Lanzo adrede una excepcion"); } }
-			 * 
-			 * else {
-			 * 
-			 * System.out.println("Error al insertar usuario"); } //Comitar los cambios al
-			 * terminar el proceso
-			 */
-
-		} //Final del TRY general
-
-		catch (Exception e) {
+			
+		}catch (Exception e) {
 			e.printStackTrace();
-			// si hay fallos se hace rollback,que lo que hace es que no se inserten los
-			// datos en la base de datos
+			//si hay fallo, rollback para dejar la BBDD como estaba
 			con.rollback();
-
-		} 
-		
-		finally {
-
-					if (pst != null) {
-
-						pst.close();
-						}
-
-					if (con != null) {
-
-						con.close();
-						}
-				}
-
-	
-		}//Final del Main
+			
+		}finally {
+			//cerrar recursos en orden inverso
+			if(pst!= null) {
+				pst.close();
+			}
+			if(con!=null) {
+				con.close();
+			}
+			
+			
+		}
+}
 }
