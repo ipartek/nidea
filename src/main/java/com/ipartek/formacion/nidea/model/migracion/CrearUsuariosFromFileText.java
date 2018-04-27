@@ -5,14 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
-
-import com.mysql.jdbc.MysqlDataTruncation;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class CrearUsuariosFromFileText {
 
@@ -32,7 +26,7 @@ public class CrearUsuariosFromFileText {
 			Class.forName("com.mysql.jdbc.Driver");
 
 			con = DriverManager.getConnection(URL);
-			//Importante para que te haga el rollback cuando falle y no te guarde nada en la bbdd y comite los cambios cuanto tu le digas
+			//Importante para que te haga el rollback cuando falle y no te guarde nada en la bbdd y comite los cambios
 			con.setAutoCommit(false);
 
 			System.out.println("Comenzamos a leer fichero");
@@ -54,7 +48,7 @@ public class CrearUsuariosFromFileText {
 					int contEmail =0;
 					
 						while ((sCurrentLine = br.readLine()) != null) {
-							//System.out.println(sCurrentLine);
+						
 							campos = sCurrentLine.split(",");
 							try{
 								if(sCurrentLine.length()>=7) {
@@ -73,7 +67,7 @@ public class CrearUsuariosFromFileText {
 
 														dni = campos[5];
 														rol = campos[6];
-														//System.out.println("Linea " + i + " =>" +nombre + " "+ ape1 + " "+ape2);
+														
 														System.out.println("Nombre: " + nombre_usuario);
 														System.out.println("Email: " + email);
 														System.out.println("Edad: "+ edad);
@@ -141,7 +135,7 @@ public class CrearUsuariosFromFileText {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			//si hay fallo, rollback para dejar la BBDD como estaba
+			//si hay fallo, rollback deja la BBDD como estaba,es decir no inserta los datos
 			con.rollback();
 			
 		}finally {
