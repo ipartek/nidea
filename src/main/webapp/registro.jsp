@@ -69,7 +69,7 @@
             </div>
             <div class="col-md-3">
                 <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
+                        <span id="error_pass" class="text-danger align-middle">
                             <i class="fa fa-close"> Contraseña no coincide</i>
                         </span>
                 </div>

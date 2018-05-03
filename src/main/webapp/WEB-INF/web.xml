@@ -3,7 +3,7 @@
   <display-name>nidea</display-name>
   <welcome-file-list>
     <welcome-file>login.jsp</welcome-file>
-  </welcome-file-list>
+  </welcome-file-list>  
   <resource-ref>
     <description>MySQL Datasource example</description>
     <res-ref-name>jdbc/mydb</res-ref-name>
