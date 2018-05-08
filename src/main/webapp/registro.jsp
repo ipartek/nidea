@@ -20,7 +20,10 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                         <input type="text" name="nombre" class="form-control" id="nombre"
-                               placeholder="Introduzca nombre" required autofocus>
+                               placeholder="Introduzca nombre" required autofocus onkeyup="chequeoUsuario(event)"> 
+                               <br>	
+                               <span id="nameError">existe</span>
+                               
                     </div>
                 </div>
             </div>
@@ -93,12 +96,13 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <button type="submit" id="boton" disabled class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
+                <button type="submit" id="boton"  class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
             </div>
         </div>
     </form>
 </div>
 
-<script src="js/registro.js"></script>
+<script src="js/registro.js?v3"></script>
+<script src="js/chequeoUsuario.js?v2"></script>
 
 <%@include file="/templates/footer.jsp" %>
