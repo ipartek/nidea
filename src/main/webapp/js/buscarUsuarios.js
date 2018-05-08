@@ -6,7 +6,7 @@ function buscarUsuario( event ){
 	
 	var options = '';
 	var select = document.getElementById('sUsuarios');
-	//eliminar opstions antiguas
+	//eliminar opztions antiguas
 	select.innerHTML = "";
 	
 	//llamada Ajax

@@ -1,45 +1,36 @@
-var nombre;
+/* Libreria para llamadas Ajax XMLHGttpRequest en Vanilla JavaScript
+Retornando Promise*/
 
-window.document.onload = function (e){
-	
-	
-	validar();
+function comprobarNombre(event){
+    var method = "GET";
+    var nombre = document.getElementById('nombre');
+    var aviso = document.getElementById('avisoNombre');
+    	
+    var url = "api/nombre?nombre=" + nombre.value;
+    var options = '';
+		
+    var request;
+
+    var promesa = ajax(method,url);
+    	
+    promesa.then(dato => {
+    	aviso.innerHTML = "Usuario ya existe";
+    	deshabilitar();
+    	})
+    	.catch(error => {
+    		if (checkPass()){
+    			habilitar();
+    		}
+    		aviso.innerHTML = "Usuario disponible";
+    	});
 }
-
-function validar(event){
-
-	var btn = document.getElementById('btnRegistrar');
-	var nombre = document.getElementById('nombre');
-	var email = document.getElementById('email');
-	var pass = document.getElementById('pass');
-	var pass2 = document.getElementById('pass2');
-	
-	var url = "api/usuario?nombre=" + nombre;
-	var options = '';
-	var aviso;
-	
-	//llamada Ajax
-	var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-    	//llamada terminada y correcta
-        if (this.readyState == 4 && this.status == 200) {
-        	deshabilitar();
-        } else{
-        	if (this.readyState == 4 && this.status == 204 && checkPass()) {
-        		habilitar();
-        	}
-        		
-        }
-    };
-    xhttp.open("GET", url , true);
-    xhttp.send(); 
-}
+        
 
 function checkPass (){
 	var resul = false;
 	var pass = document.getElementById('pass');
 	var pass2 = document.getElementById('pass2');
-	if (pass.equals(pass2)){
+	if (pass.value == pass2.value){
 		resul= true;
 	} else{
 		resul=false;
@@ -48,9 +39,11 @@ function checkPass (){
 }
 
 function habilitar(){
+	var btn = document.getElementById('btnRegistrar');
 	btn.disabled=false;
 }
 
 function deshabilitar(){
+	var btn = document.getElementById('btnRegistrar');
 	btn.disabled=true;
 }

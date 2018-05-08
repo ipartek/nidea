@@ -30,7 +30,7 @@ public class DataBaseTest {
 	@Test
 	public void testConexion() {
 
-		final String URL = "jdbc:mysql://localhost/spoty?user=root&password=";
+		final String URL = "jdbc:mysql://localhost/spoty?user=root&password=root";
 		try {
 			Connection con = DriverManager.getConnection(URL);
 			assertTrue(con != null);
