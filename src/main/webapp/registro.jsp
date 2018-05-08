@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
-                <label for="nombre">Nombre</label>
+                <label for="nombre">Nombre(Mínimo 5 letras)</label>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
