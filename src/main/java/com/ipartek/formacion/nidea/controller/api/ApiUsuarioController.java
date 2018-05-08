@@ -32,10 +32,10 @@ public class ApiUsuarioController extends HttpServlet {
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		
-ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
 		
 		//recoger parametros
-		String nombre = request.getParameter("nombre");
+		String nombre = request.getParameter("usuario");
 		if ( nombre != null && !"".equals(nombre) ) {
 			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
 		}
@@ -59,7 +59,7 @@ ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
 			if(usuarios.size()!=0) {
 				response.setStatus(HttpServletResponse.SC_OK);
 			}else {
-				//otro error. no aparece u se pone msg???
+				//otro error. no aparece o se pone msg???
 			}
 			
 		}

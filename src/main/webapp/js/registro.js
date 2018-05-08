@@ -1,10 +1,32 @@
+
+var error_pass;
+var error_pass1;
+var error_pass2;
+
+var boton;
+var nombre;
+var email;
+var password;
+var password2;
+
 window.onload= function(e){
 	console.log('Documento registro.js');
-	var boton = document.getElementById("boton").disabled = true;
-	var usuario = document.getElementById("usuario");
-	var email = document.getElementById("email");
-	var password = document.getElementById("password");
-	var password2 = document.getElementById("password2");
+	var btn = document.getElementById("btn");
+	
+	error_pass = document.getElementById('error_pass');
+	error_pass.style.display = 'none';
+	
+	error_pass1 = document.getElementById('error_pass1');
+	error_pass1.style.display = 'none';
+	
+	error_pass2 = document.getElementById('error_pass2');
+	error_pass2.style.display = 'none';
+	
+	nombre = document.getElementById("nombre");
+	email = document.getElementById("email");
+	password = document.getElementById("password");
+	password2 = document.getElementById("password2");
+	
 	validar();
 	
 	registrarListenner();
@@ -13,19 +35,30 @@ window.onload= function(e){
 
 
 function validar(){
-	
-	console.log('validar');
-	expr = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	
-	if ( usuario.value == "" || email.value == "" || password.value==""|| password2=="" ){
-		boton.disabled = true;
+	if ( nombre.value == "" || nombre.value.length < 5 ){
+		error_pass1.style.display = 'block';
+		error_pass2.style.display = 'none';
+		btn.disabled = true;
 		return;
-	}else if(!expr.test(email.value)){
-		return email.setCustomValidity("Error: La dirección de correo " + email + " es incorrecta.");
-		boton.disabled = true;
+	}else{
+		error_pass2.style.display = 'block';
+		error_pass1.style.display = 'none';
+		btn.disabled = false;
+		
 	}
-	else{
-		boton.disabled = false;
+	
+	if (  password.value !== password2.value ){
+		error_pass.style.display = 'block';
+		btn.disabled = true;
+	}else{
+		error_pass.style.display = 'none';
+	}
+	
+	if ( email.value == "" ){
+		btn.disabled = true;
+		return;
+	}else{
+		btn.disabled = false;
 	}
 	
 }
@@ -34,5 +67,8 @@ function validar(){
 function registrarListenner(){
 	
 	console.log('registrarListenner');
-	usuario.addEventListener("blur", validar );
+	nombre.addEventListener("blur", validar );
+	email.addEventListener("blur", validar );
+	password.addEventListener("blur", validar );
+	password2.addEventListener("blur", validar );
 }

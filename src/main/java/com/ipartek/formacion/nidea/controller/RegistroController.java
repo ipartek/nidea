@@ -107,9 +107,9 @@ public class RegistroController extends HttpServlet {
 							alert = new Alert("Lo sentimos el usuario o email ya existe", Alert.TIPO_WARNING);
 							view = VIEW_REGISTRO;
 						}
-						
+						//validacion ERROR => VIEW_REGISTRO
 					}else {
-						//Validacion NOK => VIEW_REGISTRO
+						
 						String mensajes = "";
 						for (ConstraintViolation<RegistroForm> violation : violations) {
 							mensajes += violation.getPropertyPath() + ":" +  violation.getMessage() + "<br>";
