@@ -27,9 +27,9 @@
 	      	   	<a class="btn btn-outline-danger" href="logout">Logout</a>
 	      	</nav>
 	     </c:if> 	
-      
-       <c:if test="${usuario.rol.id == 1}"> 
-	      	<!-- Backoffice -->
+	     
+       <!-- Backoffice -->
+       <c:if test="${usuario.rol.id == 1}"> 	      	
 	      	<nav class="my-2 my-md-0 mr-md-10">
 	      		<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
 	      		<a class="p-2 text-dark" href="backoffice/roles">Roles</a>
