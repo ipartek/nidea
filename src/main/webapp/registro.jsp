@@ -17,6 +17,9 @@
 		<label for="nombre">Nombre Usuario:</label> <input type="text"
 			class="form-control" id="nombre" name="nombre"
 			placeholder="Nombre Usuario" required value="${registro.nombre }">
+		
+			<p id="nombre_mensaje"></p>
+		
 	</div>
 	<div class="form-group">
 		<label for="password">Password:</label> 
@@ -38,6 +41,7 @@
 	<button type="submit" class="btn btn-success btn-block" id="boton" disabled>Crear</button>
 
 </form>
-<script src="js/registroUsuarios.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/registroAjax.js"></script>
 
 <%@include file="/templates/footer.jsp"%>

@@ -14,9 +14,8 @@
 <form action="frontoffice/usuarios" method="get">
 
 	<div class="form-group">
-		<label for="id">Id Usuario:</label> <input type="number"
-			class="form-control" id="id" name="id" placeholder="Id Usuario"
-			readonly value="${usuario.id }">
+		<label for="id">Id Usuario:</label> 
+		<input type="number" class="form-control" id="id" name="id" placeholder="Id Usuario" readonly value="${usuario.id }">
 	</div>
 	<div class="form-group">
 		<label for="nombre">Nombre Usuario:</label> <input type="text"

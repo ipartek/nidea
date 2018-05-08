@@ -53,25 +53,9 @@ public class ApiUsuariosController extends HttpServlet {
 			}
 
 		} else if (null != request.getParameter("nombreExacto")) {
-
 			buscarPorParametro(request.getParameter("nombreExacto"), NOMBRE, response);
-
 		} else if (null != request.getParameter("email")) {
-
 			buscarPorParametro(request.getParameter("email"), EMAIL, response);
-//			String email = request.getParameter("email");
-//
-//			if ("".equals(email)) {
-//				response.setStatus(HttpServletResponse.SC_OK);
-//			} else {
-//				Usuario usuario = new Usuario();
-//				usuario = UsuarioDAO.getInstance().getByExactEmailApi(email);
-//				if (usuario.getId() == Usuario.USUARIO_INDEFINIDO) {
-//					response.setStatus(HttpServletResponse.SC_NO_CONTENT);
-//				} else {
-//					response.setStatus(HttpServletResponse.SC_OK);
-//				}
-//			}
 		}
 		out.flush();
 	}

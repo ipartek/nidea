@@ -18,7 +18,7 @@ window.onload = function(e) {
 	pass = document.getElementById('password');
 	confirm_pass = document.getElementById('confirm_password');
 	email = document.getElementById('email');
-
+	
 	validar();
 
 	registrarListeners();
@@ -104,11 +104,15 @@ function validarNombre() {
 
 	var nombreBuscar = nombre.value;
 	var url = "api/usuario/?nombreExacto=" + nombreBuscar;
-
+	
 	return new Promise(function(resolve, reject) {
-		validarPromise(url, nombreBuscar).then(function(result) {
-			// console.log('resultado nombre %s', result);
-			resolve(result);
+		ajax("GET", url).then(request=>{
+			
+			if(request.status == 200){
+				resolve(false);
+			} else if (request.status == 204){
+				resolve(true);
+			}			
 		});
 	});
 }
@@ -124,10 +128,14 @@ function validarEmail() {
 	var emailBuscar = email.value;
 	var url = "api/usuario/?email=" + emailBuscar;
 	
-	return new Promise (function(resolve,reject){
-		validarPromise(url, emailBuscar).then(function(result) {
-			// console.log('resultado email %s', result);
-			resolve(result);
+	return new Promise(function(resolve, reject) {
+		ajax("GET", url).then(request=>{
+			
+			if(request.status == 200){
+				resolve(false);
+			} else if (request.status == 204){
+				resolve(true);
+			}			
 		});
 	});
 }
