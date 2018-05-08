@@ -91,13 +91,37 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		String sql = "SELECT id , nombre FROM usuario  WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 25;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
-			pst.setString(1, "%" + nombre + "%");
+			pst.setString(1, nombre);
 			try (ResultSet rs = pst.executeQuery()) {
 
 				Usuario usuario = null;
 				while (rs.next()) {
 					usuario = new Usuario();
 					usuario.setNombre(rs.getString("nombre"));
+					usuario.setId(rs.getInt("id"));
+					lista.add(usuario);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
+	public List<Usuario> getAllApiByMail(String email) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT id , email FROM usuario  WHERE email LIKE ? ORDER BY email ASC LIMIT 25;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1, email);
+			try (ResultSet rs = pst.executeQuery()) {
+
+				Usuario usuario = null;
+				while (rs.next()) {
+					usuario = new Usuario();
+					usuario.setEmail(rs.getString("email"));
 					usuario.setId(rs.getInt("id"));
 					lista.add(usuario);
 				}

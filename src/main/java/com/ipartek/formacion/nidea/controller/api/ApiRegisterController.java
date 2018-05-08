@@ -38,12 +38,17 @@ public class ApiRegisterController extends HttpServlet {
 		
 		PrintWriter out = response.getWriter();
 		
-		ArrayList<Usuario> usuarios = new ArrayList<Usuario>(); 
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();  
 		
 		//recoger parametros
 		String nombre = request.getParameter("nombre");
-		if ( nombre != null && !"".equals(nombre) ) {
+		String email = request.getParameter("email");
+		
+		if ( nombre != null && !"".equals(nombre)) {
 			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByName(nombre);
+		}
+		else if ( email != null && !"".equals(email)) {
+			usuarios = (ArrayList<Usuario>) UsuarioDAO.getInstance().getAllApiByMail(email);
 		}
 		
 		//respuesta

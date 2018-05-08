@@ -28,7 +28,7 @@ function buscarUsuario( event ){
             });
             select.innerHTML = options;
        }else if (this.readyState == 4 && this.status == 204){
-    	 select.innerHTML = '<option value="">-- Sin Coincidencias --</option>';
+    	 select.innerHTML = '<option value="-1">-- Sin Coincidencias --</option>';
        }
     };
     xhttp.open("GET", url , true);

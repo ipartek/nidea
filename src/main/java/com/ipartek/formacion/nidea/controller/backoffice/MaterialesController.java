@@ -266,7 +266,7 @@ public class MaterialesController extends HttpServlet implements Operable{
 		}
 		
 		//comprobar si hay que cambiar el usuario desde el select-options
-		if ( request.getParameter("id_usuario_cambio") != null ) {
+		if (request.getParameter("id_usuario_cambio") != null && !"-1".equals(request.getParameter("id_usuario_cambio"))) {
 			id_usuario = Integer.parseInt(request.getParameter("id_usuario_cambio"));
 		}else {
 		

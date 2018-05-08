@@ -21,7 +21,7 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                         <input type="text" name="name" class="form-control" id="name"
-                               placeholder="Introduce nombre" required autofocus onblur="chequearNombre(event)">
+                               placeholder="Introduce nombre" required autofocus onkeyup="chequearNombre(event)">
                     </div>
                 </div>
             </div>
@@ -42,14 +42,14 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
                         <input type="text" name="email" class="form-control" id="email"
-                               placeholder="nombre@nombre.com" required autofocus>
+                               placeholder="nombre@nombre.com" required autofocus onblur="chequearMail(event)">
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <!-- mensaje de error campo email -->
+                        <span class="text-danger align-middle" id="emailError" style="display:none;">
+                            Ese mail ya está en uso
                         </span>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-key"></i></div>
                         <input type="password" name="password" class="form-control" id="password"
-                               placeholder="Password" required>
+                               placeholder="Password" required onblur="chequearPassword(event)">
                     </div>
                 </div>
             </div>
@@ -81,6 +81,16 @@
                         <input type="password" name="password_confirmation" class="form-control"
                                id="password_confirmation" placeholder="Password" required onblur="chequearPassword(event)">
                     </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-control-feedback">
+                        <span class="text-danger align-middle" id="passwordError" style="display:none;">
+                            Las contraseñas no coinciden
+                        </span>
+                        <span class="text-danger align-middle" id="passwordError2" style="display:none;">
+                            La contraseña debe estar entre 6 y 45 caracteres
+                        </span>
                 </div>
             </div>
         </div>
