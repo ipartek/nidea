@@ -23,7 +23,7 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
                         <input type="text" name="nombre" class="form-control" id="nombre"
-                               placeholder="Introduzca nombre" required autofocus>
+                               placeholder="Introduzca nombre (minimo 5 caracteres)" onkeyup="checkNombre()" required autofocus >
                     </div>
                 </div>
             </div>
@@ -31,6 +31,7 @@
                 <div class="form-control-feedback">
                         <span class="text-danger align-middle">
                             <!-- Put name validation error messages here -->
+                            <p id="nombre_mensaje"></p>
                         </span>
                 </div>
             </div>
@@ -44,7 +45,7 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
                         <input type="text" name="email" class="form-control" id="email"
-                               placeholder="you@example.com" required autofocus>
+                               placeholder="you@example.com" required autofocus onblur="buscarMail(event)">
                     </div>
                 </div>
             </div>
@@ -52,6 +53,7 @@
                 <div class="form-control-feedback">
                         <span class="text-danger align-middle">
                             <!-- Put e-mail validation error messages here -->
+                            <div id="confirmar-mail"></div>
                         </span>
                 </div>
             </div>
@@ -68,14 +70,7 @@
                                placeholder="Password" required>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-control-feedback">
-                        <span class="text-danger align-middle">
-                            <i class="fa fa-close"> Contraseña no coincide</i>
-                        </span>
-                </div>
-            </div>
+            </div>            
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
@@ -101,5 +96,6 @@
         </div>
     </form>
 </div>
-<script src="js/registro.js"></script>
+<script src="js/registro.js?v3"></script>
+<script src="js/promesas.js"></script>
 <%@include file="/templates/footer.jsp" %>

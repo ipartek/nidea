@@ -86,7 +86,7 @@ public class RegistroController extends HttpServlet {
 			RegistroForm form = new RegistroForm (nombre, email, password, rePassword);
 			
 			//validar parametros
-			if (rePassword !=null && password.equals(rePassword)) {
+			if (nombre.length()>4 && rePassword !=null  && password.equals(rePassword)) {
 				
 				
 				Set<ConstraintViolation<RegistroForm>> violations = validator.validate(form);

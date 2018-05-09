@@ -35,7 +35,7 @@ public class ApiUsuarioController extends HttpServlet {
 		//recoger parametros
 		String nombre =request.getParameter("nombre");
 		if(nombre != null && !"".equals(nombre)) {
-			usuarios = (ArrayList<Usuario>)UsuarioDAO.getInstance().getAllApiByName(nombre);
+			usuarios = (ArrayList<Usuario>)UsuarioDAO.getInstance().checkName(nombre);
 		}
 		
 		/*ArrayList<Usuario> usuarios =new ArrayList<Usuario>();

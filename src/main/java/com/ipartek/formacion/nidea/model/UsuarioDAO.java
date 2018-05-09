@@ -74,7 +74,36 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql)) {
-			pst.setString(1, "%" + nombre + "%");
+			pst.setString(1,"%"+ nombre +"%");
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {					
+					Usuario u = new Usuario();
+					u.setId(rs.getInt("id"));
+					u.setNombre(rs.getString("nombre"));					
+					lista.add(u);
+				}
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return lista;
+	}
+	
+	/**
+	 *  Lista de usuarios solo busca nombre exacto
+	 * @param nombre
+	 * @return
+	 */
+	public List<Usuario> checkName(String nombre) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT u.`id`,  u.`nombre`  "
+				+ "FROM usuario as u  WHERE u.nombre LIKE ? "
+				+ "ORDER BY u.`nombre` ASC LIMIT 500";
+
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, nombre);
 			try (ResultSet rs = pst.executeQuery()) {
 				while (rs.next()) {					
 					Usuario u = new Usuario();

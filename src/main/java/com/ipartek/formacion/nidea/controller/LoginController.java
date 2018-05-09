@@ -67,36 +67,37 @@ public class LoginController extends HttpServlet {
 
 			String nombre = request.getParameter("usuario");
 			String password = request.getParameter("password");
+			
+				Usuario usuario = daoUsuario.check(nombre, password);
 
-			Usuario usuario = daoUsuario.check(nombre, password);
+				if (usuario != null) {	
+				
+					// guardar usuario en session
+					HttpSession session = request.getSession();
+					session.setAttribute("usuario", usuario);
 
-			if (usuario != null) {
+					/*
+					 * Tiempo expiracion session, tambien se puede configurar web.xml un valor
+					 * negativo, indica que nunca expira
+					 * 
+					 * <session-config> <session-timeout>-1</session-timeout> </session-config>
+					 * 
+					 */
+					session.setMaxInactiveInterval(SESSION_EXPIRATION);
 
-				// guardar usuario en session
-				HttpSession session = request.getSession();
-				session.setAttribute("usuario", usuario);
+					if (usuario.getRol().getId() == Usuario.ROL_ADMIN) {
+						view = VIEW_BACKOFFICE;
+					} else {
+						view = VIEW_FRONTOFFICE;
+					}
 
-				/*
-				 * Tiempo expiracion session, tambien se puede configurar web.xml un valor
-				 * negativo, indica que nunca expira
-				 * 
-				 * <session-config> <session-timeout>-1</session-timeout> </session-config>
-				 * 
-				 */
-				session.setMaxInactiveInterval(SESSION_EXPIRATION);
-
-				if (usuario.getRol().getId() == Usuario.ROL_ADMIN) {
-					view = VIEW_BACKOFFICE;
+					alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
 				} else {
-					view = VIEW_FRONTOFFICE;
+
+					view = VIEW_LOGIN;
+					alert = new Alert("Credenciales incorrectas, prueba de nuevo");
 				}
-
-				alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
-			} else {
-
-				view = VIEW_LOGIN;
-				alert = new Alert("Credenciales incorrectas, prueba de nuevo");
-			}
+			
 
 		} catch (Exception e) {
 			e.printStackTrace();
