@@ -5,11 +5,10 @@
 <%@include file="/templates/alert.jsp"%>
 
 
-<<<<<<< HEAD
-=======
+
 
  <script src="js/registro.js"></script>
->>>>>>> branch 'master_jorge' of https://github.com/ipartek/nidea.git
+
  
 <div class="container">
     <div class="row">
@@ -20,15 +19,13 @@
                        
 
                         <div class="form-group">
-<<<<<<< HEAD
-                            <span class="col-md-1 col-md-offset-2 text-center"><i class="fa fa-user bigicon"></i></span>
-                            <div class="col-md-8">
-                                <input id="nombre" name="nombre" type="text" placeholder="Nombre" class="form-control">
-=======
+
+                     
+
                             <span class="col-md-1 col-md-offset-2"><i class="fa fa-user bigicon"></i></span>
                             <div class="col-md-8 ">
                                 <input id="fname" name="nombre" type="text" placeholder="Nombre" class="form-control" onblur="confusuario()">
->>>>>>> branch 'master_jorge' of https://github.com/ipartek/nidea.git
+
                             </div>
                         </div>
                      
