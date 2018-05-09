@@ -29,7 +29,7 @@ window.onload = function(e){
 		var nombre_caracteres = event.target.value;
 		if (nombre_caracteres.length >= 5){
 			var url = "api/registro?nombre=" + nombre_caracteres;
-			llamadaAjax(url, "nombre");
+			llamadaAjax(url, "nombre"); 
 		}	else {
 			document.getElementById('nombre').style.border = "none";
 		}	
@@ -39,7 +39,7 @@ window.onload = function(e){
 
 
 function validar(){
-	
+	      
 	console.log('validar');
 	
 	if (  password.value !== rePassword.value ){
@@ -50,7 +50,7 @@ function validar(){
 	}
 	
 	if ( nombre.value == "" ){
-		boton.disabled = true;
+		boton.disabled = true; 
 		return;
 	}else{
 		boton.disabled = false;
