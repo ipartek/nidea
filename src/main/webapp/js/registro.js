@@ -1,27 +1,57 @@
-window.document.onload =function(e){
-	var boton =document.getElementById('boton');
-	var nombre =document.getElementById('nombre');
-	var email =document.getElementById('email');
-	var password =document.getElementById('password');
-	var rePassword =document.getElementById('rePassword');
-	//var url= 'api/usuario';
+var boton;
+var error_pass;
+
+var nombre;
+var email;
+var password;
+var rePassword;
+
+window.onload = function(e){
+	
+	console.log('Document Loaded: registro.js');
+	
+	boton      = document.getElementById('boton');
+	error_pass = document.getElementById('error_pass');
+	error_pass.style.display = 'none';
+	
+	nombre     = document.getElementById('nombre');
+	email      = document.getElementById('email');
+	password   = document.getElementById('password');
+	rePassword = document.getElementById('rePassword');
+
+	//validar();	
 	
 	registrarListenner();
-	validar();
-	buscarNombre(event);
-	buscarMail(event);
-	checkNombre();
 }
 
+
 function validar(){
+	
 	console.log('validar');
-	if (nombre == ""){
+	
+	if (  password.value !== rePassword.value ){
+		error_pass.style.display = 'block';
+		boton.disabled = true;
+	}else{
+		error_pass.style.display = 'none';
+	}
+	
+	if ( nombre.value == "" ){
 		boton.disabled = true;
 		return;
-	}
-	else 
+	}else{
 		boton.disabled = false;
-}
+	}
+	
+	if ( email.value == "" ){
+		boton.disabled = true;
+		return;
+	}else{
+		boton.disabled = false;
+	}
+	
+}//validar
+
 
 function checkNombre(){
 	console.log('checkNombre');
@@ -53,68 +83,12 @@ function checkNombre(){
 	}	
 }
 
+
 function registrarListenner(){
+	
 	console.log('registrarListenner');
 	nombre.addEventListener("keyup", checkNombre );
- 	email.addEventListener("blur", validar );
- 	password.addEventListener("blur", validar );
- 	rePassword.addEventListener("blur", validar );
-	
+	email.addEventListener("blur", validar );
+	password.addEventListener("blur", validar );
+	rePassword.addEventListener("blur", validar );
 }
-var boton=document.getElementById("submit");
-var usuarioDisponible;
-function buscarNombre(event){
-		//console.log('buscarUsuario: click %o', event);
-		var nombreBuscar = event.target.value;
-		var url = "api/usuario?nombre=" + nombreBuscar;
-		
-		var nombre = document.getElementById('nombre_mensaje');
-		//eliminar options antiguas
-		nombre.innerHTML = "";
-		
-		//llamada Ajax
-		if(nombreBuscar!="" && nombreBuscar.length>4){
-			//llamada a ajax para comprobarsi existe un nombre
-			let promesa = ajax('GET', url);
-	        promesa.then(data => {
-	        	//llamada terminada y correcta
-	        	nombre.innerHTML = "<p style='color:red;'>Ese usuario ya existe</p>";
-	            usuarioDisponible=false;	            
-	        	
-	        	}).catch(error => {
-	        		console.warn(error);
-	        		nombre.innerHTML = "<p style='color:green;'>Usuario disponible</p>";
-	        		usuarioDisponible=true;	        		
-	        	});		
-	       }
-		
-	}
-
-function buscarMail(event){
-	
-	var mailBuscar = event.target.value;
-	var url = "api/usuario?mail=" + mailBuscar;
-	
-	var mail = document.getElementById('confirmar-mail');
-	//eliminar options antiguas
-	email.innerHTML = "";
-	
-	//llamada Ajax
-	if(mailBuscar!=""){
-		//llamada a ajax para comprobarsi existe un nombre
-		let promesa = ajax('GET', url);
-        promesa.then(data => {
-        	//llamada terminada y correcta
-        	email.innerHTML = "<p style='color:red;'>Ese mail ya existe</p>";
-            mailDisponible=false;	            
-        	
-        	}).catch(error => {
-        		console.warn(error);
-        		email.innerHTML = "<p style='color:green;'>Mail disponible</p>";
-        		mailDisponible=true;	        		
-        	});		
-       }
-	
-}
-
-

@@ -16,22 +16,22 @@
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
-                <label for="nombre">Nombre</label>
+                <label for="nombre">Nombre <i>(minimo 5 letras)</i></label>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                    
                         <input type="text" name="nombre" class="form-control" id="nombre"
-                               placeholder="Introduzca nombre (minimo 5 caracteres)" onkeyup="checkNombre()" required autofocus >
-                    </div>
+                               placeholder="Introduzca nombre" required autofocus>
+                        <p id="nombre_mensaje"></p>       
+                    
+                    
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-control-feedback">
                         <span class="text-danger align-middle">
                             <!-- Put name validation error messages here -->
-                            <p id="nombre_mensaje"></p>
                         </span>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <div class="input-group mb-2 mr-sm-2 mb-sm-0">
                         <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-at"></i></div>
                         <input type="text" name="email" class="form-control" id="email"
-                               placeholder="you@example.com" required autofocus onblur="buscarMail(event)">
+                               placeholder="you@example.com" required autofocus>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,6 @@
                 <div class="form-control-feedback">
                         <span class="text-danger align-middle">
                             <!-- Put e-mail validation error messages here -->
-                            <div id="confirmar-mail"></div>
                         </span>
                 </div>
             </div>
@@ -70,7 +69,14 @@
                                placeholder="Password" required>
                     </div>
                 </div>
-            </div>            
+            </div>
+            <div class="col-md-3">
+                <div class="form-control-feedback">
+                        <span id="error_pass" class="text-danger align-middle">
+                            <i class="fa fa-close"> Contraseña no coincide</i>
+                        </span>
+                </div>
+            </div>
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
@@ -91,11 +97,13 @@
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-6">
-                <button type="submit" id="boton" class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
+                <button type="submit" id="boton" disabled class="btn btn-success"><i class="fa fa-user-plus"></i> Registrar</button>
             </div>
         </div>
     </form>
 </div>
-<script src="js/registro.js?v3"></script>
+
 <script src="js/promesas.js"></script>
+<script src="js/registro.js?v4"></script>
+
 <%@include file="/templates/footer.jsp" %>
