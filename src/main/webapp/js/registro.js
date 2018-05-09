@@ -1,115 +1,154 @@
 //v2
-var boton;
-var error_pass;
-
+var resultado;
 var nombre;
+var boton;
+var contraseña;
+var reContraseña;
 var email;
-var password;
-var rePassword;
+
+var nombreValido = false;
+var nombreChecked = false;
+var emailValido = false;
+var contraseñaOK = false;
 
 window.onload = function(e) {
 
-	console.log('Document Loaded: registro.js');
-
 	boton = document.getElementById('boton');
-	error_pass = document.getElementById('error_pass');
-	error_pass.style.display = 'none';
-
 	nombre = document.getElementById('nombre');
+	nombreMensaje = document.getElementById('nombreMensaje');
+	contra = document.getElementById('contraseña');
+	confirmarContraseña = document.getElementById('reContraseña');
 	email = document.getElementById('email');
-	password = document.getElementById('password');
-	rePassword = document.getElementById('rePassword');
-
+	
 	validar();
 
-	registrarListenner();
+	registrarListeners();
 }
 
-
-function ajax(method, url, data=null){
-    
-    return new Promise (function(resolve, reject){
-        
-        let request = new XMLHttpRequest();
-        if(window.XMLHttpRequest){
-            request = new XMLHttpRequest();
-        }else if (window.ActiveObject){ //IE
-            request = new ActiveObject("Msxmk2.XMLHTTP")
-
-        }else{
-            reject("Tu navegador no soporta AJAX");
-        }
-        
-        
-        //Comprobar cambios de estado
-        request.onreadystatechange=function(){
-            
-            if(request.readyState == 4){
-                
-         if( request.status == 200){
-            resolve(JSON.parse(request.responseText));
-            }else{
-                reject(Error(request.statusText));
-                }
-            }
-        };
-        
-        
-            //resolver(datos)
-        	if (this.readyState == 4 && this.status == 200){
-        		var datos = this.responseText;
-        		document.querySelector('nombre').style.border ="4px solid red";
-        	
-        	} else if (this.readyState == 4 && this.status == 204){
-        		document.querySelector('nombre').style.border ="4px solid green";
-        	}
-        	console.log("Llamada registro")
-        
-        
-            //reject(error)
-        
-        request.open(method, url,true);
-        request.send(data);
-    });
+function registrarListeners() {
+	nombre.addEventListener("keyup", validar);
+	contra.addEventListener("blur", validar);
+	confirmarContraseña.addEventListener("blur", validar);
+	email.addEventListener("blur", validar);
 }
-ajax();
-console.log("Llamada registro")
-
-        
 
 function validar() {
-
-	console.log('validar');
-
-	if (password.value !== rePassword.value) {
-		error_pass.style.display = 'block';
-		boton.disabled = true;
-	} else {
-		error_pass.style.display = 'none';
+	
+	if (this.id == 'nombre') {
+		
+		if(nombre.value.length>=5){
+			nombreChecked=true;			
+			validarNombre().then(result=>{
+				console.log('Nombre %s', result);
+				nombreValido = result;
+				if(result == true){
+					
+					nombre.style.border = "3px solid green";
+					nombreMensaje.style.color = "green";
+					nombreMensaje.innerText = "Nombre disponible";
+					
+				} else {
+					
+					nombre.style.border = "3px solid red";
+					nombreMensaje.style.color = "red";
+					nombreMensaje.innerText = "Nombre no disponible";		
+				}
+				toggleButton();
+			});			
+		} else if (nombreChecked){
+			
+			nombre.style.border = "3px solid red";
+			nombreMensaje.style.color = "red";
+			nombreMensaje.innerText = "Nombre demasiado corto";
+			
+		}
 	}
-
-	if (nombre.value == "") {
-		boton.disabled = true;
-		return;
-	} else {
-		boton.disabled = false;
-	}
-
-	if (email.value == "") {
-		boton.disabled = true;
-		return;
-	} else {
-		boton.disabled = false;
-	}
-
+		if (this.id == 'email') {
+				
+			validarEmail().then(result=>{
+				console.log('Email %s', result);
+				emailValido = result;
+				if(result == true){
+					email.style.border = "3px solid green";
+				} else {
+					email.style.border = "3px solid red";
+				}
+				toggleButton();
+			});	
+		}
+		
+		if(this.id == 'contraseña' || this.id == "reContraseña"){
+			console.log(this.value);
+			if (contra.value == confirmarContraseña.value && this.value != ''){
+				contra.style.border = "3px solid green";
+				confirmarContraseña.style.border = "3px solid green";
+				contraseñaOK = true;
+			} else {
+				contra.style.border = "3px solid red";
+				confirmarContraseña.style.border = "3px solid red";
+				contraseñaOK = false;
+			}
+			toggleButton();
+		}
 }
 
-function registrarListenner() {
+function validarNombre() {
 
-	console.log('registrarListenner');
-	nombre.addEventListener("blur", validar);
-	email.addEventListener("blur", validar);
-	password.addEventListener("blur", validar);
-	rePassword.addEventListener("blur", validar);
+	var nombreBuscar = nombre.value;
+	var url = "api/usuario/?nombreExacto=" + nombreBuscar;
+	
+	return new Promise(function(resolve, reject) {
+		ajax("GET", url).then(request=>{
+			
+			if(request.status == 200){
+				resolve(false);
+			} else if (request.status == 204){
+				resolve(true);
+			}			
+		});
+	});
 }
 
+function validarEmail() {
+
+	var emailBuscar = email.value;
+	var url = "api/usuario/?email=" + emailBuscar;
+	
+	return new Promise(function(resolve, reject) {
+		ajax("GET", url).then(request=>{
+			
+			if(request.status == 200){
+				resolve(false);
+			} else if (request.status == 204){
+				resolve(true);
+			}			
+		});
+	});
+}
+
+function validarPromise(url) {
+	return new Promise(function(resolve, reject) {
+
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("GET", url, true);
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log('No Disponible. Hay resultados coincidentes en la bbdd');
+				resolve(false);
+
+			} else if (this.readyState == 4 && this.status == 204) {
+				console.log('Disponible. No se encontraron resultado en la bbdd');
+				resolve(true);
+			}
+		}
+		xhttp.send();
+	});
+}
+
+function toggleButton(){
+	if(nombreValido && emailValido && contraseñaOK){
+		boton.disabled = false;
+	} else {
+		boton.disabled = true;
+	}
+}
