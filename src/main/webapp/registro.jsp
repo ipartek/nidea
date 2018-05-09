@@ -14,15 +14,16 @@
         </div>
         <div class="row">
             <div class="col-md-3 field-label-responsive">
-                <label for="nombre">Nombre</label>
+                <label for="nombre">Nombre <i>(minimo 5 letras)</i></label>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <div class="input-group mb-2 mr-sm-2 mb-sm-0">
-                        <div class="input-group-addon" style="width: 2.6rem"><i class="fa fa-user"></i></div>
+                    
                         <input type="text" name="nombre" class="form-control" id="nombre"
                                placeholder="Introduzca nombre" required autofocus>
-                    </div>
+                        <p id="nombre_mensaje"></p>       
+                    
+                    
                 </div>
             </div>
             <div class="col-md-3">
@@ -100,6 +101,7 @@
     </form>
 </div>
 
+<script src="js/ajax.js"></script>
 <script src="js/registro.js"></script>
 
 <%@include file="/templates/footer.jsp" %>
