@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
@@ -64,6 +63,37 @@ public class UsuarioDAO implements Persistible<Usuario> {
 		return lista;
 	}
 
+	public List<Usuario> checkName(String nombre) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT id , nombre FROM usuario  WHERE nombre = ? ORDER BY nombre ASC LIMIT 25;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			pst.setString(1,  nombre );
+			try (ResultSet rs = pst.executeQuery()) {
+
+				Usuario usuario = null;
+				while (rs.next()) {
+					usuario = new Usuario();
+					usuario.setNombre(rs.getString("nombre"));
+					usuario.setId(rs.getInt("id"));
+					lista.add(usuario);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return lista;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * Buscamos un usuario por nombre y password
 	 * 
