@@ -28,6 +28,13 @@
 			<version>${javax.servlet.api}</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<!-- SOAP  -->
+		<dependency>
+    		<groupId>soap</groupId>
+    		<artifactId>soap</artifactId>
+    		<version>2.3</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
