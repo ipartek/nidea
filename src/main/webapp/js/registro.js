@@ -62,7 +62,35 @@ function validar(){
 	}
 	
 }
-
+function checkNombre(){
+	console.log('checkNombre');
+	var nombre_mensaje = document.getElementById('nombre_mensaje');
+	
+	if ( nombre.value.length > 4 ){
+		console.log('checkNombre: llamada ajax');
+		
+		const url = `api/usuario?nombre=${nombre.value}`;	 	
+		let promesaNombre = ajax('GET', url );
+		promesaNombre.then( result => {
+					console.log(result)
+					let status = result.status;				
+					if ( status === 200){                // nombre ocupado
+						nombre_mensaje.innerHTML = '* Nombre Ocupado';
+						nombre_mensaje.classList.add("text-danger");
+						nombre_mensaje.classList.remove("text-success");
+					}else{                               // nombre libre 204 
+						nombre_mensaje.innerHTML = 'Nombre Disponible';
+						nombre_mensaje.classList.add("text-success");
+						nombre_mensaje.classList.remove("text-danger");
+					}
+		});		
+		
+	}else{
+		nombre_mensaje.innerHTML = '* Minimo 5 letras';
+		nombre_mensaje.classList.add("text-danger");
+		nombre_mensaje.classList.remove("text-success");
+	}	
+}
 
 function registrarListenner(){
 	
