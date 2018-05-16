@@ -1,7 +1,6 @@
 package com.ipartek.formacion.nidea.controller.backoffice;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -18,124 +17,78 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.nidea.controller.Operable;
-import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.RolDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
-import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Rol;
 import com.ipartek.formacion.nidea.pojo.Usuario;
-import com.mysql.jdbc.MysqlDataTruncation;
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
-/**
- * Servlet implementation class MaterialesController
- */
-
-/*
 @WebServlet("/backoffice/usuarios")
-public class BackofficeUsuariosController extends HttpServlet implements Operable {
-
+public class BackofficeUsuariosController extends HttpServlet implements Operable{
 	private static final long serialVersionUID = 1L;
 
-	private static final String VIEW_INDEX = "usuarios/index.jsp";
-	private static final String VIEW_FORM = "usuarios/form.jsp";
-	
+	private static final String VIEW_FORM = "/backoffice/usuarios/form.jsp";
+	private static final String VIEW_INDEX = "/backoffice/usuarios/index.jsp";
+
+	private RequestDispatcher dispatcher;
+	private Alert alert;
+	private String view = "";
+
+	private UsuarioDAO dao;
+	private RolDAO rolDAO;
+
+	private int id_usuario;
+	private String nombre_usuario;
+	private String password;
+	private Rol rol;
+
+	private String search;
+	private int op;
 
 	ValidatorFactory factory;
 	Validator validator;
 
-	private RequestDispatcher dispatcher;
-	private Alert alert;
-	private RolDAO daoRol;
-	private Rol rol;
-	private UsuarioDAO daoUsuario;
-
-	// parametros comunes
-	private String search; // para el buscador por nombre matertial
-	private int op; // operacion a realizar
-
-	// parametros del Material
-	private int id;
-	private int id_usuario;
-	private String nombre;
-	private float precio;
-/*
-	/**
-	 * Se ejecuta solo la 1º vez que llaman al Servlet
-	 */
-
-/*
 	@Override
 	public void init(ServletConfig config) throws ServletException {
+
 		super.init(config);
-		daoRol = RolDAO.getInstance();
-		daoUsuario = UsuarioDAO.getInstance();
+		dao = UsuarioDAO.getInstance();
+		rolDAO = RolDAO.getInstance();
 		factory = Validation.buildDefaultValidatorFactory();
 		validator = factory.getValidator();
 	}
-*/
-	/**
-	 * Se ejecuta cuando Paramos Servidor de Aplicaciones
-	 */
 
-/*
 	@Override
 	public void destroy() {
 		super.destroy();
-		daoRol = null;
-		daoUsuario = null;
+		dao = null;
+		rolDAO = null;
 		validator = null;
 		factory = null;
 	}
 
-	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		System.out.println("Antes de Ejecutar doGET o doPost");
-
-		super.service(request, response);
-		System.out.println("Despues de Ejecutar doGET o doPost");
-	}
-*/
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-
-/*
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doProcess(request, response);
-	}*/
+	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-
-/*
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		doProcess(request, response);
 	}
-*/
-	/**
-	 * Unimos las peticiones doGet y doPost, vamos que hacemos los mismo!!!
-	 * 
-	 * @param request
-	 * @param response
-	 * @throws IOException
-	 * @throws ServletException
-	 */
 
-
-/*
 	private void doProcess(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		alert = null;
 		try {
+
+			alert = null;
 
 			recogerParametros(request);
 
@@ -143,24 +96,29 @@ public class BackofficeUsuariosController extends HttpServlet implements Operabl
 			case OP_MOSTRAR_FORMULARIO:
 				mostrarFormulario(request);
 				break;
-			case OP_ELIMINAR:
-				eliminar(request, response);
-				break;
+
 			case OP_BUSQUEDA:
 				buscar(request);
 				break;
+
+			case OP_ELIMINAR:
+				eliminar(request);
+				break;
+
 			case OP_GUARDAR:
 				guardar(request);
 				break;
+
 			default:
 				listar(request);
 				break;
 			}
 
 		} catch (Exception e) {
-			alert = new Alert();
 			e.printStackTrace();
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+			listar(request);
+			alert = new Alert();
 
 		} finally {
 			request.setAttribute("alert", alert);
@@ -168,101 +126,16 @@ public class BackofficeUsuariosController extends HttpServlet implements Operabl
 		}
 	}
 
-	private void guardar(HttpServletRequest request) throws SQLException {
-
-		Rol rol = new Rol();
-
-		try {
-
-			rol.setId(id);
-			rol.setNombre(nombre);
-			
-			Usuario u = new Usuario();
-			u.setId(id_usuario);
-			material.setUsuario(u);
-			
-
-
-			// Validaciones Incorrectas
-			Set<ConstraintViolation<Material>> violations = validator.validate(material);
-			if (violations.size() > 0) {
-				String mensajes = "";
-				for (ConstraintViolation<Material> violation : violations) {
-					mensajes += violation.getMessage() + "<br>";
-					alert = new Alert(mensajes, Alert.TIPO_WARNING);
-				}
-				// Validaciones OK
-			} else {
-				if (daoRol.save(rol)) {
-					alert = new Alert("Material guardado", Alert.TIPO_PRIMARY);
-				} else {
-					alert = new Alert("Lo sentimos pero ya existe el nombre del material", Alert.TIPO_WARNING);
-				}
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-			alert = new Alert("<b>" + request.getParameter("precio") + "</b> no es un precio correcto",
-					Alert.TIPO_WARNING);
-		}
-
-		request.setAttribute("usuarios", daoUsuario.getAll());
-		request.setAttribute("material", material);
-		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-
-	}
-
-	private void buscar(HttpServletRequest request) {
-		alert = new Alert("Busqueda para: " + search, Alert.TIPO_PRIMARY);
-		ArrayList<Material> materiales = daoMaterial.search(search);
-		request.setAttribute("materiales", materiales);
-		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-
-	}
-
-	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
-		if (daoMaterial.delete(id)) {
-			alert = new Alert("Material Eliminado id " + id, Alert.TIPO_PRIMARY);
-		} else {
-			alert = new Alert("Error Eliminando, sentimos las molestias ", Alert.TIPO_WARNING);
-		}
-		listar(request);
-
-	}
-
-	private void mostrarFormulario(HttpServletRequest request) {
-
-		Usuario usuario = new Usuario();
-		if (id > -1) {
-			usuario = daoUsuario.getById(id);
-
-		} else {
-			alert = new Alert("Nuevo Producto", Alert.TIPO_WARNING);
-		}
-
-		request.setAttribute("usuarios", daoUsuario.getAll());
-		request.setAttribute("rol", rol);
-		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-	}
-
 	private void listar(HttpServletRequest request) {
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+		usuarios = dao.getAll();
 
-		ArrayList<Usuario> usuario = new ArrayList<Usuario>();
-		usuario = daoUsuario.getAll();
-		request.setAttribute("materiales", materiales);
+		request.setAttribute("usuarios", usuarios);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 
-	}*/
+	}
 
-	/**
-	 * Recogemos todos los posibles parametros enviados
-	 * 
-	 * @param request
-	 */
-
-/*
 	private void recogerParametros(HttpServletRequest request) {
-
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
 		} else {
@@ -272,26 +145,86 @@ public class BackofficeUsuariosController extends HttpServlet implements Operabl
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
 		if (request.getParameter("id") != null) {
-			id = Integer.parseInt(request.getParameter("id"));
-		} else {
-			id = -1;
+			id_usuario = Integer.parseInt(request.getParameter("id"));
 		}
 
-		if (request.getParameter("nombre") != null) {
-			nombre = request.getParameter("nombre");
-			nombre = nombre.trim();
-		} else {
-			nombre = "";
-		}
-		
-		if (request.getParameter("id_usuario") != null) {
-			id_usuario = Integer.parseInt(request.getParameter("id_usuario"));
-		} else {
-			id_usuario = -1;
-		}
-		
-		
+		nombre_usuario = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
 
+		if (request.getParameter("password") != null) {
+			password = request.getParameter("password");
+		}
+
+		rol = null;
+		if (request.getParameter("id_rol") != null) {
+			rol = rolDAO.getById(Integer.parseInt(request.getParameter("id_rol")));
+		}
 	}
 
-}*/
+	private void mostrarFormulario(HttpServletRequest request) {
+		Usuario usuario = new Usuario();
+
+		if (id_usuario == -1) {
+			request.setAttribute("usuario", usuario);
+			dispatcher = request.getRequestDispatcher(VIEW_FORM);
+		} else {
+			usuario = dao.getById(id_usuario);
+			request.setAttribute("usuario", usuario);
+			dispatcher = request.getRequestDispatcher(VIEW_FORM);
+		}
+
+		ArrayList<Rol> roles = new ArrayList<Rol>();
+		roles = rolDAO.getAll();
+		request.setAttribute("roles", roles);
+	}
+
+	private void guardar(HttpServletRequest request) {
+		Usuario usuario = new Usuario();
+		usuario.setId(id_usuario);
+		usuario.setNombre(nombre_usuario);
+		usuario.setPass(password);
+		usuario.setRol(rol);
+
+		try {
+
+			// Validaciones Incorrectas
+			Set<ConstraintViolation<Usuario>> violations = validator.validate(usuario);
+			if (violations.size() > 0) {
+				String mensajes = "";
+				for (ConstraintViolation<Usuario> violation : violations) {
+					mensajes += violation.getMessage() + "<br>";
+					alert = new Alert(mensajes, Alert.TIPO_WARNING);
+				}
+				// Validaciones OK
+			} else {
+				if (dao.save(usuario)) {
+					alert = new Alert("Usuario guardado", Alert.TIPO_PRIMARY);
+				} else {
+					alert = new Alert("Lo sentimos pero ya existe el nombre de usuario", Alert.TIPO_WARNING);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		request.setAttribute("roles", rolDAO.getAll());
+		request.setAttribute("usuario", usuario);
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
+	}
+
+	private void buscar(HttpServletRequest request) {
+		ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+		usuarios = dao.getByName(search);
+		request.setAttribute("usuarios", usuarios);
+		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+	}
+
+	private void eliminar(HttpServletRequest request) {
+		if (dao.delete(id_usuario)) {
+			alert = new Alert("Se ha eliminado el registro: " + id_usuario, Alert.TIPO_DANGER);
+		} else {
+			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
+		}
+
+		listar(request);
+
+	}
+}

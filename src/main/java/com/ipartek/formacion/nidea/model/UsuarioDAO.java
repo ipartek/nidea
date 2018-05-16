@@ -88,7 +88,22 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 	
 	
-	
+	public ArrayList<Usuario> getByName(String search) {
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT u.id as id_usuario, u.nombre as nombre_usuario, u.password, r.id as id_rol, r.nombre as nombre_rol FROM usuario AS u, rol as r WHERE u.id_rol = r.id AND u.nombre LIKE ? ORDER BY u.id DESC LIMIT 500;";
+				
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, "%" + search + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
+}
 	
 	
 	
@@ -105,7 +120,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	 */
 	public Usuario check(String nombre, String pass) {
 		Usuario resul = null;
-		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password as 'password', r.id as 'rol_id', r.nombre as 'rol_nombre' "
+		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password as 'password', r.id as 'id_rol', r.nombre as 'nombre_rol' "
 				+ "FROM usuario as u, rol as r " + "WHERE u.id_rol = r.id AND u.nombre=? and u.password = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 			pst.setString(1, nombre);
@@ -123,30 +138,30 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 
 	@Override
-	public List<Usuario> getAll() {
-		List<Usuario> lista = new ArrayList<Usuario>();
-		String sql = "SELECT usuario.id as 'id_usuario', usuario.nombre as 'nombre_usuario',usuario.password as 'password',usuario.id_rol,rol.id as 'rol_id',rol.nombre as 'rol_nombre' FROM usuario,rol where usuario.id= rol.id;";
+	public ArrayList<Usuario> getAll() {
+
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		String sql = "SELECT u.id as id_usuario, u.nombre as nombre_usuario, u.password, r.id as id_rol, r.nombre as nombre_rol FROM usuario AS u, rol as r WHERE u.id_rol = r.id ORDER BY u.id DESC LIMIT 500;";
 
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
-				ResultSet rs = pst.executeQuery();) {
-			Usuario m = null;
-			while (rs.next()) {
-				m = mapper(rs);
-				lista.add(m);
-			}
+				ResultSet rs = pst.executeQuery()) {
 
+			while (rs.next()) {
+				lista.add(mapper(rs));
+
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return lista;
 
-	}
+		return lista;
+}
 
 	@Override
 	public Usuario getById(int id) {
 		Usuario usuario = new Usuario();
-		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password, r.id as 'rol_id', r.nombre as 'rol_nombre' FROM usuario as u, rol as r  WHERE u.id_rol = r.id AND u.id = ?;";
+		String sql = "SELECT u.id as 'id_usuario', u.nombre as 'nombre_usuario', u.password, r.id as 'id_rol', r.nombre as 'nombre_rol' FROM usuario as u, rol as r  WHERE u.id_rol = r.id AND u.id = ?;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setInt(1, id);
@@ -260,8 +275,8 @@ public class UsuarioDAO implements Persistible<Usuario> {
 
 		// Rol del usuario
 		Rol rol = new Rol();
-		rol.setId(rs.getInt("rol_id"));
-		rol.setNombre(rs.getString("rol_nombre"));
+		rol.setId(rs.getInt("id_rol"));
+		rol.setNombre(rs.getString("nombre_rol"));
 		u.setRol(rol);
 
 		return u;

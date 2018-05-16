@@ -20,6 +20,7 @@ public class ConnectionManager {
 			if (ds == null) {
 				throw new Exception("Data source no encontrado!");
 			}
+			System.out.println("Conexion establecida");
 
 			conn = ds.getConnection();
 
