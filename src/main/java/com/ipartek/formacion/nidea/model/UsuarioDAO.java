@@ -91,7 +91,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	 * @param nombre String con el nombre a buscar
 	 * @return
 	 */
-	public boolean getRegistradosApi(String nombre) {
+	public boolean getNombre(String nombre) {
 		boolean resul = false;
 		String sql = "SELECT id, nombre FROM usuario WHERE nombre LIKE ? ORDER BY nombre ASC LIMIT 15;";
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
@@ -111,6 +111,31 @@ public class UsuarioDAO implements Persistible<Usuario> {
 	}
 	
 
+	/**
+	 * Lista de usuarios solo con id y nombre. Usar solo para la API REST
+	 * @param nombre String con el email a buscar
+	 * @return
+	 */
+	public boolean getEmail(String email) {
+		boolean resul = false;
+		String sql = "SELECT id, email FROM usuario WHERE email LIKE ? ORDER BY nombre ASC LIMIT 15;";
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+			pst.setString(1, email);
+			
+			try (ResultSet rs = pst.executeQuery();) {
+				Usuario usuario = null;
+				while (rs.next()) {
+					resul=true;
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return resul;
+	}
+	
+	
 	@Override
 	public Usuario getById(int id) {
 		Usuario u = null;

@@ -2,28 +2,73 @@
 Retornando Promise*/
 
 function comprobarNombre(event){
-    var method = "GET";
+    const method = "GET";
     var nombre = document.getElementById('nombre');
-    var aviso = document.getElementById('avisoNombre');
+    var avisoNombre = document.getElementById('avisoNombre');
     	
-    var url = "api/nombre?nombre=" + nombre.value;
+    var url = `api/nombre?nombre=${nombre.value}`;
     var options = '';
 		
     var request;
 
-    var promesa = ajax(method,url);
+    var promesaNombre = ajax(method,url);
     	
-    promesa.then(dato => {
-    	aviso.innerHTML = "Usuario ya existe";
-    	deshabilitar();
-    	})
-    	.catch(error => {
+    promesaNombre.then(result => {
+    	let status = result.status;
+    	if (status >= "200" && status <=203){
+    		avisoNombre.innerHTML = "Usuario ya existe";
+    		avisoNombre.classList.add("text-danger");
+    		avisoNombre.classList.remove("text-success");
+        	deshabilitar();
+    	}else if(status == "204"){
+    		avisoNombre.classList.add("text-success");
+    		avisoNombre.classList.remove("text-danger");
+    		avisoNombre.innerHTML = "Usuario disponible";
     		if (checkPass()){
     			habilitar();
-    		}
-    		aviso.innerHTML = "Usuario disponible";
+    		}	
+    	}
+    	
+    	})
+    	.catch(error => {
+    		console.warn(error);
     	});
 }
+
+function comprobarEmail(event){
+    const method = "GET";
+    var email = document.getElementById('email');
+    var avisoEmail = document.getElementById('avisoEmail');
+    	
+    var url = `api/email?=${email.value}`;
+    var options = '';
+		
+    var request;
+
+    var promesaEmail = ajax(method,url);
+    	
+    promesaNombre.then(result => {
+    	let status = result.status;
+    	if (status >= "200" && status <=203){
+    		avisoEmail.innerHTML = "Email ya existe";
+    		avisoEmail.classList.add("text-danger");
+    		avisoEmail.classList.remove("text-success");
+        	deshabilitar();
+    	}else if(status == "204"){
+    		avisoEmail.classList.add("text-success");
+    		avisoEmail.classList.remove("text-danger");
+    		avisoEmail.innerHTML = "Email disponible";
+    		if (checkPass()){
+    			habilitar();
+    		}	
+    	}
+    	
+    	})
+    	.catch(error => {
+    		console.warn(error);
+    	});
+}
+
         
 
 function checkPass (){

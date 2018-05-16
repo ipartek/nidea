@@ -18,8 +18,8 @@ import com.ipartek.formacion.nidea.pojo.Usuario;
 /**
  * Servlet implementation class ApiUsuarioController
  */
-@WebServlet("/api/nombre")
-public class ApiNombreController extends HttpServlet {
+@WebServlet("/api/email")
+public class ApiEmailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -34,7 +34,7 @@ public class ApiNombreController extends HttpServlet {
 		//recoger parametros
 		String nombre = request.getParameter("nombre");
 		if(nombre != null && !"".equals(nombre)) {
-			if (UsuarioDAO.getInstance().getNombre(nombre)) {
+			if (UsuarioDAO.getInstance().getEmail(nombre)) {
 				alert = new Alert("", Alert.TIPO_WARNING);
 				
 			}else {

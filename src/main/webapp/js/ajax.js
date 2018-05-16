@@ -18,8 +18,8 @@ function ajax(method,url,data = null){
         //comprobar cambios de estado
         request.onreadystatechange = function(){
             if (request.readyState == 4) {
-                if (request.status >= 200 && request.status <= 203) {
-                    resolve(JSON.parse(request.responseText));
+                if (request.status >= 200 && request.status <= 299) {
+                    resolve(request);
                 } else{
                     reject (Error(request.statusText));
                 }

@@ -17,7 +17,7 @@
 		<div class="form-group row">
 			<label for="email" class="col-sm-2 col-form-label">Email</label>
 			<div class="col-sm-5">
-				<input type="text" value="${usuario.email}" class="form-control" id="email" placeholder="Introduce email">
+				<input type="text" value="${usuario.email}" class="form-control" id="email" placeholder="Introduce email" onblur="comprobarEmail(event)">
 			</div>
 			<span id="avisoEmail"></span>
 		</div>
