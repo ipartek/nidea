@@ -27,11 +27,11 @@ public class LoginController extends HttpServlet {
 	private static final String VIEW_FRONTOFFICE = "frontoffice/index.jsp";
 	private static final String VIEW_LOGIN = "login.jsp";
 
+	private static final int SESSION_EXPIRATION = -1; // No expira
+
 	private Alert alert = new Alert();
 
 	private UsuarioDAO daoUsuario;
-
-	private static final int SESSION_EXPIRATION = -1; // No expira
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {

@@ -51,8 +51,8 @@ public class MesaController extends HttpServlet {
 
 			}
 
-			String sDimnesion = request.getParameter("dimension");
-			int dimension = Integer.parseInt(sDimnesion);
+			String sDimension = request.getParameter("dimension");
+			int dimension = Integer.parseInt(sDimension);
 			m.setDimension(dimension);
 
 			String sCustom = request.getParameter("custom");

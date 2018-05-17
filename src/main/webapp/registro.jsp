@@ -10,14 +10,14 @@
 		<div class="form-group row">
 			<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
 			<div class="col-sm-5">
-				<input type="text" value="${usuario.nombre}" class="form-control" id="nombre" placeholder="Introduce nombre de usuario" onkeyup="if (this.value.length > 4) comprobarNombre(event)">
+				<input type="text" value="${usuario.nombre}" class="form-control" id="nombre" name="nombre" placeholder="Introduce nombre de usuario" onkeyup="if (this.value.length > 4) comprobarNombre(event)">
 			</div>
 			<span id="avisoNombre"></span>
 		</div>
 		<div class="form-group row">
 			<label for="email" class="col-sm-2 col-form-label">Email</label>
 			<div class="col-sm-5">
-				<input type="text" value="${usuario.email}" class="form-control" id="email" placeholder="Introduce email" onblur="comprobarEmail(event)">
+				<input type="text" value="${usuario.email}" class="form-control" id="email" name="email" placeholder="Introduce email" onblur="comprobarEmail(event)">
 			</div>
 			<span id="avisoEmail"></span>
 		</div>

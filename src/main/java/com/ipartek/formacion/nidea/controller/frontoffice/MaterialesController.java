@@ -252,6 +252,7 @@ public class MaterialesController extends HttpServlet {
 			op = 0;
 		}
 
+		// Si no se parsea, trim o cualquier otra operacion. Más corto
 		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
 		if (request.getParameter("id") != null) {

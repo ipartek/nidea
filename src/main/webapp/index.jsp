@@ -22,4 +22,4 @@
 <a href="generar-mesa"> ¿Quieres Comprar una Mesa ?</a>
 
 
-<jsp:include page="templates/footer.jsp"></jsp:include>
+<%@include file="templates/footer.jsp" %>

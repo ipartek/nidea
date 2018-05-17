@@ -17,12 +17,12 @@
 
 	<div class="form-group">
 		<label for="id">Id:</label> <input type="number" class="form-control"
-			id="id" name="id" placeholder="Id" readonly value="${rol.id }">
+			id="id" name="id" placeholder="Id" readonly value="${rol.id}">
 	</div>
 	<div class="form-group">
 		<label for="nombre">Nombre Rol:</label> <input type="text"
 			class="form-control" id="nombre" name="nombre" placeholder="Nombre"
-			required value="${rol.nombre }">
+			required value="${rol.nombre}">
 	</div>
 	
 
@@ -49,21 +49,19 @@
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="exampleModalLongTitle">Confirmar
-							eliminacion de ${rol.nombre}</h5>
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
+						<h5 class="modal-title" id="exampleModalLongTitle">Confirmar eliminacion de ${rol.nombre}</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="id">Id:</label>
-							<p>${rol.id }</p>
+							<p>${rol.id}</p>
 						</div>
 						<div class="form-group">
 							<label for="nombre">Nombre Rol:</label>
-							<p>${rol.nombre }</p>
+							<p>${rol.nombre}</p>
 						</div>
 						
 						<a class="btn btn-danger btn-block"

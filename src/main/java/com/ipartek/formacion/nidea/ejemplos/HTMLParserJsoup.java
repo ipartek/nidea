@@ -27,6 +27,7 @@ public class HTMLParserJsoup {
 		 * 
 		 */
 
+		//Para intentar entrar al servidor cogiendo los datos por Jsoup e introducir materiales nuevos a la BBDD
 		String url = "http://192.168.0.42:8080/nidea/login";
 		String urlMaterial = "http://192.168.0.42:8080/nidea/backoffice/materiales?op=1";
 
@@ -45,7 +46,7 @@ public class HTMLParserJsoup {
 
 		Connection.Response responseCrearMaterial = Jsoup
 				.connect("http://192.168.0.42:8080/nidea/backoffice/materiales?op=2").method(Connection.Method.POST)
-				.data("nombre", "Nuevo MAterial").data("precio", "11.0").cookie("JSESSIONID", cookieSession).execute();
+				.data("nombre", "Nuevo Material").data("precio", "11.0").cookie("JSESSIONID", cookieSession).execute();
 
 		// Document docBackoffdsdicewrsewte = response.parse();
 
